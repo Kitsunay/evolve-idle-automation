@@ -3,6 +3,9 @@ An attempt to write unlockable automations for Evolve Idle, a very slow game, th
 
 This is a beginners attempt at writing a Firefox extension, and at the same time automation scripts for an idle game. Pray fate does not go against it.
 
+## How to Install
+This extension is not available in official extension store.
+
 ## How to Run in Local Environment
 This is a Firefox extension. As such, to install it on Firefox, you have to:
 - navigate to [about:debugging](about:debugging)
