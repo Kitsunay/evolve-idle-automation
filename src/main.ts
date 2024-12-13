@@ -1,1 +1,3 @@
-console.log('Hello from Typescript, World!');
+import { AutomationEngine } from "./automation-engine";
+
+AutomationEngine.run();

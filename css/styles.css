@@ -1,0 +1,28 @@
+/* ===== AUTO-BUILDING ===== */
+.auto-building {
+    margin: .375rem .375rem 0 0;
+    border-radius: 4px;
+
+    display: flex;
+    text-align: center;
+    justify-items: center;
+
+    background-color: #3c3836;
+    
+    /* Disabled text color by default */
+    color: #fb4934;
+    
+    cursor: pointer;
+}
+
+.auto-building:hover {
+    background-color: #504945;
+}
+
+.auto-building.on {
+    color: #8ec07c;
+}
+
+.auto-building span {
+    flex:1;
+}
