@@ -11,13 +11,16 @@
         }
     },
     "scripts": {
-        "watch": "webpack --mode development --watch",
+        "build-watch": "webpack --mode development --watch",
         "build-dev": "webpack --mode development",
-        "build": "webpack --mode production"
+        "build": "webpack --mode production",
+        "start": "web-ext run --watch-ignored *.* **/firefox-profiles/**/* src/**/* settings/**/* node_modules/**/* icons/**/* --start-url https://pmotschmann.github.io/Evolve/ --firefox-profile=.\\firefox-profiles\\evolve-idle --profile-create-if-missing --keep-profile-changes --verbose",
+        "help": "web-ext run --help"
     },
     "devDependencies": {
         "ts-loader": "^9.5.1",
         "typescript": "^5.7.2",
+        "web-ext": "~8.1.0",
         "webpack": "^5.97.1",
         "webpack-cli": "^5.1.4"
     }

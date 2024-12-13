@@ -7,11 +7,6 @@
         "48": "icons/border-48.png",
         "96": "icons/border-96.png"
     },
-    "browser_specific_settings": {
-        "gecko": {
-          "update_url": "https://example.com/updates.json"
-        }
-      },
     "content_scripts": [
         {
             "matches": [
@@ -20,6 +15,15 @@
             "js": [
                 "dist/bundle.js"
             ]
+        },
+        {
+            "matches": [
+                "*://pmotschmann.github.io/Evolve/*"
+            ],
+            "css": [
+                "css/styles.css"
+            ],
+            "run_at": "document_start"
         }
     ]
 }

@@ -1,2 +1,5 @@
 node_modules/
 dist/
+
+# profile settings created by web-ext
+firefox-profiles/
