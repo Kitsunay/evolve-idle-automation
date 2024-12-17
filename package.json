@@ -1,6 +1,6 @@
 {
     "name": "evolve-idle-automation",
-    "version": "0.0.1",
+    "version": "0.2.0",
     "description": "Adds unlockable automations to Evolve Idle",
     "source": "src/main.ts",
     "main": "dist/main.js",
@@ -20,7 +20,7 @@
     "devDependencies": {
         "ts-loader": "^9.5.1",
         "typescript": "^5.7.2",
-        "web-ext": "~8.1.0",
+        "web-ext": "~8.3.0",
         "webpack": "^5.97.1",
         "webpack-cli": "^5.1.4"
     }

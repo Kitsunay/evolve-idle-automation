@@ -1,5 +1,7 @@
 import { Buildings } from "./buildings/buildings";
+import { Research } from "./research/research";
 
 export class Game {
-    public static buildings = Buildings;
+    public static Buildings = Buildings;
+    public static Research = Research;
 }
