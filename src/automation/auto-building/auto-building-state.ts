@@ -1,6 +1,6 @@
 import { AutoBuildingItem } from "./auto-building-item";
 
-export interface AutoBuildingConfiguration {
+export interface AutoBuildingState {
     /**
      * Whether this automation is unlocked
      */

@@ -16,7 +16,7 @@ export class AutoBuildingInterface {
         
         // Create the element if it doesn't exist exists
         if (!autoBuildingElement && buildingElement) {
-            let autoBuildingElementString = `<div class="auto-building"><span>Auto-Building</span></div>`;
+            let autoBuildingElementString = `<div class="auto auto-building"><span>Auto-Building</span></div>`;
             autoBuildingElement = Interface.createElementFromString(autoBuildingElementString, buildingElement, 0);
             autoBuildingElement.addEventListener('click', onToggle);
         }

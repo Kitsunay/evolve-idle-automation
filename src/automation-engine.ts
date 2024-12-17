@@ -1,4 +1,6 @@
 import { AutoBuilding } from "./automation/auto-building/auto-building";
+import { AutoResearch } from "./automation/auto-research/auto-research";
+import { Automation } from "./automation/automation";
 
 export class AutomationEngine {
     private static tickInterval: NodeJS.Timeout;
@@ -8,8 +10,12 @@ export class AutomationEngine {
 
     static tickIntervalToken: number;
 
+    private static readonly AUTOMATIONS: Automation<any>[] = [new AutoBuilding(), new AutoResearch()];
+
     public static run(): void {
-        AutoBuilding.init();
+        for (const automation of this.AUTOMATIONS) {
+            automation.init();
+        }
 
         if (this.tickInterval) clearInterval(this.tickInterval);
 
@@ -18,8 +24,6 @@ export class AutomationEngine {
         this.tickIntervalToken = tickIntervalToken;
 
         let tickInterval = setInterval(() => {
-            console.log('Automation Tick', this.tickCounter++);
-
             let tickToken = tickIntervalToken;
             if (tickToken !== this.tickIntervalToken) {
                 console.log('Attempting to destroy rogue tick interval.');
@@ -27,7 +31,11 @@ export class AutomationEngine {
                 return;
             }
 
-            AutoBuilding.tick();
+            console.debug('Automation Tick', this.tickCounter++);
+
+            for (const automation of this.AUTOMATIONS) {
+                automation.tick();
+            }
         }, this.TICK_INTERVAL);
 
         // On window unload, stop the interval to prevent unnecessary memory leaks
@@ -36,5 +44,11 @@ export class AutomationEngine {
                 clearInterval(this.tickInterval);
             }
         });
+    }
+
+    public static updateAllUI() {
+        for (const automation of this.AUTOMATIONS) {
+            automation.updateUI();
+        }
     }
 }

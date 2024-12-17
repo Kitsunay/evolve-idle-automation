@@ -1,7 +1,9 @@
 /* ===== AUTO-BUILDING ===== */
-.auto-building {
+.auto {
     margin: .375rem .375rem 0 0;
     border-radius: 4px;
+
+    width: 12.625rem; /* As defined for most buttons in the game */
 
     display: flex;
     text-align: center;
@@ -15,14 +17,39 @@
     cursor: pointer;
 }
 
-.auto-building:hover {
+.auto:hover {
     background-color: #504945;
 }
 
-.auto-building.on {
+.auto.on {
     color: #8ec07c;
 }
 
-.auto-building span {
+.auto span {
     flex:1;
+}
+
+.top-right {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+
+    width: 16px;
+    height: 16px;
+
+    padding: 1px;
+
+    border-bottom-left-radius: 7px;
+    border-top-right-radius: 4px;
+
+    pointer-events: none;
+
+    background-color: #282828;
+}
+
+.top-right > .icon {
+position: absolute;
+
+    width: 14px;
+    height: 14px;
 }

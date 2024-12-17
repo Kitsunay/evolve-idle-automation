@@ -1,16 +1,17 @@
 import { Game } from "../../game/game";
 import { AutoBuildingInterface } from "../../interface/auto-building/auto-building-interface";
-import { AutoBuildingConfiguration } from "./auto-building-configuration";
+import { Automation } from "../automation";
+import { AutoBuildingState } from "./auto-building-state";
 import { AutoBuildingItem } from "./auto-building-item";
 
-export class AutoBuilding {
+export class AutoBuilding extends Automation<AutoBuildingState> {
     /**
      * Persistable configuration with default values and all buildings.
      * The core of this automation.
      */
-    private static configuration: AutoBuildingConfiguration = {
+    protected state: AutoBuildingState = {
         unlocked: false,
-        buildings:  [
+        buildings: [
             // Commercial District
             {
                 buildingId: "city-bank",
@@ -23,7 +24,7 @@ export class AutoBuilding {
                 buildingId: "city-temple",
                 autoEnabled: false
             },
-    
+
             // Science Sector
             {
                 buildingId: "city-university",
@@ -33,7 +34,7 @@ export class AutoBuilding {
                 buildingId: "city-library",
                 autoEnabled: false
             },
-    
+
             // Trade District
             {
                 buildingId: "city-silo",
@@ -43,7 +44,7 @@ export class AutoBuilding {
                 buildingId: "city-shed",
                 autoEnabled: false
             },
-    
+
             // Industrial Park
             {
                 buildingId: "city-lumber_yard",
@@ -71,31 +72,31 @@ export class AutoBuilding {
     /**
      * Whether this automation is unlocked
      */
-    static get unlocked(): boolean {
-        return this.configuration.unlocked;
+    get unlocked(): boolean {
+        return this.state.unlocked;
     }
 
     /**
      * Key to store configuration and state in local storage
      */
-    private static readonly LOCAL_STORAGE_KEY: string = "auto-building";
+    protected readonly LOCAL_STORAGE_KEY: string = "auto-building";
 
     /**
      * Default configuration for all buildings.
      */
-    static get buildings(): AutoBuildingItem[] {
-        return this.configuration.buildings;
+    get buildings(): AutoBuildingItem[] {
+        return this.state.buildings;
     }
 
-    public static init() {
+    public init() {
         // Load configuration and state from local storage (from string to object)
-        this.loadConfiguration();
+        this.loadState();
 
         // Update UI
-        AutoBuilding.updateUI();
+        this.updateUI();
     }
 
-    private static updateUI() {
+    updateUI() {
         for (const building of this.buildings) {
             AutoBuildingInterface.refreshBuildingInterface(building.buildingId, building.autoEnabled, () => {
                 this.toggle(building.buildingId);
@@ -107,36 +108,42 @@ export class AutoBuilding {
      * Toggles automation for the given building
      * @param buildingId
      */
-    private static toggle(buildingId: string) {
+    private toggle(buildingId: string) {
+        console.log('toggle');
+
         for (const building of this.buildings) {
             if (building.buildingId === buildingId) {
                 building.autoEnabled = !building.autoEnabled;
+                break;
             }
         }
 
-        this.saveConfiguration();
+        this.saveState();
         this.updateUI();
     }
 
-    static saveConfiguration() {
-        localStorage.setItem(AutoBuilding.LOCAL_STORAGE_KEY, JSON.stringify(this.configuration));
-    }
-
-    static loadConfiguration() {
-        let configuration = JSON.parse(localStorage.getItem(AutoBuilding.LOCAL_STORAGE_KEY));
+    protected override loadState() {
+        let configuration = this.loadStateObject();
 
         if (!configuration) { // No configuration in local storage
             return;
         }
 
         // Load configuration without overwriting known buildings
-        this.configuration.unlocked = configuration.unlocked;
+        this.state.unlocked = configuration.unlocked;
 
-        for (const building of this.configuration.buildings) {
+        if (!configuration.buildings) { // No buildings loaded from local storage
+            return;
+        }
+
+        for (const buildingIndex in this.state.buildings) { // I broke array loading, turned arrays into objects and now i need a key iterating loop
+            let building = this.state.buildings[buildingIndex];
+
             for (const loadedBuilding of configuration.buildings) {
                 // Find persisted configuration for each building by matching buildingId
                 if (building.buildingId === loadedBuilding.buildingId) {
                     building.autoEnabled = loadedBuilding.autoEnabled;
+                    break;
                 }
             }
         }
@@ -145,15 +152,17 @@ export class AutoBuilding {
     /**
      * Automation logic to run every tick
      */
-    public static tick() {
+    public tick() {
         this.updateUI();
 
-        //console.log('tick');
-        for (const building of this.buildings) {
-            //console.log(building);
+        for (const buildingItem of this.buildings) {
             // Try to purchase buildings of all enabled autobuyers
-            if (building.autoEnabled) {
-                Game.buildings.getBuilding(building.buildingId).tryBuy();
+            if (buildingItem.autoEnabled) {
+                let building = Game.Buildings.getBuilding(buildingItem.buildingId);
+
+                if (Game.Buildings.tryBuy(building)) { // At most one building per type per tick
+                    console.log(`Purchased building [${buildingItem.buildingId}]`);
+                }
             }
         }
     }
