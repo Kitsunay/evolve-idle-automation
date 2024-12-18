@@ -161,7 +161,7 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
                 let building = Game.Buildings.getBuilding(buildingItem.buildingId);
 
                 if (Game.Buildings.tryBuy(building)) { // At most one building per type per tick
-                    console.log(`Purchased building [${buildingItem.buildingId}]`);
+                    console.log(`Automation purchased building [${buildingItem.buildingId}]`);
                 }
             }
         }
