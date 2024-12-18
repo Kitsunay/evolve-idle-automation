@@ -1,5 +1,5 @@
 export class Interface {
-    static createElementFromString(childHtml: string, parent: HTMLElement, childIndex?: number): Element {
+    static createElementFromString(childHtml: string, parent: Element, childIndex?: number): Element {
         // Prepare an element
         let element: Element = document.createElement('div'); // Create any element
         element.innerHTML = childHtml; // Put the expected string inside the temp element

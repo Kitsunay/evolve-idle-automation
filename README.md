@@ -32,7 +32,6 @@ Researches the first thing that is researchable. Will auto-research only technol
 TODO: Unlock if plasmids exist (after first reset) and research queue is researched
 
 ## TODO:
-- Notification in case "Preload Tab Content" is set to off (this could be automated, too, but i'm not writing malware here, so the player must confirm this choice)
 - Auto-Workers - requires management of farmers so citizens don't starve
 - Auto-Building auto-discovers new buildings and assigns them to a proper category (standard, with food upkeep (civilian and military), with resource upkeep, with energy upkeep)
 - Auto-Building unlocks after building queue is researched, each building unlocks when amount of that building reaches 10-15 (TBD)
@@ -46,4 +45,4 @@ TODO: Unlock if plasmids exist (after first reset) and research queue is researc
 - Auto-Energy - Simple priority list???
 - Auto-Building shouldn't purchase if building queue is not empty (to allow for manual priritization)
 - Auto-Research shouldn't purchase if research queue is not empty (to allow for manual priritization)
-- Automation progression, to inform players what they need to do to unlock the next automation + information about how the automations work should be available within the game
+- Automation progression, to inform players what they need to do to unlock the next automation + information about how the automations work should be available within the game window

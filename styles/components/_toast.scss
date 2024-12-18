@@ -1,0 +1,55 @@
+.toast {
+    position: absolute;
+
+    background-color: #1d2021;
+    
+    padding: 0.5rem;
+    margin: 1.75rem 0.75rem;
+    max-width: 25rem;
+
+    display: flex;
+    flex-direction: row;
+
+    &:not(.visible) {
+        display: none;
+    }
+
+    &.horizontal-left {
+        left: 0;
+    }
+
+    &.horizontal-center {
+        left: 50%;
+    }
+
+    &.horizontal-right {
+        right: 0;
+    }
+
+    &.vertical-top {
+        top: 0;
+    }
+
+    &.vertical-center {
+        top: 50%;
+    }
+
+    &.vertical-bottom {
+        bottom: 0;
+    }
+
+    .content {
+        margin: 0
+    }
+
+    .close-button {
+        display: flex; // This is for some reason the only display that properly wraps around the icon
+        cursor: pointer;
+
+        border-radius: 4px;
+
+        &:hover {
+            background-color: #3c3836;
+        }
+    }
+}

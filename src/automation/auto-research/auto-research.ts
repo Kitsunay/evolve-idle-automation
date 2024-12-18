@@ -33,7 +33,7 @@ export class AutoResearch extends Automation<AutoResearchState> {
 
                 this.saveState();
 
-                console.log(`Added research to auto-research list [${researchId}]`);
+                console.log(`Added research [${researchId}] to auto-research list`);
             }
         });
 
@@ -56,7 +56,7 @@ export class AutoResearch extends Automation<AutoResearchState> {
                 // This purchase causes full UI re-render, so all automations need to be updated to prevent flickering
                 AutomationEngine.updateAllUI(); // ALWAYS UPDATE UI AFTER PURCHASE !!!
 
-                console.log(`Purchased research [${research.researchId}]`);
+                console.log(`Automation purchased research [${research.researchId}]`);
 
                 return; // Only one purchase per tick, to allow the game to update
             }
