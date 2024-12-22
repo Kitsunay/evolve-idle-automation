@@ -1,5 +1,6 @@
 import { AutoBuilding } from "./automation/auto-building/auto-building";
 import { AutoResearch } from "./automation/auto-research/auto-research";
+import { AutoWorker } from "./automation/auto-worker/auto-worker";
 import { Automation } from "./automation/automation";
 import { Game } from "./game/game";
 import { Toast } from "./interface/components/toast/toast";
@@ -12,7 +13,7 @@ export class AutomationEngine {
 
     static tickIntervalToken: number;
 
-    private static readonly AUTOMATIONS: Automation<any>[] = [new AutoBuilding(), new AutoResearch()];
+    private static readonly AUTOMATIONS: Automation<any>[] = [new AutoBuilding(), new AutoResearch(), new AutoWorker()];
 
     public static run(): void {
         if (!Game.Settings.preloadTabContent) {

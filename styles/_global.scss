@@ -30,6 +30,30 @@
     flex: 1;
 }
 
+.auto-worker {
+    margin-left: 0.5rem;
+
+    .auto {
+        width: 10rem;
+    }
+}
+
+.auto-worker-row {
+    display: flex;
+    margin-left: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    > :first-child {
+        width: 10rem;
+        margin-right: 0.5rem;
+    }
+
+    > :nth-child(2) {
+        width: 4.5rem;
+        text-align: center;
+    }
+}
+
 .top-right {
     position: absolute;
     top: 7px;

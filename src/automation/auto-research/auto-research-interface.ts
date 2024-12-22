@@ -1,4 +1,4 @@
-import { Interface } from "../interface";
+import { Interface } from "../../interface/interface";
 
 export class AutoResearchInterface {
 
@@ -17,14 +17,14 @@ export class AutoResearchInterface {
         // Create the element if it doesn't exist exists
         if (!autoResearchElement && researchRootElement) {
             let autoBuildingElementString = `<div class="auto auto-research"><span>Auto-Research</span></div>`;
-            autoResearchElement = Interface.createElementFromString(autoBuildingElementString, researchRootElement, 0);
+            autoResearchElement = Interface.createChildElementFromString(autoBuildingElementString, researchRootElement, 0);
             autoResearchElement.addEventListener('click', onClick);
         }
 
         // Also make sure 'Automation' label is rendered
         if (!document.querySelector<HTMLElement>(`#auto-research-label`)) {
             let autoResearchLabelElementString = `<div id="auto-research-label"><h3 class="name has-text-warning">Automation</h3></div>`;
-            Interface.createElementFromString(autoResearchLabelElementString, researchRootElement, 0);
+            Interface.createChildElementFromString(autoResearchLabelElementString, researchRootElement, 0);
         }
 
         // Update element's value (on/off)
@@ -49,7 +49,7 @@ export class AutoResearchInterface {
 
                 if (!iconElement) {
                     let iconElementString = `<div class="auto-research-icon top-right"><div class="icon icon-cogs icon-size-16"></div></div>`;
-                    iconElement = Interface.createElementFromString(iconElementString, researchElement);
+                    iconElement = Interface.createChildElementFromString(iconElementString, researchElement);
                 }
             }
         }

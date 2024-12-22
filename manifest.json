@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Evolve Idle Automation",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "description": "Adds unlockable automations to Evolve Idle",
     "icons": {
         "48": "icons/border-48.png",
@@ -14,16 +14,10 @@
             ],
             "js": [
                 "dist/bundle.js"
-            ]
-        },
-        {
-            "matches": [
-                "*://pmotschmann.github.io/Evolve/*"
             ],
             "css": [
                 "dist/styles.css"
-            ],
-            "run_at": "document_start"
+            ]
         }
     ]
 }

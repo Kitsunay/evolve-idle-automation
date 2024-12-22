@@ -1,4 +1,4 @@
-import { Interface } from "../interface";
+import { Interface } from "../../interface/interface";
 
 export class AutoBuildingInterface {
 
@@ -13,11 +13,16 @@ export class AutoBuildingInterface {
     static refreshBuildingInterface(buildingId: string, enabled: boolean, onToggle: () => void) {
         let autoBuildingElement: Element = document.querySelector<HTMLElement>(`#${buildingId} .auto-building`);
         let buildingElement = document.querySelector<HTMLElement>(`#${buildingId}`);
+
+        // SKip if building element does not exist
+        if (!buildingElement) {
+            return;
+        }
         
         // Create the element if it doesn't exist exists
         if (!autoBuildingElement && buildingElement) {
             let autoBuildingElementString = `<div class="auto auto-building"><span>Auto-Building</span></div>`;
-            autoBuildingElement = Interface.createElementFromString(autoBuildingElementString, buildingElement, 0);
+            autoBuildingElement = Interface.createChildElementFromString(autoBuildingElementString, buildingElement, 0);
             autoBuildingElement.addEventListener('click', onToggle);
         }
 

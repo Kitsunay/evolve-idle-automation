@@ -7,7 +7,7 @@ export class Settings {
      */
     static get preloadTabContent(): boolean {
         // Through a massive selector, find the setting element and check if the setting is set to 'checked'
-        if (document.querySelector('#settings .settings11').parentElement.parentElement.querySelector('input[type="checkbox"]:checked')) {
+        if (document.querySelector('#settings .settings11')?.parentElement?.parentElement?.querySelector('input[type="checkbox"]:checked')) {
             return true;
         }
 

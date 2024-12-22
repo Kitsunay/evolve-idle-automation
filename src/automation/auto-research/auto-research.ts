@@ -1,6 +1,6 @@
 import { AutomationEngine } from "../../automation-engine";
 import { Game } from "../../game/game";
-import { AutoResearchInterface } from "../../interface/auto-research/auto-research-interface";
+import { AutoResearchInterface } from "./auto-research-interface";
 import { Automation } from "../automation";
 import { AutoResearchState } from "./auto-research-state";
 
@@ -11,11 +11,6 @@ export class AutoResearch extends Automation<AutoResearchState> {
         unlocked: false,
         enabled: false,
         knownResearches: new Set<string>()
-    }
-
-    init(): void {
-        this.loadState();
-        this.updateUI();
     }
 
     updateUI() {
@@ -32,6 +27,7 @@ export class AutoResearch extends Automation<AutoResearchState> {
                 this.state.knownResearches.add(researchId);
 
                 this.saveState();
+                AutomationEngine.updateAllUI(); // ALWAYS UPDATE UI AFTER PURCHASE !!!
 
                 console.log(`Added research [${researchId}] to auto-research list`);
             }

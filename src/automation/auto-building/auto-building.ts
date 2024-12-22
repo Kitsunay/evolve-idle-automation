@@ -1,5 +1,5 @@
 import { Game } from "../../game/game";
-import { AutoBuildingInterface } from "../../interface/auto-building/auto-building-interface";
+import { AutoBuildingInterface } from "./auto-building-interface";
 import { Automation } from "../automation";
 import { AutoBuildingState } from "./auto-building-state";
 import { AutoBuildingItem } from "./auto-building-item";
@@ -86,14 +86,6 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
      */
     get buildings(): AutoBuildingItem[] {
         return this.state.buildings;
-    }
-
-    public init() {
-        // Load configuration and state from local storage (from string to object)
-        this.loadState();
-
-        // Update UI
-        this.updateUI();
     }
 
     updateUI() {

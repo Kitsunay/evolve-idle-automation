@@ -1,4 +1,4 @@
-import { AutoBuildingInterface } from "./auto-building/auto-building-interface";
+import { AutoBuildingInterface } from "../automation/auto-building/auto-building-interface";
 
 export class InterfaceManager {
     static init() {

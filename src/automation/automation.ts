@@ -2,7 +2,14 @@ export abstract class Automation<STATE> {
     protected abstract readonly LOCAL_STORAGE_KEY: string;
     protected abstract state: STATE;
     
-    abstract init(): void;
+    public init(): void {
+        // Load configuration and state from local storage (from string to object)
+        this.loadState();
+
+        // Update UI
+        this.updateUI();
+    }
+
     abstract tick(): void;
     abstract updateUI(): void;
 
@@ -46,7 +53,10 @@ export abstract class Automation<STATE> {
     }
 
     protected loadState(): void {
-        this.state = this.loadStateObject();
+        let stateObject = this.loadStateObject();
+        if (stateObject) { // Do not overwrite default state if nothing is stored in local storage yet
+            this.state = stateObject;
+        }
     }
 
     /**

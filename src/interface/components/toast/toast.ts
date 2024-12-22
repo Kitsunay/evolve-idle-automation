@@ -6,7 +6,7 @@ export class Toast {
     private element: Element;
 
     constructor(content: string, lifeMs: number = undefined, verticalAlign: ToastVerticalAlign = 'TOP', horizontalAlign: ToastHorizontalAlign = 'RIGHT') {
-        this.element = Interface.createElementFromString(`<div class="toast"><div class="content">${content}</div><div><div class="close-button"><div class="icon icon-close icon-color-danger icon-size-24"></div></div></div></div>`, document.activeElement);
+        this.element = Interface.createChildElementFromString(`<div class="toast"><div class="content">${content}</div><div><div class="close-button"><div class="icon icon-close icon-color-danger icon-size-24"></div></div></div></div>`, document.activeElement);
 
         this.element.classList.add(`vertical-${verticalAlign.toLowerCase()}`);
         this.element.classList.add(`horizontal-${horizontalAlign.toLowerCase()}`);

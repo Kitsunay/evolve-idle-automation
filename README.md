@@ -25,15 +25,27 @@ The game prefers to keep hardware load to a minimum and completely destroys elem
 ## Content
 ### Auto-Building
 Purchases buildings as soon as they can be bought.
-TODO: Unlock automation after building queue is researched, unlock for each building when amount of that building reaches 10-15 (TBD)
+
+TODO: Unlock automation after building queue is researched
+
+TODO: Unlock for each building when amount of that building reaches 10-15 (TBD)
 
 ### Auto-Research
 Researches the first thing that is researchable. Will auto-research only technologies that have already been manually researched in previous resets to prevent accidentally unlocking new mechanics.
-TODO: Unlock if plasmids exist (after first reset) and research queue is researched
+
+TODO: Unlock if plasmids exist (after first reset) and research queue is researched after the first reset
+
+### Auto-Worker
+Distributes available workers to jobs based on user-defined ratios.
+
+TODO: Unlock condition??? 100 total workers?
+
+Includes Auto-Farmer (currently hardcoded), which is exempt from the standard Auto-Worker ratio-based distribution. Instead, farmers are assigned based on target food production rate, which replaces the ratio configuration on the interface. There will always be enough farmers to produce at least the configured food rate.
+
+TODO: Unlock condition??? 1k food/s?
 
 ## TODO:
-- Auto-Workers - requires management of farmers so citizens don't starve
-- Auto-Building auto-discovers new buildings and assigns them to a proper category (standard, with food upkeep (civilian and military), with resource upkeep, with energy upkeep)
+- Auto-Building auto-discovers new buildings
 - Auto-Building unlocks after building queue is researched, each building unlocks when amount of that building reaches 10-15 (TBD)
 - Auto-Research unlocks if plasmids exist (after first reset) and research queue is researched for the second time
 - Auto-Storage - purchase crates only if resource reaches cap/configurable percentage
@@ -46,3 +58,4 @@ TODO: Unlock if plasmids exist (after first reset) and research queue is researc
 - Auto-Building shouldn't purchase if building queue is not empty (to allow for manual priritization)
 - Auto-Research shouldn't purchase if research queue is not empty (to allow for manual priritization)
 - Automation progression, to inform players what they need to do to unlock the next automation + information about how the automations work should be available within the game window
+- Auto-Building advanced settings, for better management of building categories (standard, with food upkeep (civilian and military), with resource upkeep, with energy upkeep)
