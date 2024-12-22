@@ -3,6 +3,7 @@ import { AutoBuildingInterface } from "./auto-building-interface";
 import { Automation } from "../automation";
 import { AutoBuildingState } from "./auto-building-state";
 import { AutoBuildingItem } from "./auto-building-item";
+import { AutomationEngine } from "../../automation-engine";
 
 export class AutoBuilding extends Automation<AutoBuildingState> {
     /**
@@ -11,62 +12,7 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
      */
     protected state: AutoBuildingState = {
         unlocked: false,
-        buildings: [
-            // Commercial District
-            {
-                buildingId: "city-bank",
-                autoEnabled: false
-            },
-            {
-                buildingId: "city-amphitheatre",
-                autoEnabled: false
-            }, {
-                buildingId: "city-temple",
-                autoEnabled: false
-            },
-
-            // Science Sector
-            {
-                buildingId: "city-university",
-                autoEnabled: false
-            },
-            {
-                buildingId: "city-library",
-                autoEnabled: false
-            },
-
-            // Trade District
-            {
-                buildingId: "city-silo",
-                autoEnabled: false
-            },
-            {
-                buildingId: "city-shed",
-                autoEnabled: false
-            },
-
-            // Industrial Park
-            {
-                buildingId: "city-lumber_yard",
-                autoEnabled: false
-            },
-            {
-                buildingId: "city-rock_quarry",
-                autoEnabled: false
-            },
-            {
-                buildingId: "city-cement_plant",
-                autoEnabled: false
-            },
-            {
-                buildingId: "city-foundry",
-                autoEnabled: false
-            },
-            {
-                buildingId: "city-mine",
-                autoEnabled: false
-            },
-        ]
+        buildings: []
     }
 
     /**
@@ -89,10 +35,30 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
     }
 
     updateUI() {
+        // Auto-Discovery: Before full UI update, check if there are any new jobs to automate
+        // TODO: Trigger auto-discovery only after research/building purchase?
+        this.runAutoDiscovery();
+
         for (const building of this.buildings) {
             AutoBuildingInterface.refreshBuildingInterface(building.buildingId, building.autoEnabled, () => {
                 this.toggle(building.buildingId);
             });
+        }
+    }
+
+    runAutoDiscovery() {
+        let availableBuildings = Game.Buildings.getBuildings();
+
+        // Add in buildings that are not present in the configuration array
+        for (const building of availableBuildings) {
+            if (!this.state.buildings.some(x => x.buildingId === building.buildingId)) { // If none of the buildingIds in configuration match the current building
+                // Add a new configuration item
+                this.state.buildings.push({
+                    buildingId: building.buildingId,
+                    autoEnabled: false,
+                    unlocked: false
+                });
+            }
         }
     }
 
@@ -101,8 +67,6 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
      * @param buildingId
      */
     private toggle(buildingId: string) {
-        console.log('toggle');
-
         for (const building of this.buildings) {
             if (building.buildingId === buildingId) {
                 building.autoEnabled = !building.autoEnabled;
@@ -114,38 +78,13 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
         this.updateUI();
     }
 
-    protected override loadState() {
-        let configuration = this.loadStateObject();
-
-        if (!configuration) { // No configuration in local storage
-            return;
-        }
-
-        // Load configuration without overwriting known buildings
-        this.state.unlocked = configuration.unlocked;
-
-        if (!configuration.buildings) { // No buildings loaded from local storage
-            return;
-        }
-
-        for (const buildingIndex in this.state.buildings) { // I broke array loading, turned arrays into objects and now i need a key iterating loop
-            let building = this.state.buildings[buildingIndex];
-
-            for (const loadedBuilding of configuration.buildings) {
-                // Find persisted configuration for each building by matching buildingId
-                if (building.buildingId === loadedBuilding.buildingId) {
-                    building.autoEnabled = loadedBuilding.autoEnabled;
-                    break;
-                }
-            }
-        }
-    }
-
     /**
      * Automation logic to run every tick
      */
     public tick() {
         this.updateUI();
+
+        let firstPurchase = false; // Watch for purchases where the first building of a type is purchased
 
         for (const buildingItem of this.buildings) {
             // Try to purchase buildings of all enabled autobuyers
@@ -153,9 +92,18 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
                 let building = Game.Buildings.getBuilding(buildingItem.buildingId);
 
                 if (Game.Buildings.tryBuy(building)) { // At most one building per type per tick
+                    if (Game.Buildings.getBuilding(buildingItem.buildingId).count === 1) {
+                        firstPurchase = true;
+                    }
+
                     console.log(`Automation purchased building [${buildingItem.buildingId}]`);
                 }
             }
+        }
+
+        // If first purchase happened, update UI, unlock might have happened and automations ahould react to it properly
+        if (firstPurchase) {
+            AutomationEngine.updateAllUI();
         }
     }
 }

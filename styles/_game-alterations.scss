@@ -1,0 +1,4 @@
+// Fix for "Smelter" configuration button being too high on building page
+.main .content .action div.special {
+    top: calc(6px + 19px + 6px);
+}

@@ -45,10 +45,9 @@ Includes Auto-Farmer (currently hardcoded), which is exempt from the standard Au
 TODO: Unlock condition??? 1k food/s?
 
 ## TODO:
-- Auto-Building auto-discovers new buildings
+- Auto-Storage - purchase crates only if resource reaches cap/configurable percentage
 - Auto-Building unlocks after building queue is researched, each building unlocks when amount of that building reaches 10-15 (TBD)
 - Auto-Research unlocks if plasmids exist (after first reset) and research queue is researched for the second time
-- Auto-Storage - purchase crates only if resource reaches cap/configurable percentage
 - Auto-Market - uses only trade routes to not break balance, requires auto-sell/auto-buy managment, player defines priorities (what has high priority to buy, what has high priority to sell)
 - Auto-Building for buildings with upkeep costs
 - Auto-Industry - ???
