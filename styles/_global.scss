@@ -38,10 +38,18 @@
     }
 }
 
+#resStorage .auto {
+    width: 100%;
+
+    margin-bottom: .375rem;
+}
+
 .auto-worker-row {
     display: flex;
     margin-left: 0.5rem;
     margin-bottom: 0.5rem;
+
+    color: #8ec07c;
 
     > :first-child {
         width: 10rem;

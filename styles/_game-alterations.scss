@@ -2,3 +2,8 @@
 .main .content .action div.special {
     top: calc(6px + 19px + 6px);
 }
+
+// Fix for auto-storage button rendering next to "Create Crate" button, instead of above it
+#resStorage #createHead .is-multiline {
+    flex-direction: column;
+}

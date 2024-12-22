@@ -28,7 +28,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
         let availableWorkers = Game.Resources.getCount(Game.Resources.populationResourceId);
         availableWorkers -= farmerTarget.value;
 
-        let otherJobTargets = this.runAutoWorker(availableWorkers);
+        let otherJobTargets = this.getJobTargets(availableWorkers);
 
         let targetWorkers: { jobId: string, value: number }[] = [farmerTarget, ...otherJobTargets];
 
@@ -63,7 +63,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
         // Don't forget to deal with default job - if it's unemployed, if it's farmer and if it's anything else
     }
 
-    private runAutoWorker(numWorkers: number): { jobId: string, value: number }[] {
+    private getJobTargets(numWorkers: number): { jobId: string, value: number }[] {
         // Divide citizens by ratios
         let jobCategories = Game.JobList.getCategories();
 
@@ -227,25 +227,25 @@ export class AutoWorker extends Automation<AutoWorkerState> {
     private calculateRatiosWithCaps(value: number, ratios: number[], valueCaps: number[]): number[] {
         // Calculate result the standard way
         let intResult = this.calculateRatios(ratios, value);
-
+        
         // Find indexes of values that overflow the cap
         let cappedIndexes: number[] = []; // Indexes of values that overflow the cap
-
+        
         for (let i = 0; i < intResult.length; i++) {
             if (valueCaps[i] !== undefined && intResult[i] > valueCaps[i]) {
                 cappedIndexes.push(i);
                 intResult[i] = valueCaps[i];
             }
         }
-
+        
         if (cappedIndexes.length === 0) { // No overflow, return the result
             return intResult;
         }
-
+        
         // Cap overflow happened, rerun the calculation without the overflowed values in the arrays
         // Drop the dustributed value by capped values
         let newValue = value - cappedIndexes.map(x => intResult[x]).reduce((a, b) => a + b, 0);
-
+        
         // Generate new arrays for ratios and caps without overflowed values in the arrays
         let newRatios = ratios.filter((x, i) => !cappedIndexes.includes(i)).map(x => x * newValue);
         let newCaps = valueCaps.filter((x, i) => !cappedIndexes.includes(i));
@@ -254,7 +254,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
 
         // Merge sub-result with the overflowed values
         for (let i = 0; i < cappedIndexes.length; i++) {
-            subResult.splice(cappedIndexes[i] + i, 0, intResult[cappedIndexes[i]]);
+            subResult.splice(cappedIndexes[i], 0, intResult[cappedIndexes[i]]);
         }
 
         return subResult;
@@ -304,7 +304,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
                         maxSortedIndexes.splice(middle + 1, 0, i);
                         maxSortedDiffs.splice(middle + 1, 0, diff);
                     }
-                    
+
                     break;
                 }
 

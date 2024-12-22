@@ -3,6 +3,7 @@ import { JobList } from "./job-list/job-list";
 import { Research } from "./research/research";
 import { Resources } from "./resources/resources";
 import { Settings } from "./settings";
+import { Storage } from "./storage/storage";
 
 export class Game {
     public static Buildings = Buildings;
@@ -10,4 +11,5 @@ export class Game {
     public static Settings = Settings;
     public static JobList = JobList;
     public static Resources = Resources;
+    public static Storage = Storage;
 }

@@ -44,11 +44,15 @@ Includes Auto-Farmer (currently hardcoded), which is exempt from the standard Au
 
 TODO: Unlock condition??? 1k food/s?
 
+### Auto-Storage
+Purchases storage containers and distributes them evenly across all storageable resources.
+
+TODO: Unlock condition??? 1m steel storage space?
+
 ## TODO:
-- Auto-Storage - purchase crates only if resource reaches cap/configurable percentage
+- Auto-Market - uses only trade routes to not break balance, requires auto-sell/auto-buy managment, player defines priorities (what has high priority to buy, what has high priority to sell), creates sell routes if resource is at cap, removes sell routes when resource is no longer at cap, creates buy routes when money is at cap, removes buy routes when money is no longer at cap or bought resource is at cap (this will be a chunky one)
 - Auto-Building unlocks after building queue is researched, each building unlocks when amount of that building reaches 10-15 (TBD)
 - Auto-Research unlocks if plasmids exist (after first reset) and research queue is researched for the second time
-- Auto-Market - uses only trade routes to not break balance, requires auto-sell/auto-buy managment, player defines priorities (what has high priority to buy, what has high priority to sell)
 - Auto-Building for buildings with upkeep costs
 - Auto-Industry - ???
 - Auto-Building for buildings with energy upkeep
@@ -58,3 +62,4 @@ TODO: Unlock condition??? 1k food/s?
 - Auto-Research shouldn't purchase if research queue is not empty (to allow for manual priritization)
 - Automation progression, to inform players what they need to do to unlock the next automation + information about how the automations work should be available within the game window
 - Auto-Building advanced settings, for better management of building categories (standard, with food upkeep (civilian and military), with resource upkeep, with energy upkeep)
+- Auto-Storage advanced settings, allows setting storage ratios for resources (similar to how worker ratio distribution works)
