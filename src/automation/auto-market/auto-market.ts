@@ -9,6 +9,11 @@ export class AutoMarket extends Automation<AutoMarketState> {
     protected state: AutoMarketState = { unlocked: false, items: [] };
 
     tick(): void {
+        // Only run if Market is unlocked
+        if (!Game.Market.isUnlocked) {
+            return;
+        }
+
         let money = Game.Resources.getCount('resMoney');
         let maxMoney = Game.Resources.getMaxCount('resMoney');
         let capRatio = money / maxMoney;
