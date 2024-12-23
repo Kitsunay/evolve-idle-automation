@@ -13,6 +13,8 @@ export class AutoResearch extends Automation<AutoResearchState> {
         knownResearches: new Set<string>()
     }
 
+    private exceptions: string[] = ['civ-anthropology', 'civ-fanaticism']; // These researches cannot be automated
+
     updateUI() {
         // Button to turn this automation on/off
         AutoResearchInterface.refreshEnableButton(this.state.enabled, () => {
@@ -23,7 +25,7 @@ export class AutoResearch extends Automation<AutoResearchState> {
 
         AutoResearchInterface.setOnResearchBuyListeners((researchId: string) => {
             // On purchase, add the research to automated research set
-            if (!this.state.knownResearches.has(researchId)) {
+            if (!this.state.knownResearches.has(researchId) && !this.exceptions.includes(researchId)) {
                 this.state.knownResearches.add(researchId);
 
                 this.saveState();
