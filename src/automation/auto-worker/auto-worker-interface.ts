@@ -52,6 +52,12 @@ export class AutoWorkerInterface {
 
                 // Job ratio is a sibling element below the job amount configuration
                 let jobRootElement = document.querySelector<HTMLElement>(`#${job.jobId}`);
+
+                // Skip jobs that are not visible
+                if (jobRootElement.style.display === 'none') {
+                    continue;
+                }
+
                 if (jobRootElement.classList.contains('job_label')) {
                     // 'job_label' class indicates that the root element for the job is too deepin the tree and sibling must be created higher
                     // this is the case with foundry jobs for example
