@@ -49,10 +49,17 @@ Purchases storage containers and distributes them evenly across all storageable 
 
 TODO: Unlock condition??? 1m steel storage space?
 
+## Auto-Market
+Allows the player to select resources that can be managed by the automation. If a resource is up for sale, sell trade routes will be established when the resource is at storage cap and not needed, and they will be destroyed when the resource drops down. Auto-Buy will create buy trade routes when money is almost at cap, and removing them from resources that are at cap and no longer need to be bought, or stored money drops down.
+
+TODO: Unlock condition??? have a total trading value over 3K for 100 consecutive days?
+
 ## TODO:
-- Auto-Market - uses only trade routes to not break balance, requires auto-sell/auto-buy managment, player defines priorities (what has high priority to buy, what has high priority to sell), creates sell routes if resource is at cap, removes sell routes when resource is no longer at cap, creates buy routes when money is at cap, removes buy routes when money is no longer at cap or bought resource is at cap (this will be a chunky one)
+- Resource refactoring - a single Resource class that can access storage/market data
 - Auto-Building unlocks after building queue is researched, each building unlocks when amount of that building reaches 10-15 (TBD)
 - Auto-Research unlocks if plasmids exist (after first reset) and research queue is researched for the second time
+- Auto-Evolve?
+- Auto-Start?
 - Auto-Building for buildings with upkeep costs
 - Auto-Industry - ???
 - Auto-Building for buildings with energy upkeep
@@ -63,3 +70,4 @@ TODO: Unlock condition??? 1m steel storage space?
 - Automation progression, to inform players what they need to do to unlock the next automation + information about how the automations work should be available within the game window
 - Auto-Building advanced settings, for better management of building categories (standard, with food upkeep (civilian and military), with resource upkeep, with energy upkeep)
 - Auto-Storage advanced settings, allows setting storage ratios for resources (similar to how worker ratio distribution works)
+- Auto-Market - player defined priorities (what has high priority to buy, what has high priority to sell), Unlock: have a total trading value over 3K for 100 consecutive days

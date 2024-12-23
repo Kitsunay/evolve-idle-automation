@@ -1,3 +1,5 @@
+import { GameUtils } from "../game-utils";
+
 export class Resources {
 
     public static get populationResourceId(): string {
@@ -7,18 +9,24 @@ export class Resources {
     }
 
     public static getCount(resourceId: string): number {
+        // Fix for market resources
+        resourceId = this.fixResourceId(resourceId);
+
         // Return value visible in the left sidebar
         let countString = document.querySelector(`#${resourceId} .count`).textContent;
 
         // If has max, return only count (e.g. from string 3 / 15 return only 3)
-        if (countString.indexOf('/') < 0) {
+        if (countString.indexOf('/') >= 0) {
             countString = countString.substring(0, countString.indexOf('/'));
         }
 
-        return parseInt(countString);
+        return GameUtils.parseInt(countString);
     }
 
     public static getMaxCount(resourceId: string): number {
+        // Fix for market resources
+        resourceId = this.fixResourceId(resourceId);
+
         // Return value visible in the left sidebar
         let countString = document.querySelector(`#${resourceId} .count`).textContent;
 
@@ -28,10 +36,15 @@ export class Resources {
         }
 
         countString = countString.substring(countString.indexOf('/') + 1);
-        return parseInt(countString);
+        let maxCount = GameUtils.parseInt(countString);
+
+        return maxCount;
     }
 
     public static getConsumption(resourceId: string): number {
+        // Fix for market resources
+        resourceId = this.fixResourceId(resourceId);
+
         // This method uses global pop-up to get resource consumption, if a pop-up is displayed, cache it for restore at method end
         let openTooltip = document.querySelector('#popper');
         let cachedElement: Element = undefined;
@@ -53,24 +66,35 @@ export class Resources {
         let consumptionElements = document.querySelectorAll('#popper .resBreakdown .parent > div:nth-child(2) .modal_bd > :nth-child(2)'); // Read pop-up tooltip
         document.querySelector(`#${resourceId} .diff`).dispatchEvent(new Event('mouseout')); // Simulate mouseout to hide the tooltip
 
-        if (cachedElement) {
-            cachedElement.dispatchEvent(new Event('mouseover')); // Restore the original tooltip
-        }
-
         let consumption = 0;
         for (let i = 0; i < consumptionElements.length; i++) {
             const element = consumptionElements[i];
-            consumption += parseFloat(element.textContent);
+
+            consumption += GameUtils.parseFloat(element.textContent);
+        }
+
+        if (cachedElement) {
+            cachedElement.dispatchEvent(new Event('mouseover')); // Restore the original tooltip
         }
 
         return consumption;
     }
 
     public static getProduction(resourceId: string): number {
-        return parseFloat(document.querySelector(`#${resourceId} .diff`).textContent);
+        // Fix for market resources
+        resourceId = this.fixResourceId(resourceId);
+
+        return GameUtils.parseFloat(document.querySelector(`#${resourceId} .diff`).textContent);
     }
 
     public static getTotalProduction(resourceId: string): number {
+        // Fix for market resources
+        resourceId = this.fixResourceId(resourceId);
+        
         return this.getProduction(resourceId) - this.getConsumption(resourceId);
+    }
+
+    private static fixResourceId(resourceId: string): string {
+        return resourceId.replace('market-', 'res');
     }
 }
