@@ -4,14 +4,12 @@ import { JobItem } from "./job-item";
 import { UncategorizedJobCategoryItem } from "./uncategorized/uncategorized-job-category-item";
 
 export class JobList {
-    private static jobCategories: JobCategoryItem[] = [new UncategorizedJobCategoryItem(), new FoundryJobCategoryItem()];
-
-    public static getCategories(): JobCategoryItem[] {
-        return this.jobCategories;
+    public static get Categories(): JobCategoryItem[] {
+        return [new UncategorizedJobCategoryItem(), new FoundryJobCategoryItem()];
     }
 
     public static getJobs(): JobItem[] {
-        return this.jobCategories.flatMap((category) => category.jobs);
+        return this.Categories.flatMap((category) => category.jobs);
     }
 
     public static getJob(jobId: string): JobItem {

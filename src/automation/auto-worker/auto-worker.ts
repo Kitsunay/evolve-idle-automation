@@ -65,7 +65,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
 
     private getJobTargets(numWorkers: number): { jobId: string, value: number }[] {
         // Divide citizens by ratios
-        let jobCategories = Game.JobList.getCategories();
+        let jobCategories = Game.JobList.Categories;
 
         // Build a massive object connecting categories and their configs, and jobs that are visible in each category
         let categories: { gameCategory: JobCategoryItem, categoryConfig: AutoWorkerJobCategory, enabledJobs: AutoWorkerJobRatio[] }[] = [];
@@ -200,7 +200,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
 
     private runJobAutoDiscovery() {
         // TODO: Improve performance with Map<>???
-        let categories = Game.JobList.getCategories();
+        let categories = Game.JobList.Categories;
         for (const category of categories) {
             // Auto-Discovery of categories
             let categoryConfig = this.state.jobCategories.find(x => x.id === category.id);
