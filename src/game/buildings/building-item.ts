@@ -6,7 +6,15 @@ export class BuildingItem {
         return this.mainElement.querySelector<HTMLElement>('.button');
     }
 
+    get isVisible(): boolean {
+        return this.mainElement && this.buyButtonElement && this.buyButtonElement.style.display !== 'none';
+    }
+
     get isPurchasable(): boolean {
+        if (!this.isVisible) { // If the building is not unlocked yet, it cant be purchased
+            return false;
+        }
+
         // cna - can not afford, cnam - can not afford due to max capacity
         return !(this.mainElement.classList.contains('cna') || this.mainElement.classList.contains('cnam'));
     }
