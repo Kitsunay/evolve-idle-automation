@@ -15,6 +15,10 @@ export abstract class JobCategoryItem extends JobItem {
         return false;
     }
 
+    public get isVisible(): boolean {
+        return this.element && this.element.style.display !== 'none' && this.element.childElementCount > 0;
+    }
+
     public get subElement(): HTMLElement {
         return undefined;
     }

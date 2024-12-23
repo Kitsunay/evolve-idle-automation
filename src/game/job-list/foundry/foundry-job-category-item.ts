@@ -35,6 +35,10 @@ export class FoundryJobCategoryItem extends JobCategoryItem {
     }
 
     public get countMax(): number {
+        if (!this.isVisible) {
+            return undefined;
+        }
+
         let countString = this.element.querySelector<HTMLElement>('.job > :not([id]) .count').textContent;
         
         // If has max, return only max (e.g. from string 3 / 15 return only 15), otherwise return undefined
