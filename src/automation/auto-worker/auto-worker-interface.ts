@@ -54,7 +54,7 @@ export class AutoWorkerInterface {
                 let jobRootElement = document.querySelector<HTMLElement>(`#${job.jobId}`);
 
                 // Skip jobs that are not visible
-                if (jobRootElement.style.display === 'none') {
+                if (!jobRootElement || jobRootElement.style.display === 'none') {
                     continue;
                 }
 
