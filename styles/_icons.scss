@@ -1,5 +1,6 @@
 .icon {
     //position: absolute;
+    display: block;
 
     &.icon-size-16 {
         width: 14px;
@@ -25,7 +26,7 @@
     &.icon-color-fabd2f,
     &.icon-color-orange,
     &.icon-color-warning {
-        filter: invert(90%) sepia(51%) saturate(291%) hue-rotate(320deg) brightness(95%) contrast(93%);
+        filter: brightness(0) saturate(100%) invert(93%) sepia(11%) saturate(4827%) hue-rotate(331deg) brightness(99%) contrast(97%);
     }
 
     // Red
@@ -33,6 +34,13 @@
     &.icon-color-red,
     &.icon-color-danger {
         filter: invert(51%) sepia(84%) saturate(5094%) hue-rotate(342deg) brightness(100%) contrast(97%);
+    }
+
+    // White
+    &.icon-color-ebdbb2,
+    &.icon-color-white,
+    &.icon-color-light {
+        filter: invert(90%) sepia(51%) saturate(291%) hue-rotate(320deg) brightness(95%) contrast(93%);
     }
 
     &.icon-cogs {

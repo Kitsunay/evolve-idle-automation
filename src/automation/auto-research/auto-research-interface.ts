@@ -48,7 +48,7 @@ export class AutoResearchInterface {
                 let iconElement = researchElement.querySelector('.auto-research-icon');
 
                 if (!iconElement) {
-                    let iconElementString = `<div class="auto-research-icon top-right"><div class="icon icon-cogs icon-size-16"></div></div>`;
+                    let iconElementString = `<div class="auto-research-icon top-right"><div class="icon icon-cogs icon-size-16 icon-color-white"></div></div>`;
                     iconElement = Interface.createChildElementFromString(iconElementString, researchElement);
                 }
             }
