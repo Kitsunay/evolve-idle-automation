@@ -52,6 +52,10 @@ export class Resources {
             let cachedId = openTooltip.getAttribute('data-id');
             cachedElement = document.querySelector<HTMLElement>(`#${cachedId}`);
 
+            if (cachedElement === null) {
+                console.log('Failed to find cached tooltip element', openTooltip, cachedId);
+            }
+
             let jobLabel = cachedElement.querySelector('.job_label');
             if (jobLabel) { // Jobs have borked tooltip event listeners
                 cachedElement = jobLabel;

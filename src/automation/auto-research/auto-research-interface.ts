@@ -1,7 +1,6 @@
 import { Interface } from "../../interface/interface";
 
 export class AutoResearchInterface {
-
     /**
      * Map to keep track of existing listeners on research buttons, to prevent accidentally setting more than one listener.
      */
@@ -74,7 +73,7 @@ export class AutoResearchInterface {
             const listener = () => {
                 // cna - can not afford, cnam - can not afford due to max capacity
                 if (researchElement.classList.contains('cna') || researchElement.classList.contains('cnam')) {
-                    console.log('Can not afford research');
+                    console.debug('Can not afford research');
                     return;
                 }
 
@@ -84,5 +83,9 @@ export class AutoResearchInterface {
             researchButton.addEventListener('click', listener);
             this.onResearchBuyListeners.set(researchId, listener);
         }
+    }
+
+    static setOnResearchTabRefreshListener(callback: () => void) {
+        Interface.ResearchInterface.addOnResearchRefreshListener(callback);
     }
 }
