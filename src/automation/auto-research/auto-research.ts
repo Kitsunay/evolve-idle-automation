@@ -16,8 +16,6 @@ export class AutoResearch extends Automation<AutoResearchState> {
     private exceptions: string[] = ['civ-anthropology', 'civ-fanaticism']; // These researches cannot be automated
 
     updateUI() {
-        console.log('Updating UI...');
-
         // Button to turn this automation on/off
         AutoResearchInterface.refreshEnableButton(this.state.enabled, () => {
             this.state.enabled = !this.state.enabled;
