@@ -113,19 +113,15 @@ export class AutoMarket extends Automation<AutoMarketState> {
             return undefined;
         }
 
+        // Filter out resources that are too expensive or already full
+        autoBuyableResources = autoBuyableResources.filter((resource) => resource.buyPrice < income && Game.Resources.getCount(resource.resourceId) / Game.Resources.getMaxCount(resource.resourceId) < 0.99);
+
         // Find out how many trades each resource has, only resources with min trades are considered for the next auto-buy trade
         let minTrades = autoBuyableResources.map((resource) => resource.buyTradeCount).reduce((min, next) => Math.min(min, next), Number.MAX_VALUE);
         autoBuyableResources = autoBuyableResources.filter((resource) => resource.buyTradeCount === minTrades);
 
         // Single out a resource that fits in current budget and is not capped
-        let targetResource: MarketResourceItem = undefined;
-
-        for (const resource of autoBuyableResources) {
-            if (resource.buyPrice < income && Game.Resources.getCount(resource.resourceId) / Game.Resources.getMaxCount(resource.resourceId) < 0.99) {
-                targetResource = resource;
-                break;
-            }
-        }
+        let targetResource: MarketResourceItem = autoBuyableResources.length > 0 ? autoBuyableResources[0] : undefined;
 
         if (!targetResource) { // Buying stuff is outside of our budget
             return undefined;
