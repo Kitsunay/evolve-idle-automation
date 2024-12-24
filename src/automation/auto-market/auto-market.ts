@@ -25,8 +25,14 @@ export class AutoMarket extends Automation<AutoMarketState> {
         let soldResources = resources.filter((resource) => resource.sellTradeCount > 0);
         let boughtResources = resources.filter((resource) => resource.buyTradeCount > 0);
 
-        let autoBuyableResources = resources.filter((resource) => this.state.items.some((item) => item.resourceId === resource.resourceId && item.buyEnabled));
-        let autoSellableResources = resources.filter((resource) => this.state.items.some((item) => item.resourceId === resource.resourceId && item.sellEnabled));
+        let autoBuyableResources = resources.filter((resource) => this.state.items.some((item) =>
+            item.resourceId === resource.resourceId &&
+            item.buyEnabled &&
+            resource.sellTradeCount === 0)); // Don't consider resources that are already in a sell trade for buying
+        let autoSellableResources = resources.filter((resource) => this.state.items.some((item) =>
+            item.resourceId === resource.resourceId &&
+            item.sellEnabled &&
+            resource.buyTradeCount === 0)); // Don't consider resources that are already in a buy trade for selling
 
         // An attempt to minimize spaghetti after Auto-Worker fiasco
         if (this.tryAddBuyHighFunds(autoBuyableResources, soldResources, capRatio, income)) {
