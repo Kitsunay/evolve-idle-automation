@@ -3,7 +3,7 @@ import { MarketResourceItem } from "./market-resource-item";
 export class Market {
     public static get isUnlocked(): boolean {
         // Check if market tab is rendered
-        return document.querySelector('#mTabResource [aria-controls="293-content"]:not([style="display: none;"])') ? true : false;
+        return document.querySelector('#mTabResource .tabs ul :nth-child(1):not([style="display: none;"])') ? true : false;
     }
 
     public static getResources(): MarketResourceItem[] {

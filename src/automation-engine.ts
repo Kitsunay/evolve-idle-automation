@@ -41,7 +41,7 @@ export class AutomationEngine {
                 return;
             }
 
-            console.debug('Automation Tick', this.tickCounter++);
+            //console.debug('Automation Tick', this.tickCounter++);
 
             for (const automation of this.AUTOMATIONS) {
                 automation.tick();

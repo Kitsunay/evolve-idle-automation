@@ -11,6 +11,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
     tick(): void {
         // Only run if Market is unlocked
         if (!Game.Market.isUnlocked) {
+            console.log("Market is not unlocked");
             return;
         }
 
@@ -272,6 +273,10 @@ export class AutoMarket extends Automation<AutoMarketState> {
             if (sellTarget === undefined || resource.sellPrice > sellTarget.sellPrice) {
                 sellTarget = resource;
             }
+        }
+
+        if (sellTarget === undefined) { // Can't sell anything
+            return undefined;
         }
 
         let freeTrades = Game.Market.freeTradeRouteCount;

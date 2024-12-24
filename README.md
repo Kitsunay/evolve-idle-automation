@@ -26,9 +26,9 @@ The game prefers to keep hardware load to a minimum and completely destroys elem
 ### Auto-Building
 Purchases buildings as soon as they can be bought.
 
-TODO: Unlock automation after building queue is researched
+TODO: Unlock automation after using building queue to build 20 buildings with wait time of at least 10s
 
-TODO: Unlock for each building when amount of that building reaches 10-15 (TBD)
+TODO: Unlock for each building when amount of that building reaches 10
 
 ### Auto-Research
 Researches the first thing that is researchable. Will auto-research only technologies that have already been manually researched in previous resets to prevent accidentally unlocking new mechanics.
