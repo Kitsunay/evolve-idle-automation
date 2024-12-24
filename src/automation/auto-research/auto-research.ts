@@ -31,10 +31,11 @@ export class AutoResearch extends Automation<AutoResearchState> {
                 this.state.knownResearches.add(researchId);
 
                 this.saveState();
-                AutomationEngine.updateAllUI(); // ALWAYS UPDATE UI AFTER PURCHASE !!!
-
+                
                 console.log(`Added research [${researchId}] to auto-research list`);
             }
+
+            AutomationEngine.updateAllUI(); // ALWAYS UPDATE UI AFTER RESEARCH PURCHASE !!!
         });
 
         AutoResearchInterface.refreshAutomatedResearches(this.state.knownResearches);

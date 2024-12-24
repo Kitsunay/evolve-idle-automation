@@ -55,34 +55,7 @@ export class AutoResearchInterface {
     }
 
     static setOnResearchBuyListeners(callback: (researchId: string) => void) {
-        // Get all researches
-        let researchElements = document.querySelectorAll<HTMLElement>('#tech [id^="tech-"]');
-
-        for (let index = 0; index < researchElements.length; index++) {
-            const researchElement = researchElements[index];
-
-            let researchId = researchElement.id;
-            let researchButton = researchElement.querySelector<HTMLElement>('.button');
-
-            // Make sure each button has only one listener
-            if (this.onResearchBuyListeners.has(researchId)) {
-                researchButton.removeEventListener('click', this.onResearchBuyListeners.get(researchId));
-            }
-
-            // Callback is fired only if research purchase is successful
-            const listener = () => {
-                // cna - can not afford, cnam - can not afford due to max capacity
-                if (researchElement.classList.contains('cna') || researchElement.classList.contains('cnam')) {
-                    console.debug('Can not afford research');
-                    return;
-                }
-
-                callback(researchId);
-            };
-
-            researchButton.addEventListener('click', listener);
-            this.onResearchBuyListeners.set(researchId, listener);
-        }
+        Interface.ResearchInterface.addOnResearchBuyListener(callback);
     }
 
     static setOnResearchTabRefreshListener(callback: () => void) {

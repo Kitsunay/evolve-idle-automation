@@ -5,6 +5,10 @@ export class ResearchItemInterface {
         this.rootElement = rootElement;
     }
 
+    public get id(): string {
+        return this.rootElement.getAttribute('id');
+    }
+
     /**
      * Adds an event listener to the root element
      * @param eventType name of the event
