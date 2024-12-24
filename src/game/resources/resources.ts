@@ -57,6 +57,10 @@ export class Resources {
                 cachedElement = jobLabel;
             }
 
+            if (cachedElement.classList.contains('race')) { // Race tooltip is borked, too
+                cachedElement = cachedElement.querySelector<HTMLElement>('.name');
+            }
+
             document.querySelector(`#${cachedId}`).dispatchEvent(new Event('mouseout'));
         }
 
