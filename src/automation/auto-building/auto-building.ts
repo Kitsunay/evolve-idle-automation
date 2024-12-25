@@ -82,7 +82,11 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
      * Automation logic to run every tick
      */
     public tick() {
-        this.updateUI();
+        this.updateUI(); // Patchwork keeping the UI up to date
+
+        if (Game.Buildings.BuildingQueue.exists && Game.Buildings.BuildingQueue.queueItems.length > 0) { // Don't do anything if there are items in the queue (prioritize player's queue)
+            return;
+        }
 
         let firstPurchase = false; // Watch for purchases where the first building of a type is purchased
 

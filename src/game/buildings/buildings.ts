@@ -1,6 +1,9 @@
 import { BuildingItem } from "./building-item";
+import { BuildingQueue } from "./building-queue";
 
 export class Buildings {
+    public static BuildingQueue = BuildingQueue;
+
     public static getBuildings() {
         // Get all possible civilization items
         let buildingElements = Array.from(document.querySelectorAll<HTMLElement>('#mTabCivil .tab-item .action'));

@@ -6,6 +6,11 @@ import { Resources } from "./resources/resources";
 import { Settings } from "./settings";
 import { Storage } from "./storage/storage";
 
+/**
+ * Collection of classes that simulate the game's API,
+ * translating between the game UI and automation logic
+ * (and sometimes with a few blocks of additional logic for convenience).
+ */
 export class Game {
     public static Buildings = Buildings;
     public static Research = Research;

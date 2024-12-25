@@ -1,5 +1,8 @@
 import { ResearchInterface } from "./research/research-interface";
 
+/**
+ * Collection of classes that provide convenience methods for modifying the game's UI
+ */
 export class Interface {
     public static readonly ResearchInterface = ResearchInterface;
 
