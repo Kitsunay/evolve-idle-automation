@@ -3,11 +3,6 @@ import { Interface } from "../../interface/interface";
 
 export class AutoResearchInterface {
     /**
-     * Map to keep track of existing listeners on research buttons, to prevent accidentally setting more than one listener.
-     */
-    private static onResearchBuyListeners = new Map<string, () => void>();
-
-    /**
      * Render the button that enables/disables auto-research automation.
      */
     static refreshEnableButton(enabled: boolean, onClick: () => void) {
@@ -53,13 +48,5 @@ export class AutoResearchInterface {
                 }
             }
         }
-    }
-
-    static setOnResearchBuyListeners(callback: (researchId: string) => void) {
-        Game.Research.onResearchBuy.addListener(callback);
-    }
-
-    static setOnResearchTabRefreshListener(callback: () => void) {
-        Game.Research.onResearchTabRefresh.addListener(callback);
     }
 }

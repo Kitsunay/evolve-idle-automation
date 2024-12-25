@@ -23,7 +23,7 @@ export class AutoResearch extends Automation<AutoResearchState> {
             this.updateUI();
         });
 
-        AutoResearchInterface.setOnResearchBuyListeners((researchId: string) => {
+        Game.Research.onResearchBuy.addListener((researchId: string) => {
             // On purchase, add the research to automated research set
             if (!this.state.knownResearches.has(researchId) && !this.exceptions.includes(researchId)) {
                 this.state.knownResearches.add(researchId);
@@ -39,7 +39,7 @@ export class AutoResearch extends Automation<AutoResearchState> {
         AutoResearchInterface.refreshAutomatedResearches(this.state.knownResearches);
 
         // Refresh auto-research UI on actions that cause full UI re-render
-        AutoResearchInterface.setOnResearchTabRefreshListener(() => {
+        Game.Research.onResearchTabRefresh.addListener(() => {
             this.updateUI();
         })
     }
