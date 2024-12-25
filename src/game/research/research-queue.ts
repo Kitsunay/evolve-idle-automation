@@ -1,12 +1,29 @@
-import { Interface } from "../../interface/interface";
 import { ResearchQueueItem } from "./research-queue-item";
 
 export class ResearchQueue {
-    public static exists(): boolean {
-        return Interface.ResearchInterface.ResearchQueueInterface.exists;
+    /**
+     * Checks if the research queue interface element exists
+     */
+    public static get exists(): boolean {
+        return !!this.rootElement;
     }
 
-    public static queueItems(): ResearchQueueItem[] {
-        return Interface.ResearchInterface.ResearchQueueInterface.queueItems.map(item => new ResearchQueueItem(item));
+    /**
+     * Returns the root HTML element
+     */
+    public static get rootElement(): HTMLElement {
+        return document.querySelector<HTMLElement>(`#resQueue`);
+    }
+
+    /**
+     * Returns current research queue items
+     */
+    public static get queueItems(): ResearchQueueItem[] {
+        let nodeList = this.queueListElement.querySelectorAll<HTMLElement>('li');
+        return Array.from(nodeList).map(item => new ResearchQueueItem(item))
+    }
+
+    private static get queueListElement(): HTMLElement {
+        return this.rootElement.querySelector<HTMLElement>('.buildList');
     }
 }

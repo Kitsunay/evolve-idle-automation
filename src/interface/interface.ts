@@ -1,11 +1,7 @@
-import { ResearchInterface } from "./research/research-interface";
-
 /**
  * Collection of classes that provide convenience methods for modifying the game's UI
  */
 export class Interface {
-    public static readonly ResearchInterface = ResearchInterface;
-
     static createChildElementFromString(childHtml: string, parent: Element, childIndex?: number): Element {
         // Prepare an element
         let element = this.createElementFromString(childHtml);

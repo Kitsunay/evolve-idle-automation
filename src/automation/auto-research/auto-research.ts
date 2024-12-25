@@ -50,22 +50,22 @@ export class AutoResearch extends Automation<AutoResearchState> {
         }
 
         // Don't buy if player queued up a research
-        if (Game.Research.ResearchQueue.exists && Game.Research.ResearchQueue.queueItems().length > 0) {
+        if (Game.Research.ResearchQueue.exists && Game.Research.ResearchQueue.queueItems.length > 0) {
             return;
         }
 
         // Get purchasable researches
-        let purchasableResearches = Game.Research.getPurchasableResearches();
+        let purchasableResearches = Game.Research.purchasableResearches;
 
         // Find first purchasable research that is known and purchase it
         for (const research of purchasableResearches) {
-            if (this.state.knownResearches.has(research.researchId)) {
+            if (this.state.knownResearches.has(research.id)) {
                 Game.Research.tryBuyResearch(research);
 
                 // This purchase causes full UI re-render, so all automations need to be updated to prevent flickering
                 AutomationEngine.updateAllUI(); // ALWAYS UPDATE UI AFTER PURCHASE !!!
 
-                console.log(`Automation purchased research [${research.researchId}]`);
+                console.log(`Automation purchased research [${research.id}]`);
 
                 return; // Only one purchase per tick, to allow the game to update
             }

@@ -1,3 +1,4 @@
+import { Game } from "../../game/game";
 import { Interface } from "../../interface/interface";
 
 export class AutoResearchInterface {
@@ -55,10 +56,10 @@ export class AutoResearchInterface {
     }
 
     static setOnResearchBuyListeners(callback: (researchId: string) => void) {
-        Interface.ResearchInterface.addOnResearchBuyListener(callback);
+        Game.Research.onResearchBuy.addListener(callback);
     }
 
     static setOnResearchTabRefreshListener(callback: () => void) {
-        Interface.ResearchInterface.addOnResearchRefreshListener(callback);
+        Game.Research.onResearchTabRefresh.addListener(callback);
     }
 }
