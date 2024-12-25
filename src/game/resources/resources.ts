@@ -50,9 +50,9 @@ export class Resources {
         let cachedElement: Element = undefined;
         if (openTooltip) {
             let cachedId = openTooltip.getAttribute('data-id');
-            cachedElement = document.querySelector<HTMLElement>(`#${cachedId}`);
+            cachedElement = document.querySelector(`[id*="${cachedId}"]`);
 
-            if (cachedElement === null) {
+            if (!cachedElement) {
                 console.log('Failed to find cached tooltip element', openTooltip, cachedId);
             }
 
@@ -65,7 +65,11 @@ export class Resources {
                 cachedElement = cachedElement.querySelector<HTMLElement>('.name');
             }
 
-            document.querySelector(`#${cachedId}`).dispatchEvent(new Event('mouseout'));
+            if (cachedElement.classList.contains('city')) { // District names are also borked
+                cachedElement = cachedElement.querySelector<HTMLElement>('h3');
+            }
+
+            cachedElement.dispatchEvent(new Event('mouseout'));
         }
 
         // The popup exists for such a short amount of time, it doesn't even render and the player won't see any flickering tooltips
@@ -98,7 +102,7 @@ export class Resources {
     public static getTotalProduction(resourceId: string): number {
         // Fix for market resources
         resourceId = this.fixResourceId(resourceId);
-        
+
         return this.getProduction(resourceId) - this.getConsumption(resourceId);
     }
 
