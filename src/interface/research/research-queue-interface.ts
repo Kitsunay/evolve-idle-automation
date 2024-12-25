@@ -1,11 +1,6 @@
-import { Interface } from "../interface";
 import { ResearchQueueItemInterface } from "./research-queue-item-interface";
 
 export class ResearchQueueInterface {
-    private static queueItemMutationObserver: MutationObserver = undefined;
-    private static queueItemAddCallbacks = new Set<() => void>();
-    private static queueItemRemovedCallbacks = new Set<() => void>();
-
     /**
      * Checks if the research queue interface element exists
      */

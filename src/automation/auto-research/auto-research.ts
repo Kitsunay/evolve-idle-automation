@@ -49,6 +49,11 @@ export class AutoResearch extends Automation<AutoResearchState> {
             return;
         }
 
+        // Don't buy if player queued up a research
+        if (Game.Research.ResearchQueue.exists && Game.Research.ResearchQueue.queueItems().length > 0) {
+            return;
+        }
+
         // Get purchasable researches
         let purchasableResearches = Game.Research.getPurchasableResearches();
 

@@ -1,6 +1,9 @@
 import { ResearchItem } from "./research-item";
+import { ResearchQueue } from "./research-queue";
 
 export class Research {
+    public static ResearchQueue = ResearchQueue;
+
     /**
      * Returns a list of researches that can be purchased.
      * @returns 

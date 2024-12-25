@@ -11,7 +11,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
     tick(): void {
         // Only run if Market is unlocked
         if (!Game.Market.isUnlocked) {
-            console.log("Market is not unlocked");
+            console.debug("Market is not unlocked");
             return;
         }
 
