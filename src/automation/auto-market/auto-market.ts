@@ -53,6 +53,10 @@ export class AutoMarket extends Automation<AutoMarketState> {
         }
 
         // REMOVE SELL
+        if (this.tryRemoveSellTradeResourceProductionIsNegative(soldResources)) {
+            return; // Only one trade route per tick
+        }
+
         if (this.tryRemoveSellTradeResourceNotAutoSellable(resources, autoSellableResources)) {
             return; // Only one trade route per tick
         }
@@ -60,10 +64,6 @@ export class AutoMarket extends Automation<AutoMarketState> {
         if (this.tryRemoveSellTradeResourceNotFull(soldResources)) {
             return; // Only one trade route per tick
         };
-
-        if (this.tryRemoveSellTradeResourceProductionIsNegative(soldResources)) {
-            return; // Only one trade route per tick
-        }
 
         // ADD SELL
         if (this.tryAddSellResourceIsFull(autoSellableResources, soldResources)) {
