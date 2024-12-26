@@ -39,6 +39,10 @@ export class AutoMarket extends Automation<AutoMarketState> {
             return; // Only one trade route per tick
         }
 
+        if (this.tryRemoveBuyUnevenDistribution(autoBuyableResources, boughtResources, capRatio, income)) {
+            return; // Only one trade route per tick
+        }
+
         // REMOVE BUY
         if (this.tryRemoveBuyBoughtResourceIsFull(boughtResources)) {
             return; // Only one trade route per tick
@@ -117,7 +121,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
         autoBuyableResources = autoBuyableResources.filter((resource) => Game.Resources.getCount(resource.resourceId) / Game.Resources.getMaxCount(resource.resourceId) < 0.99);
 
         // Find out how many trades each resource has, only resources with min trades are considered for the next auto-buy trade
-        let minTrades = autoBuyableResources.map((resource) => resource.buyTradeCount).reduce((min, next) => {console.log('Math.min(min, next)', min, next, Math.min(min, next)); return Math.min(min, next);}, Number.MAX_VALUE);
+        let minTrades = autoBuyableResources.map((resource) => resource.buyTradeCount).reduce((min, next) => {return Math.min(min, next);}, Number.MAX_VALUE);
         autoBuyableResources = autoBuyableResources.filter((resource) => resource.buyTradeCount <= minTrades);
 
         // Filter out resources that are too expensive for now
@@ -153,6 +157,44 @@ export class AutoMarket extends Automation<AutoMarketState> {
         }
 
         return undefined;
+    }
+
+    private tryRemoveBuyUnevenDistribution(autoBuyableResources: MarketResourceItem[], boughtResources: MarketResourceItem[], capRatio: number, income: number): MarketResourceItem {
+        // Do this only if there is enough money
+        if (capRatio < 0.9 || income < 0) { // There is not enough money to buy
+            return undefined;
+        }
+
+        // Filter out resources that are already full
+        autoBuyableResources = autoBuyableResources.filter((resource) => Game.Resources.getCount(resource.resourceId) / Game.Resources.getMaxCount(resource.resourceId) < 0.99);
+        
+        // Look for resources with lowest number of trades
+        let minTrades = autoBuyableResources.map((resource) => resource.buyTradeCount).reduce((min, next) => {return Math.min(min, next);}, Number.MAX_VALUE);
+        autoBuyableResources = autoBuyableResources.filter((resource) => resource.buyTradeCount <= minTrades);
+
+        // Find resource with lowest number of trades that is a valid auto-buy candidate
+        let addTarget: MarketResourceItem = autoBuyableResources.length > 0 ? autoBuyableResources[0] : undefined;
+
+        console.log(boughtResources);
+
+        // Now find a resource with most trades
+        let maxTrades = boughtResources.map((resource) => resource.buyTradeCount).reduce((max, next) => Math.max(max, next), 0);
+        boughtResources = boughtResources.filter((resource) => resource.buyTradeCount >= maxTrades);
+
+        let subTarget: MarketResourceItem = boughtResources.length > 0 ? boughtResources[0] : undefined;
+
+        console.log("maxTrades", maxTrades, "minTrades", minTrades, "addTarget", addTarget, "subTarget", subTarget);
+
+        // If the difference between the two is greater than 1, remove the resource with most trades
+        if (maxTrades - minTrades > 1) {
+            Game.Market.subBuyTrade(subTarget);
+        }
+
+        // If buying the new resource would not put us into negative income, buy it
+        if (addTarget.buyPrice < income + subTarget.buyPrice) {
+            Game.Market.addBuyTrade(addTarget);
+            return subTarget;
+        }
     }
 
     private tryRemoveBuyBoughtResourceIsFull(boughtResources: MarketResourceItem[]): MarketResourceItem {
