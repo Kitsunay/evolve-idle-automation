@@ -77,14 +77,14 @@ export class AutoMarket extends Automation<AutoMarketState> {
         this.runAutoDiscovery();
 
         for (const item of this.state.items) {
-            AutoMarketInterface.refreshSellButton(item.resourceId, item.sellEnabled, () => {
-                item.sellEnabled = !item.sellEnabled;
+            AutoMarketInterface.refreshBuyButton(item.resourceId, item.buyEnabled, () => {
+                item.buyEnabled = !item.buyEnabled;
                 this.saveState();
                 this.updateUI();
             });
 
-            AutoMarketInterface.refreshBuyButton(item.resourceId, item.buyEnabled, () => {
-                item.buyEnabled = !item.buyEnabled;
+            AutoMarketInterface.refreshSellButton(item.resourceId, item.sellEnabled, () => {
+                item.sellEnabled = !item.sellEnabled;
                 this.saveState();
                 this.updateUI();
             });
