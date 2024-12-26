@@ -1,7 +1,8 @@
+import { ToggleButton } from "../../interface/components/toggle-button/toggle-button";
 import { Interface } from "../../interface/interface";
 
 export class AutoStorageInterface {
-    public static refreshEnableButton(storageId: string, enabled: boolean, onClick: () => void) {
+    public static refreshEnableButton(storageId: string, enabled: boolean, onToggle: () => void) {
         // Get header with storage buy button
         let buttonContainerElement = document.querySelector<HTMLElement>(`#resStorage #createHead div.${storageId}`);
 
@@ -15,21 +16,8 @@ export class AutoStorageInterface {
         let autoId = `auto-storage-${storageId}`;
 
         // Check if auto button exists
-        let autoButtonElement = buttonContainerElement.querySelector<Element>(`#${autoId}`);
-
-        if (!autoButtonElement) {
-            // Add an "Auto" button above the buy button
-            let elementString = `<div id="${autoId}" class="auto auto-storage"><span></span></div>`;
-            autoButtonElement = Interface.createChildElementFromString(elementString, buttonContainerElement, 0);
-            autoButtonElement.addEventListener('click', onClick);
-        }
-
-        // Update button values to represent the current "enabled" state
-        let buttonText = `Auto: ${enabled ? 'On' : 'Off'}`;
-        autoButtonElement.firstChild.textContent = buttonText;
-
-        if (autoButtonElement.classList.contains('on') !== enabled) {
-            autoButtonElement.classList.toggle('on');
-        }
+        let toggleButton = ToggleButton.createIfNotExists(`${autoId}`, buttonContainerElement, {textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
+        toggleButton.onToggle = onToggle;
+        toggleButton.isToggled = enabled;
     }
 }

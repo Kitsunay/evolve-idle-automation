@@ -1,8 +1,9 @@
+import { ToggleButton } from "../../interface/components/toggle-button/toggle-button";
 import { Interface } from "../../interface/interface";
 import { AutoWorkerJobRatio } from "./auto-worker-job-ratio";
 
 export class AutoWorkerInterface {
-    static refreshEnableButton(enabled: boolean, onClick: () => void) {
+    static refreshEnableButton(enabled: boolean, onToggle: () => void) {
         let rootElement = document.querySelector<HTMLElement>(`#civics .jobList`);
         let autoWorkerRootElement: Element = rootElement.querySelector<Element>(`.auto-worker`);
 
@@ -13,24 +14,15 @@ export class AutoWorkerInterface {
         }
 
         // Add on/off button
-        let autoWorkerButtonElement = autoWorkerRootElement.querySelector<Element>('.auto');
-
-        if (!autoWorkerButtonElement) {
-            let elementString = `<div class="auto"><span>Auto-Worker</span></div>`;
-            autoWorkerButtonElement = Interface.createChildElementFromString(elementString, autoWorkerRootElement, 0);
-            autoWorkerButtonElement.addEventListener('click', onClick);
-        }
+        let toggleButton = ToggleButton.createIfNotExists(`auto_worker_toggle_enabled`, autoWorkerRootElement, {textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
+        toggleButton.onToggle = onToggle;
+        toggleButton.isToggled = enabled;
 
         // Add 'Automation' label
         let autoWorkerLabelElement = autoWorkerRootElement.querySelector<Element>('#auto-worker-label');
         if (!autoWorkerLabelElement) {
             let autoWorkerLabelElementString = '<div id="auto-worker-label" class="has-text-warning">Automation</div>';
             autoWorkerLabelElement = Interface.createChildElementFromString(autoWorkerLabelElementString, autoWorkerRootElement, 0);
-        }
-
-        // Update element's value (on/off)
-        if (autoWorkerButtonElement.classList.contains('on') !== enabled) {
-            autoWorkerButtonElement.classList.toggle('on');
         }
     }
 

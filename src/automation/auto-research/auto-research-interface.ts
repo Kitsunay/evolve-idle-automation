@@ -1,30 +1,27 @@
-import { Game } from "../../game/game";
+import { ToggleButton } from "../../interface/components/toggle-button/toggle-button";
 import { Interface } from "../../interface/interface";
 
 export class AutoResearchInterface {
     /**
      * Render the button that enables/disables auto-research automation.
      */
-    static refreshEnableButton(enabled: boolean, onClick: () => void) {
-        let autoResearchElement: Element = document.querySelector<HTMLElement>(`#tech .auto-research`);
+    static refreshEnableButton(enabled: boolean, onToggle: () => void) {
+        //let autoResearchElement: Element = document.querySelector<HTMLElement>(`#tech .auto-research`);
         let researchRootElement = document.querySelector<HTMLElement>(`#tech`);
+
+        if (!researchRootElement) {
+            return;
+        }
         
         // Create the element if it doesn't exist exists
-        if (!autoResearchElement && researchRootElement) {
-            let autoBuildingElementString = `<div class="auto auto-research"><span>Auto-Research</span></div>`;
-            autoResearchElement = Interface.createChildElementFromString(autoBuildingElementString, researchRootElement, 0);
-            autoResearchElement.addEventListener('click', onClick);
-        }
+        let toggleButton = ToggleButton.createIfNotExists(`auto_research_toggle_enabled`, researchRootElement, { styleClass: "auto-research", textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
+        toggleButton.onToggle = onToggle;
+        toggleButton.isToggled = enabled;
 
         // Also make sure 'Automation' label is rendered
         if (!document.querySelector<HTMLElement>(`#auto-research-label`)) {
             let autoResearchLabelElementString = `<div id="auto-research-label"><h3 class="name has-text-warning">Automation</h3></div>`;
             Interface.createChildElementFromString(autoResearchLabelElementString, researchRootElement, 0);
-        }
-
-        // Update element's value (on/off)
-        if (autoResearchElement.classList.contains('on') !== enabled) {
-            autoResearchElement.classList.toggle('on');
         }
     }
 

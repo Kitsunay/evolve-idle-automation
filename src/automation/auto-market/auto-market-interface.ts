@@ -1,38 +1,21 @@
+import { ToggleButton } from "../../interface/components/toggle-button/toggle-button";
 import { Interface } from "../../interface/interface";
 
 export class AutoMarketInterface {
-    static refreshBuyButton(resourceId: string, buyEnabled: boolean, onClick: () => void) {
+    static refreshBuyButton(resourceId: string, buyEnabled: boolean, onToggle: () => void) {
         let containerElement = this.refreshButtonContainer(resourceId);
 
-        let elementId = `auto_market_buy_${resourceId}`;
-        let buyButtonElement = containerElement.querySelector(`#${elementId}`);
-
-        if (!buyButtonElement) {
-            let elementString = `<div id="${elementId}" class="auto auto-market buy"><span>A.BUY</span></div>`;
-            buyButtonElement = Interface.createChildElementFromString(elementString, containerElement, 0);
-            buyButtonElement.addEventListener('click', onClick);
-        }
-
-        if (buyButtonElement.classList.contains('on') !== buyEnabled) {
-            buyButtonElement.classList.toggle('on');
-        }
+        let toggleButton = ToggleButton.createIfNotExists(`auto_market_buy_${resourceId}`, containerElement, { styleClass: "auto-market buy", textContent: {on: "BUY", off: "BUY"}});
+        toggleButton.onToggle = onToggle;
+        toggleButton.isToggled = buyEnabled;
     }
 
-    static refreshSellButton(resourceId: string, sellEnabled: boolean, onClick: () => void) {
+    static refreshSellButton(resourceId: string, sellEnabled: boolean, onToggle: () => void) {
         let containerElement = this.refreshButtonContainer(resourceId);
 
-        let elementId = `auto_market_sell_${resourceId}`;
-        let sellButtonElement = containerElement.querySelector(`#${elementId}`);
-
-        if (!sellButtonElement) {
-            let elementString = `<div id="${elementId}" class="auto auto-market sell"><span>A.SELL</span></div>`;
-            sellButtonElement = Interface.createChildElementFromString(elementString, containerElement, 0);
-            sellButtonElement.addEventListener('click', onClick);
-        }
-
-        if (sellButtonElement.classList.contains('on') !== sellEnabled) {
-            sellButtonElement.classList.toggle('on');
-        }
+        let toggleButton = ToggleButton.createIfNotExists(`auto_market_sell_${resourceId}`, containerElement, { styleClass: "auto-market sell", textContent: {on: "SELL", off: "SELL"}});
+        toggleButton.onToggle = onToggle;
+        toggleButton.isToggled = sellEnabled;
     }
 
     private static refreshButtonContainer(resourceId: string): Element {

@@ -1,0 +1,30 @@
+.toggle-button {
+    margin: .375rem .375rem 0 0;
+    border-radius: 4px;
+
+    width: 12.625rem;
+    /* As defined for most buttons in the game */
+
+    display: flex;
+    text-align: center;
+    justify-items: center;
+
+    background-color: #3c3836;
+
+    /* Disabled text color by default */
+    color: #fb4934;
+
+    cursor: pointer;
+}
+
+.toggle-button:hover {
+    background-color: #504945;
+}
+
+.toggle-button.on {
+    color: #8ec07c;
+}
+
+.toggle-button span {
+    flex: 1;
+}
