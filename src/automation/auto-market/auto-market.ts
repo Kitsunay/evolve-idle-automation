@@ -175,15 +175,11 @@ export class AutoMarket extends Automation<AutoMarketState> {
         // Find resource with lowest number of trades that is a valid auto-buy candidate
         let addTarget: MarketResourceItem = autoBuyableResources.length > 0 ? autoBuyableResources[0] : undefined;
 
-        console.log(boughtResources);
-
         // Now find a resource with most trades
         let maxTrades = boughtResources.map((resource) => resource.buyTradeCount).reduce((max, next) => Math.max(max, next), 0);
         boughtResources = boughtResources.filter((resource) => resource.buyTradeCount >= maxTrades);
 
         let subTarget: MarketResourceItem = boughtResources.length > 0 ? boughtResources[0] : undefined;
-
-        console.log("maxTrades", maxTrades, "minTrades", minTrades, "addTarget", addTarget, "subTarget", subTarget);
 
         // If the difference between the two is greater than 1, remove the resource with most trades
         if (maxTrades - minTrades > 1) {
