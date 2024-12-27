@@ -3,7 +3,7 @@
 # Check if version number has been manually updated
 # If git diff returns a line with +/- that begins with "version", exit
 $gitOutput = git diff --staged package.json
-if ($gitOutput -eq $null) {
+if ($null -eq $gitOutput) {
     $gitOutput = "" # Have at least an empty string to not break the script
 }
 
