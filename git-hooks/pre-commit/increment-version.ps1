@@ -1,5 +1,7 @@
 #!/usr/bin/env pwsh
 
+$args
+
 # Check if version number has been manually updated
 # If git diff returns a line with +/- that begins with "version", exit
 $gitOutput = git diff --staged package.json

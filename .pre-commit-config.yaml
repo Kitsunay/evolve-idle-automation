@@ -1,3 +1,4 @@
+default_install_hook_types: [pre-commit, pre-push, commit-msg]
 repos:
 - repo: local
   hooks:
@@ -6,5 +7,5 @@ repos:
       entry: git-hooks/pre-commit/increment-version.ps1
       language: script
       verbose: true
-      files: '.pre-commit-config.yaml' # Makes the script run
-      always_run: true                 # once on each commit
+      stages: [commit-msg] # The script will be given a filepath to file with commit message
+      always_run: true     # Makes the script run once on each commit
