@@ -1,5 +1,5 @@
 import { Game } from "../../game";
-import { Observer } from "./observer";
+import { Observer } from "../../common/observer";
 
 export class ResearchBuyObserver extends Observer<(resourceId: string) => void> {
     protected observedElement: HTMLElement = document.querySelector<HTMLElement>('#tech');

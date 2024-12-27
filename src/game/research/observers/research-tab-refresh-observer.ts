@@ -1,14 +1,6 @@
-import { Observer } from "./observer";
+import { ElementObserver } from "../../common/element-observer";
 
-export class ResearchTabRefreshObserver extends Observer<() => void> {
+export class ResearchTabRefreshObserver extends ElementObserver {
     protected observedElement: HTMLElement = document.querySelector<HTMLElement>('#mTabResearch');
     protected observerConfig: MutationObserverInit = { childList: true };
-
-    protected onMutation(mutationList: MutationRecord[], observer: MutationObserver, listeners: Map<string, () => void>): void {
-        listeners.forEach(callback => callback());
-    }
-
-    protected init(): void {
-        // Do nothing
-    }
 }
