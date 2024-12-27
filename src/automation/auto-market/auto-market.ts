@@ -82,7 +82,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
         this.runAutoDiscovery();
 
         AutoMarketInterface.updateUI({
-            isVisible: this.state.unlocked, configItems: this.state.items,
+            isVisible: /*this.state.unlocked*/ true, configItems: this.state.items,
             onBuy: (item: AutoMarketItem) => {
                 item.buyEnabled = !item.buyEnabled;
                 this.saveState();

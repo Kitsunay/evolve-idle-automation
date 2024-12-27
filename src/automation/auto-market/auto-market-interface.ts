@@ -47,7 +47,7 @@ export class AutoMarketInterface {
         
         // Make sure the button doesn't exist
         if (!buttonConfig.visible) {
-            let toggleButton = ToggleButton.get(`auto_market_${buttonType}_${buttonConfig.resourceId}`);
+            let toggleButton = ToggleButton.get(buttonId);
             
             if (toggleButton) {
                 toggleButton.destroy();
@@ -60,7 +60,7 @@ export class AutoMarketInterface {
         let containerElement = this.refreshButtonContainer(buttonConfig.resourceId);
 
         let toggleButton = ToggleButton.getOrCreate(
-            `auto_market_${buttonType}_${buttonConfig.resourceId}`,
+            buttonId,
             containerElement,
             {
                 styleClass: `auto-market ${buttonType}`,
