@@ -4,7 +4,7 @@ import { Interface } from "../../interface/interface";
 import { AutoMarketItem } from "./auto-market-item";
 
 export class AutoMarketInterface {
-    public static updateUI(config: { isVisible: boolean; configItems: AutoMarketItem[]; onBuy: (item: AutoMarketItem) => void; onSell: (item: AutoMarketItem) => void; }) {
+    public static updateUI(config: { isVisible: boolean; configItems: AutoMarketItem[]; onBuy: (item: AutoMarketItem) => void; onSell: (item: AutoMarketItem) => void; onPause: (item: AutoMarketItem) => void; }) {
         // Test whether the interface should be rendered or hidden
         config.isVisible = config.isVisible && Game.Market.isTradeRouteUnlocked;
 
@@ -13,6 +13,7 @@ export class AutoMarketInterface {
                 visible: config.isVisible,
                 resourceId: item.resourceId,
                 enabled: item.buyEnabled,
+                paused: item.paused,
                 onToggle: () => {
                     config.onBuy(item);
                 }
@@ -22,19 +23,34 @@ export class AutoMarketInterface {
                 visible: config.isVisible,
                 resourceId: item.resourceId,
                 enabled: item.sellEnabled,
+                paused: item.paused,
                 onToggle: () => {
                     config.onSell(item);
+                }
+            });
+
+            this.refreshPauseButton({
+                visible: config.isVisible,
+                resourceId: item.resourceId,
+                enabled: item.paused === true, // To prevent problems with undefined
+                paused: undefined,
+                onToggle: () => {
+                    config.onPause(item);
                 }
             });
         }
     }
 
-    private static refreshBuyButton(config: { visible: boolean, resourceId: string, enabled: boolean, onToggle: () => void }) {
+    private static refreshBuyButton(config: { visible: boolean, resourceId: string, enabled: boolean, paused: boolean, onToggle: () => void }) {
         this.refreshButton('buy', config);
     }
 
-    private static refreshSellButton(config: { visible: boolean, resourceId: string, enabled: boolean, onToggle: () => void }) {
+    private static refreshSellButton(config: { visible: boolean, resourceId: string, enabled: boolean, paused: boolean, onToggle: () => void }) {
         this.refreshButton('sell', config);
+    }
+
+    private static refreshPauseButton(config: { visible: boolean, resourceId: string, enabled: boolean, paused: boolean, onToggle: () => void }) {
+        this.refreshButton('pause', config);
     }
 
     /**
@@ -42,7 +58,7 @@ export class AutoMarketInterface {
      * @param buttonType 
      * @param buttonConfig 
      */
-    private static refreshButton(buttonType: 'buy' | 'sell', buttonConfig: { visible: boolean, resourceId: string, enabled: boolean, onToggle: () => void }) {
+    private static refreshButton(buttonType: 'buy' | 'sell' | 'pause', buttonConfig: { visible: boolean, resourceId: string, enabled: boolean, paused: boolean, onToggle: () => void }) {
         const buttonId = `auto_market_${buttonType}_${buttonConfig.resourceId}`;
         
         // Make sure the button doesn't exist
@@ -73,6 +89,10 @@ export class AutoMarketInterface {
 
         toggleButton.onToggle = buttonConfig.onToggle;
         toggleButton.isToggled = buttonConfig.enabled;
+
+        if (buttonConfig.paused !== undefined && toggleButton.buttonElement.classList.contains('paused') !== buttonConfig.paused) {
+            toggleButton.buttonElement.classList.toggle('paused');
+        }
     }
 
     private static refreshButtonContainer(resourceId: string): Element {

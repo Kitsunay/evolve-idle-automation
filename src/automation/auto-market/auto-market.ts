@@ -23,6 +23,9 @@ export class AutoMarket extends Automation<AutoMarketState> {
 
         let resources: MarketResourceItem[] = Game.Market.getResources();
 
+        // Drop paused resources from affectable resources
+        resources = resources.filter((resource) => this.state.items.some((item) => item.resourceId === resource.resourceId && !item.paused));
+
         let soldResources = resources.filter((resource) => resource.sellTradeCount > 0);
         let boughtResources = resources.filter((resource) => resource.buyTradeCount > 0);
 
@@ -92,6 +95,11 @@ export class AutoMarket extends Automation<AutoMarketState> {
                 item.sellEnabled = !item.sellEnabled;
                 this.saveState();
                 this.updateUI();
+            },
+            onPause: (item: AutoMarketItem) => {
+                item.paused = !item.paused;
+                this.saveState();
+                this.updateUI();
             }
         });
 
@@ -126,6 +134,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
                 // Add a new configuration item
                 this.state.items.push({
                     resourceId: resource.resourceId,
+                    paused: false,
                     sellEnabled: false,
                     buyEnabled: false
                 });

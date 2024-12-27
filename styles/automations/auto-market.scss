@@ -48,30 +48,34 @@
         &.sell {
             &:hover {
                 border-color: #fb4934;
-            }    
+            }
 
             &.on {
                 border-color: #fb4934;
                 color: #fb4934;
             }
         }
-    }
-}
 
-.auto-worker-row {
-    display: flex;
-    margin-left: 0.5rem;
-    margin-bottom: 0.5rem;
+        &.pause {
+            // Override game's class
+            box-sizing: border-box;
+            bottom: unset;
+            height: unset;
 
-    color: #8ec07c;
+            &.on {
+                border-color: #83a598;
+            }
+        }
 
-    > :first-child {
-        width: 10rem;
-        margin-right: 0.5rem;
-    }
+        // When sell/buy is paused
+        &.paused {
+            color: #83a598;
+            border-color: #3c3836;
 
-    > :nth-child(2) {
-        width: 4.5rem;
-        text-align: center;
+            &.on {
+                color: #83a598;
+                border-color: #83a598;
+            }
+        }
     }
 }
