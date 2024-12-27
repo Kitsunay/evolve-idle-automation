@@ -209,7 +209,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
         }
 
         // If buying the new resource would not put us into negative income, buy it
-        if (addTarget.buyPrice < income + subTarget.buyPrice) {
+        if (addTarget && addTarget.buyPrice < income + subTarget.buyPrice) {
             Game.Market.addBuyTrade(addTarget);
             return subTarget;
         }
