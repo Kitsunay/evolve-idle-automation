@@ -12,6 +12,7 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
      */
     protected state: AutoBuildingState = {
         unlocked: false,
+        paused: false,
         buildings: []
     }
 
@@ -40,10 +41,16 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
         this.runAutoDiscovery();
 
         for (const building of this.buildings) {
-            AutoBuildingInterface.refreshBuildingInterface(building.buildingId, building.autoEnabled, () => {
+            AutoBuildingInterface.refreshBuildingInterface(building.buildingId, building.autoEnabled, this.state.paused, () => {
                 this.toggle(building.buildingId);
             });
         }
+
+        AutoBuildingInterface.refreshPauseButton(this.state.paused, () => {
+            this.state.paused = !this.state.paused;
+            this.saveState();
+            this.updateUI();
+        });
     }
 
     runAutoDiscovery() {

@@ -7,6 +7,11 @@ export interface AutoBuildingState {
     unlocked: boolean;
 
     /**
+     * Whether this automation is paused
+     */
+    paused: boolean;
+
+    /**
      * The list of buildings with their automation status
      */
     buildings: AutoBuildingItem[];

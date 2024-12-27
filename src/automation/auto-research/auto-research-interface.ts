@@ -13,7 +13,7 @@ export class AutoResearchInterface {
             return;
         }
         
-        // Create the element if it doesn't exist exists
+        // Create the element if it doesn't exist
         let toggleButton = ToggleButton.getOrCreate(`auto_research_toggle_enabled`, researchRootElement, { styleClass: "auto-research", textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
         toggleButton.onToggle = onToggle;
         toggleButton.isToggled = enabled;

@@ -1,0 +1,32 @@
+.auto-building {
+    border-style: solid;
+    border-width: 1px;
+    border-color: transparent;
+
+    transition: all 200ms ease;
+
+    &.paused {
+        color: #83a598;
+        background-color: transparent;
+        border-color: #3c3836;
+    }
+}
+
+.pause-button {
+    color: #83a598;
+    background-color: transparent;
+    border-color: #3c3836;
+    border-style: solid;
+    border-width: 1px;
+
+    transition: all 200ms ease;
+
+    &:hover {
+        border-color: #fb4934;
+    }
+
+    &.on {
+        border-color: #fb4934;
+        color: #fb4934;
+    }
+}
