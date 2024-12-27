@@ -91,6 +91,10 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
     public tick() {
         this.updateUI(); // Patchwork keeping the UI up to date
 
+        if (this.state.paused) { // Don't do anything if automation is paused
+            return;
+        }
+
         if (Game.Buildings.BuildingQueue.exists && Game.Buildings.BuildingQueue.queueItems.length > 0) { // Don't do anything if there are items in the queue (prioritize player's queue)
             return;
         }
