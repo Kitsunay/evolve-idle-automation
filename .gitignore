@@ -1,5 +1,6 @@
 node_modules/
 dist/
+.git-template/
 
 # profile settings created by web-ext
 firefox-profiles/
