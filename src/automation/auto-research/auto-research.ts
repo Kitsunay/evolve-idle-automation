@@ -13,7 +13,7 @@ export class AutoResearch extends Automation<AutoResearchState> {
         knownResearches: new Set<string>()
     }
 
-    private exceptions: string[] = ['civ-anthropology', 'civ-fanaticism']; // These researches cannot be automated
+    private exceptions: string[] = ['tech-anthropology', 'tech-fanaticism']; // These researches cannot be automated
 
     updateUI() {
         // Button to turn this automation on/off
