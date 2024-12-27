@@ -47,7 +47,7 @@ $manifestJson = Get-Content -Raw manifest.json
 $manifestJson = $manifestJson -replace $regex, """version"": ""$($versionNumber)"""
 Set-Content manifest.json $manifestJson
 
-# Stage changes
+# Stage changes to the upcoming commit
 git add package.json manifest.json
 
 Write-Host "Incremented version to [$($versionNumber)] in package.json and manifest.json"
