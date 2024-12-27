@@ -1,6 +1,9 @@
 import { MarketResourceItem } from "./market-resource-item";
+import { ResourceTabRefreshObserver } from "./observers/resource-tab-refresh-observer";
 
 export class Market {
+    public static readonly onResourceTabRefresh = new ResourceTabRefreshObserver();
+
     public static get isUnlocked(): boolean {
         // Check if market tab is rendered
         return document.querySelector('#mTabResource .tabs ul > :nth-child(1):not([style="display: none;"])') ? true : false;
@@ -13,6 +16,10 @@ export class Market {
 
         // Build resource item list
         return resourceIds.map((id) => new MarketResourceItem(id));
+    }
+
+    public static get isTradeRouteUnlocked(): boolean {
+        return document.querySelector('#market #tradeTotal:not([style="display: none;"])') ? true : false;
     }
 
     public static get freeTradeRouteCount(): number {

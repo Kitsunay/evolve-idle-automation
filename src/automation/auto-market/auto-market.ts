@@ -2,6 +2,7 @@ import { Game } from "../../game/game";
 import { MarketResourceItem } from "../../game/market/market-resource-item";
 import { Automation } from "../automation";
 import { AutoMarketInterface } from "./auto-market-interface";
+import { AutoMarketItem } from "./auto-market-item";
 import { AutoMarketState } from "./auto-market-state";
 
 export class AutoMarket extends Automation<AutoMarketState> {
@@ -10,7 +11,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
 
     tick(): void {
         // Only run if Market is unlocked
-        if (!Game.Market.isUnlocked) {
+        if (!Game.Market.isUnlocked || !Game.Market.isTradeRouteUnlocked) {
             console.debug("Market is not unlocked");
             return;
         }
@@ -80,6 +81,21 @@ export class AutoMarket extends Automation<AutoMarketState> {
         // TODO: Trigger auto-discovery only after research/building purchase?
         this.runAutoDiscovery();
 
+        AutoMarketInterface.updateUI({
+            isVisible: this.state.unlocked, configItems: this.state.items,
+            onBuy: (item: AutoMarketItem) => {
+                item.buyEnabled = !item.buyEnabled;
+                this.saveState();
+                this.updateUI();
+            },
+            onSell: (item: AutoMarketItem) => {
+                item.sellEnabled = !item.sellEnabled;
+                this.saveState();
+                this.updateUI();
+            }
+        });
+
+        /*
         for (const item of this.state.items) {
             AutoMarketInterface.refreshBuyButton(item.resourceId, item.buyEnabled, () => {
                 item.buyEnabled = !item.buyEnabled;
@@ -93,6 +109,12 @@ export class AutoMarket extends Automation<AutoMarketState> {
                 this.updateUI();
             });
         }
+        */
+
+        Game.Market.onResourceTabRefresh.addListener(() => {
+            this.updateUI();
+            console.debug('Auto-Market UI Refreshed, reason: Resource Tab Refresh');
+        });
     }
 
     runAutoDiscovery() {
@@ -121,7 +143,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
         autoBuyableResources = autoBuyableResources.filter((resource) => Game.Resources.getCount(resource.resourceId) / Game.Resources.getMaxCount(resource.resourceId) < 0.99);
 
         // Find out how many trades each resource has, only resources with min trades are considered for the next auto-buy trade
-        let minTrades = autoBuyableResources.map((resource) => resource.buyTradeCount).reduce((min, next) => {return Math.min(min, next);}, Number.MAX_VALUE);
+        let minTrades = autoBuyableResources.map((resource) => resource.buyTradeCount).reduce((min, next) => { return Math.min(min, next); }, Number.MAX_VALUE);
         autoBuyableResources = autoBuyableResources.filter((resource) => resource.buyTradeCount <= minTrades);
 
         // Filter out resources that are too expensive for now
@@ -167,9 +189,9 @@ export class AutoMarket extends Automation<AutoMarketState> {
 
         // Filter out resources that are already full
         autoBuyableResources = autoBuyableResources.filter((resource) => Game.Resources.getCount(resource.resourceId) / Game.Resources.getMaxCount(resource.resourceId) < 0.99);
-        
+
         // Look for resources with lowest number of trades
-        let minTrades = autoBuyableResources.map((resource) => resource.buyTradeCount).reduce((min, next) => {return Math.min(min, next);}, Number.MAX_VALUE);
+        let minTrades = autoBuyableResources.map((resource) => resource.buyTradeCount).reduce((min, next) => { return Math.min(min, next); }, Number.MAX_VALUE);
         autoBuyableResources = autoBuyableResources.filter((resource) => resource.buyTradeCount <= minTrades);
 
         // Find resource with lowest number of trades that is a valid auto-buy candidate

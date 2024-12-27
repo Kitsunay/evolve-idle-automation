@@ -14,7 +14,7 @@ export class AutoWorkerInterface {
         }
 
         // Add on/off button
-        let toggleButton = ToggleButton.createIfNotExists(`auto_worker_toggle_enabled`, autoWorkerRootElement, {textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
+        let toggleButton = ToggleButton.getOrCreate(`auto_worker_toggle_enabled`, autoWorkerRootElement, {textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
         toggleButton.onToggle = onToggle;
         toggleButton.isToggled = enabled;
 

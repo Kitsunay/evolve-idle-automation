@@ -19,7 +19,7 @@ export class AutoBuildingInterface {
             return;
         }
         
-        let toggleButton = ToggleButton.createIfNotExists(`auto_building_toggle_${buildingId}`, buildingElement, { styleClass: "auto-building", textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
+        let toggleButton = ToggleButton.getOrCreate(`auto_building_toggle_${buildingId}`, buildingElement, { styleClass: "auto-building", textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
         toggleButton.onToggle = onToggle;
         toggleButton.isToggled = enabled;
     }

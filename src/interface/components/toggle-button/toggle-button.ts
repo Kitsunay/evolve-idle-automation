@@ -29,22 +29,35 @@ export class ToggleButton {
      * @param textContent button text content for toggled and untoggled states
      * @returns 
      */
-    public static createIfNotExists(buttonId: string, parentElement: Element, config?: { styleClass?: string, textContent?: { on: string, off: string }, position?: number}): ToggleButton {
+    public static getOrCreate(buttonId: string, parentElement: Element, config?: { styleClass?: string, textContent?: { on: string, off: string }, position?: number }): ToggleButton {
         return new ToggleButton(buttonId, parentElement, config);
     }
 
-    private constructor(buttonId: string, parentElement: Element, config?: { styleClass?: string, textContent?: { on: string, off: string }, position?: number}) {
-        // Create button if it doesn't exist yet
-        this.buttonElement = parentElement.querySelector<Element>(`#${buttonId}`);
+    public static get(buttonId: string): ToggleButton | null {
+        let toggleButton = new ToggleButton(buttonId);
 
-        if (!this.buttonElement) {
-            this.buttonElement = Interface.createChildElementFromString(`<div id="${buttonId}" class="toggle-button${config?.styleClass ? " " + config?.styleClass : ""}"><span class="toggle-button-text"></span></div>`, parentElement, config?.position);
-            this.buttonElementIsNew = true;
+        return toggleButton.buttonElement ? toggleButton : null;
+    }
+
+    private constructor(buttonId: string, parentElement?: Element, config?: { styleClass?: string, textContent?: { on: string, off: string }, position?: number }) {
+        // Try to get existing button
+        this.buttonElement = parentElement ? parentElement.querySelector<Element>(`#${buttonId}`) : document.querySelector<Element>(`#${buttonId}`);
+
+        // Create button if it doesn't exist yet and config was provided
+        if (parentElement) {
+            if (!this.buttonElement) {
+                this.buttonElement = Interface.createChildElementFromString(`<div id="${buttonId}" class="toggle-button${config?.styleClass ? " " + config?.styleClass : ""}"><span class="toggle-button-text"></span></div>`, parentElement, config?.position);
+                this.buttonElementIsNew = true;
+            }
+
+            this.textContent = config?.textContent ?? this.textContent;
+
+            this.render();
         }
+    }
 
-        this.textContent = config?.textContent ?? this.textContent;
-
-        this.render();
+    public destroy() {
+        this.buttonElement?.remove();
     }
 
     /**

@@ -1,21 +1,78 @@
+import { Game } from "../../game/game";
 import { ToggleButton } from "../../interface/components/toggle-button/toggle-button";
 import { Interface } from "../../interface/interface";
+import { AutoMarketItem } from "./auto-market-item";
 
 export class AutoMarketInterface {
-    static refreshBuyButton(resourceId: string, buyEnabled: boolean, onToggle: () => void) {
-        let containerElement = this.refreshButtonContainer(resourceId);
+    public static updateUI(config: { isVisible: boolean; configItems: AutoMarketItem[]; onBuy: (item: AutoMarketItem) => void; onSell: (item: AutoMarketItem) => void; }) {
+        // Test whether the interface should be rendered or hidden
+        config.isVisible = config.isVisible && Game.Market.isTradeRouteUnlocked;
 
-        let toggleButton = ToggleButton.createIfNotExists(`auto_market_buy_${resourceId}`, containerElement, { styleClass: "auto-market buy", textContent: {on: "BUY", off: "BUY"}});
-        toggleButton.onToggle = onToggle;
-        toggleButton.isToggled = buyEnabled;
+        for (const item of config.configItems) {
+            this.refreshBuyButton({
+                visible: config.isVisible,
+                resourceId: item.resourceId,
+                enabled: item.buyEnabled,
+                onToggle: () => {
+                    config.onBuy(item);
+                }
+            });
+
+            this.refreshSellButton({
+                visible: config.isVisible,
+                resourceId: item.resourceId,
+                enabled: item.sellEnabled,
+                onToggle: () => {
+                    config.onSell(item);
+                }
+            });
+        }
     }
 
-    static refreshSellButton(resourceId: string, sellEnabled: boolean, onToggle: () => void) {
-        let containerElement = this.refreshButtonContainer(resourceId);
+    private static refreshBuyButton(config: { visible: boolean, resourceId: string, enabled: boolean, onToggle: () => void }) {
+        this.refreshButton('buy', config);
+    }
 
-        let toggleButton = ToggleButton.createIfNotExists(`auto_market_sell_${resourceId}`, containerElement, { styleClass: "auto-market sell", textContent: {on: "SELL", off: "SELL"}});
-        toggleButton.onToggle = onToggle;
-        toggleButton.isToggled = sellEnabled;
+    private static refreshSellButton(config: { visible: boolean, resourceId: string, enabled: boolean, onToggle: () => void }) {
+        this.refreshButton('sell', config);
+    }
+
+    /**
+     * Generalization of button creation. Creates/destroys buttons that enable/disable automation of trade routes.
+     * @param buttonType 
+     * @param buttonConfig 
+     */
+    private static refreshButton(buttonType: 'buy' | 'sell', buttonConfig: { visible: boolean, resourceId: string, enabled: boolean, onToggle: () => void }) {
+        const buttonId = `auto_market_${buttonType}_${buttonConfig.resourceId}`;
+        
+        // Make sure the button doesn't exist
+        if (!buttonConfig.visible) {
+            let toggleButton = ToggleButton.get(`auto_market_${buttonType}_${buttonConfig.resourceId}`);
+            
+            if (toggleButton) {
+                toggleButton.destroy();
+            }
+
+            return;
+        }
+        
+        // Make sure the button is properly configured and rendered
+        let containerElement = this.refreshButtonContainer(buttonConfig.resourceId);
+
+        let toggleButton = ToggleButton.getOrCreate(
+            `auto_market_${buttonType}_${buttonConfig.resourceId}`,
+            containerElement,
+            {
+                styleClass: `auto-market ${buttonType}`,
+                textContent: {
+                    on: buttonType.toUpperCase(),
+                    off: buttonType.toUpperCase()
+                }
+            }
+        );
+
+        toggleButton.onToggle = buttonConfig.onToggle;
+        toggleButton.isToggled = buttonConfig.enabled;
     }
 
     private static refreshButtonContainer(resourceId: string): Element {

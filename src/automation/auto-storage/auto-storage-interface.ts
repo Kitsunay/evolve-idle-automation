@@ -16,7 +16,7 @@ export class AutoStorageInterface {
         let autoId = `auto-storage-${storageId}`;
 
         // Check if auto button exists
-        let toggleButton = ToggleButton.createIfNotExists(`${autoId}`, buttonContainerElement, {textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
+        let toggleButton = ToggleButton.getOrCreate(`${autoId}`, buttonContainerElement, {textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
         toggleButton.onToggle = onToggle;
         toggleButton.isToggled = enabled;
     }
