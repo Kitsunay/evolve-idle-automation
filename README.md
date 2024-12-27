@@ -71,3 +71,4 @@ TODO: Unlock condition??? have a total trading value over 3K for 100 consecutive
 - Auto-Building advanced settings, for better management of building categories (standard, with food upkeep (civilian and military), with resource upkeep, with energy upkeep)
 - Auto-Storage advanced settings, allows setting storage ratios for resources (similar to how worker ratio distribution works)
 - Auto-Market - player defined priorities (what has high priority to buy, what has high priority to sell), Unlock: have a total trading value over 3K for 100 consecutive days
+- more stuff to automate that i have not seen yet?
