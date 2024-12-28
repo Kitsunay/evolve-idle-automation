@@ -55,19 +55,23 @@ Allows the player to select resources that can be managed by the automation. If 
 TODO: Unlock condition??? have a total trading value over 3K for 100 consecutive days?
 
 ## TODO:
+- Top priority are items that are preventing a fully automated reset:
+  - Auto-Energy - Simple priority list???
+  - Auto-Research path picker (Anthropology vs. Fanaticism)
+  - Auto-Industry - ???
+  - Bug: Auto-Building and Auto-Research sometimes add an item to query
+  - Bug: Market bugs out twice during a reset, not rendering total trade routes properly
 - Resource refactoring - a single Resource class that can access storage/market data
 - Auto-Building unlocks after building queue is researched, each building unlocks when amount of that building reaches 10-15 (TBD)
 - Auto-Research unlocks if plasmids exist (after first reset) and research queue is researched for the second time
 - Auto-Evolve?
 - Auto-Start?
 - Auto-Building for buildings with upkeep costs
-- Auto-Industry - ???
 - Auto-Building for buildings with energy upkeep
 - Auto-Battle - just click the battle button whenever all soldiers are ready
-- Auto-Energy - Simple priority list???
 - Auto-Building shouldn't purchase if building queue is not empty (to allow for manual priritization)
 - Auto-Research shouldn't purchase if research queue is not empty (to allow for manual priritization)
-- Automation progression, to inform players what they need to do to unlock the next automation + information about how the automations work should be available within the game window
+- Automation progression, to inform players what they need to do to unlock the next automation + information about how the unlocked automations work should be available within the game window
 - Auto-Building advanced settings, for better management of building categories (standard, with food upkeep (civilian and military), with resource upkeep, with energy upkeep)
 - Auto-Storage advanced settings, allows setting storage ratios for resources (similar to how worker ratio distribution works)
 - Auto-Market - player defined priorities (what has high priority to buy, what has high priority to sell), Unlock: have a total trading value over 3K for 100 consecutive days
