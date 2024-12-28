@@ -1,10 +1,9 @@
 #!/usr/bin/env pwsh
 
-$args
-
 # Check if version number has been manually updated
 # If git diff returns a line with +/- that begins with "version", exit
-$gitOutput = git diff --staged package.json
+#$gitOutput = git diff --staged package.json
+$gitOutput = git diff HEAD^ HEAD -- package.json
 if ($null -eq $gitOutput) {
     $gitOutput = "" # Have at least an empty string to not break the script
 }
@@ -51,6 +50,9 @@ Set-Content manifest.json $manifestJson
 
 # Stage changes to the upcoming commit
 git add package.json manifest.json
+
+# Add the version change to the original commit
+#git commit --amend --no-edit
 
 Write-Host "Incremented version to [$($versionNumber)] in package.json and manifest.json"
 exit 0

@@ -1,0 +1,1 @@
+These hooks are not run automatically, you need to set up your .git/hooks/ directory with proper scripts that point to these directories.
