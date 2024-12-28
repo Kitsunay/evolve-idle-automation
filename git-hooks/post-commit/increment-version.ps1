@@ -34,9 +34,19 @@ if ($packageJson -match $regex) {
     $versionNumber = $matches[1]
 }
 
-# Increment patch version number
 $versionNumberParts = $versionNumber.Split(".")
-$versionNumberParts[2] = [int]$versionNumberParts[2] + 1
+
+# Decide which version number to increment
+# If commit message contains "[MAJOR]", increment minor version number
+$commitMessage = git log -1 --pretty=%B
+if ($commitMessage.Contains("[MAJOR]")) {
+    $versionNumberParts[1] = [int]$versionNumberParts[1] + 1
+} else {
+    # By default, increment patch version number
+    $versionNumberParts[2] = [int]$versionNumberParts[2] + 1
+}
+
+# Increment patch version number
 $versionNumber = $versionNumberParts -join "."
 
 # Write new version number into package.json
