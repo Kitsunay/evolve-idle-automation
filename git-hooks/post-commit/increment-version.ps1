@@ -52,7 +52,7 @@ Set-Content manifest.json $manifestJson
 git add package.json manifest.json
 
 # Add the version change to the original commit
-#git commit --amend --no-edit
+git commit --amend --no-edit
 
 Write-Host "Incremented version to [$($versionNumber)] in package.json and manifest.json"
 exit 0
