@@ -1,6 +1,6 @@
 {
     "name": "evolve-idle-automation",
-    "version": "0.5.10",
+    "version": "0.5.11",
     "description": "Adds unlockable automations to Evolve Idle",
     "source": "src/main.ts",
     "main": "dist/main.js",
@@ -15,7 +15,8 @@
         "webpack-watch": "webpack --mode development --watch",
         "build": "webpack --mode production && sass ./styles/:./dist/",
         "start": "web-ext run --watch-ignored *.* **/firefox-profiles/**/* src/**/* settings/**/* node_modules/**/* icons/**/* --start-url https://pmotschmann.github.io/Evolve/ --firefox-profile=.\\firefox-profiles\\evolve-idle --profile-create-if-missing --keep-profile-changes --verbose",
-        "help": "web-ext run --help"
+        "help": "web-ext run --help",
+        "dev": "start npm run sass-watch & start npm run webpack-watch & start npm run start"
     },
     "devDependencies": {
         "ts-loader": "^9.5.1",
@@ -28,6 +29,7 @@
         "sass": "^1.83.0"
     }
 }
+
 
 
 
