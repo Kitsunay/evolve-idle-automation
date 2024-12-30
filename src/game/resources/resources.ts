@@ -1,11 +1,11 @@
 import { GameUtils } from "../game-utils";
+import { Power } from "./power";
 
 export class Resources {
+    public static readonly Power = Power;
 
     public static get populationResourceId(): string {
-        let raceName = document.querySelector('#race .name').textContent.toLowerCase();
-
-        return `res${raceName}`;
+        return document.querySelector('#resMoney + *').id;
     }
 
     public static getCount(resourceId: string): number {

@@ -38,9 +38,10 @@ $versionNumberParts = $versionNumber.Split(".")
 
 # Decide which version number to increment
 # If commit message contains "[MAJOR]", increment minor version number
-$commitMessage = git log -1 --pretty=%B
-if ($commitMessage.Contains("[MAJOR]")) {
+[string] $commitMessage = git log -1 --pretty=%B
+if ($commitMessage -match "[MAJOR]") {
     $versionNumberParts[1] = [int]$versionNumberParts[1] + 1
+    $versionNumberParts[2] = 0
 } else {
     # By default, increment patch version number
     $versionNumberParts[2] = [int]$versionNumberParts[2] + 1

@@ -1,3 +1,4 @@
+import { Game } from "../game";
 import { BuildingItem } from "./building-item";
 import { BuildingQueue } from "./building-queue";
 
@@ -36,5 +37,13 @@ export class Buildings {
         }
 
         return building.buyButtonElement.dispatchEvent(new Event('click'));
+    }
+
+    static activate(targetBuilding: BuildingItem) {
+        targetBuilding.activateElement.dispatchEvent(new Event('click'));
+    }
+
+    static deactivate(targetBuilding: BuildingItem) {
+        targetBuilding.deactivateElement.dispatchEvent(new Event('click'));
     }
 }
