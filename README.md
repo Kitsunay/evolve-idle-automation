@@ -62,6 +62,7 @@ TODO: Unlock condition??? have a total trading value over 3K for 100 consecutive
   - Bug: Auto-Building and Auto-Research sometimes add an item to query
   - Bug: Market bugs out twice during a reset, not rendering total trade routes properly
 - Resource refactoring - a single Resource class that can access storage/market data
+- Rendering refactoring - make UI render when mutation observer observes a change, instead of on every tick
 - Auto-Building unlocks after building queue is researched, each building unlocks when amount of that building reaches 10-15 (TBD)
 - Auto-Research unlocks if plasmids exist (after first reset) and research queue is researched for the second time
 - Auto-Evolve?
