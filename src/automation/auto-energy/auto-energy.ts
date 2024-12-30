@@ -218,7 +218,7 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
         // From the priority group, pick the building with the least powered count
         let priorityGroup = this.state.energyConsumers.filter(x => x.priority === targetPriority);
         let targetBuilding: BuildingItem = undefined;
-        let numMinActive = priorityGroup.reduce((min, x) => Game.Buildings.getBuilding(x.id).activeCount < min && Game.Buildings.getBuilding(x.id).inactiveCount > 0 ? Game.Buildings.getBuilding(x.id).activeCount : min, Game.Buildings.getBuilding(priorityGroup[0].id).activeCount);
+        let numMinActive = priorityGroup.reduce((min, x) => Game.Buildings.getBuilding(x.id).activeCount < min && Game.Buildings.getBuilding(x.id).inactiveCount > 0 ? Game.Buildings.getBuilding(x.id).activeCount : min, Number.MAX_VALUE);
 
         for (const energyConsumer of priorityGroup) {
             let building = Game.Buildings.getBuilding(energyConsumer.id);
