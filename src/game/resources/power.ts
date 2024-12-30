@@ -8,4 +8,8 @@ export class Power {
     public static get count(): number {
         return parseInt(this.mainElement.querySelector<HTMLElement>('#powerMeter').textContent.trim());
     }
+
+    public static get exists(): boolean {
+        return this.mainElement.querySelector('#powerStatus').attributes.getNamedItem('style').value !== 'display: none;';
+    }
 }

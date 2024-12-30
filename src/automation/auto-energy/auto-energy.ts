@@ -191,6 +191,10 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
      * Distributes available energy to energy consumers based on their priority.
      */
     private tryDistributeEnergy(): boolean {
+        if (!Game.Resources.Power.exists) {
+            return false;
+        }
+
         // Implementation: Try to add energy to highest priority consumer, if successful, return
         let sortedConsumers = this.state.energyConsumers.sort((left, right) => left.priority - right.priority); // Sort ascending
         sortedConsumers = sortedConsumers.filter(x => x.priority !== undefined); // Remove undefined priorities (new, never before seen buildings)
