@@ -227,7 +227,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
     private calculateRatiosWithCaps(value: number, ratios: number[], valueCaps: number[]): number[] {
         // Calculate result the standard way
         let intResult = this.calculateRatios(ratios, value);
-        
+
         // Find indexes of values that overflow the cap
         let cappedIndexes: number[] = []; // Indexes of values that overflow the cap
         
@@ -237,17 +237,18 @@ export class AutoWorker extends Automation<AutoWorkerState> {
                 intResult[i] = valueCaps[i];
             }
         }
-        
+
         if (cappedIndexes.length === 0) { // No overflow, return the result
+            //console.log(`expected ${value} total ${intResult.reduce((a, b) => a + b, 0)}`);
             return intResult;
         }
-        
+
         // Cap overflow happened, rerun the calculation without the overflowed values in the arrays
         // Drop the dustributed value by capped values
         let newValue = value - cappedIndexes.map(x => intResult[x]).reduce((a, b) => a + b, 0);
-        
+
         // Generate new arrays for ratios and caps without overflowed values in the arrays
-        let newRatios = ratios.filter((x, i) => !cappedIndexes.includes(i)).map(x => x * newValue);
+        let newRatios = ratios.filter((x, i) => !cappedIndexes.includes(i));
         let newCaps = valueCaps.filter((x, i) => !cappedIndexes.includes(i));
 
         let subResult = this.calculateRatiosWithCaps(newValue, newRatios, newCaps);
@@ -324,6 +325,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
         for (let i = 0; i < maxSortedIndexes.length; i++) {
             let index = maxSortedIndexes[i];
 
+            remainder = Math.round(remainder); // Avoids float precision issues
             if (remainder <= 0) {
                 break;
             }
@@ -331,6 +333,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
             intResult[index] += 1;
             remainder -= 1;
         }
+
         return intResult;
     }
 
