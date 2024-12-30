@@ -41,6 +41,7 @@ export class AutoMilitary extends Automation<AutoMilitaryState> {
             this.state.autoBattle.enabled = true;
         }
 
+        this.saveState();
         this.updateUI();
     }
 }
