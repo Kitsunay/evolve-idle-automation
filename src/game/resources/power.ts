@@ -10,6 +10,6 @@ export class Power {
     }
 
     public static get exists(): boolean {
-        return this.mainElement.querySelector('#powerStatus').attributes.getNamedItem('style').value !== 'display: none;';
+        return this.mainElement.querySelector('#powerStatus').attributes.getNamedItem('style')?.value !== 'display: none;';
     }
 }

@@ -1,6 +1,6 @@
 {
     "name": "evolve-idle-automation",
-    "version": "0.11.0",
+    "version": "0.12.0",
     "description": "Adds unlockable automations to Evolve Idle",
     "source": "src/main.ts",
     "main": "dist/main.js",
@@ -30,6 +30,7 @@
         "sass": "^1.83.0"
     }
 }
+
 
 
 
