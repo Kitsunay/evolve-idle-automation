@@ -36,7 +36,18 @@ export class Buildings {
             return false;
         }
 
-        return building.buyButtonElement.dispatchEvent(new Event('click'));
+        let numPrevQueueItems = Game.Buildings.BuildingQueue.queueItems.length;
+        building.buyButtonElement.dispatchEvent(new Event('click'));
+        let numCurrQueueItems = Game.Buildings.BuildingQueue.queueItems.length;
+
+        if (numPrevQueueItems === numCurrQueueItems) {
+            return true;
+        }
+
+        // If purchase failed and added a queue item, remove the queue item from the queue
+        console.error('Failed to buy building', building);
+        Game.Buildings.BuildingQueue.queueItems[0].buttonElement.dispatchEvent(new Event('click'));
+        return false;
     }
 
     static activate(targetBuilding: BuildingItem) {

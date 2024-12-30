@@ -7,4 +7,11 @@ export class BuildingQueueItem {
     constructor(element: HTMLElement) {
         this.element = element;
     }
+
+    /**
+     * Returns the clickable element of this queue item.
+     */
+    public get buttonElement(): HTMLElement {
+        return this.element.querySelector<HTMLElement>('a');
+    }
 }

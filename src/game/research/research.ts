@@ -1,3 +1,4 @@
+import { Game } from "../game";
 import { ResearchBuyObserver } from "./observers/research-buy-observer";
 import { ResearchTabRefreshObserver } from "./observers/research-tab-refresh-observer";
 import { ResearchItem } from "./research-item";
@@ -49,7 +50,18 @@ export class Research {
             return false;
         }
 
-        return research.buyButtonElement.dispatchEvent(new Event('click'));
+        let numPrevQueueItems = Game.Research.ResearchQueue.queueItems.length;
+        research.buyButtonElement.dispatchEvent(new Event('click'));
+        let numCurrQueueItems = Game.Research.ResearchQueue.queueItems.length;
+
+        if (numPrevQueueItems === numCurrQueueItems) {
+            return true;
+        }
+
+        // If purchase failed and added a queue item, remove the queue item from the queue
+        console.error('Failed to buy research', research);
+        Game.Research.ResearchQueue.queueItems[0].buttonElement.dispatchEvent(new Event('click'));
+        return false;
     }
 
     private static researchBuyMutationObserver: MutationObserver = undefined;
