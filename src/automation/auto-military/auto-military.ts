@@ -33,7 +33,6 @@ export class AutoMilitary extends Automation<AutoMilitaryState> {
     }
 
     toggleAutoBattle(enabled: boolean, foreignPowerId: string) {
-        console.log(foreignPowerId, this.state.autoBattle);
         if (this.state.autoBattle.targetId === foreignPowerId) {
             this.state.autoBattle.enabled = !this.state.autoBattle.enabled;
         } else {
