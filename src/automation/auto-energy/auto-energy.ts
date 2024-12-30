@@ -262,19 +262,21 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
 
         // Implementation: If adding energy fails, check if there are lower priority consumers, if so, remove energy from one of them
         let deactivationCandidates = this.state.energyConsumers.filter(x => x.priority >= targetPriority && new BuildingItem(x.id).activeCount > 0);
-
+        
         if (deactivationCandidates.length === 0) { // Nothing to do to improve the situation
             return false;
         }
-
-        // Find the lowest priority and collect consumer candidates
+        
+        // Find the lowest priority and collect all consumer candidates from that priority group
         let deactivationPriority = deactivationCandidates.reduce((max, x) => x.priority > max ? x.priority : max, deactivationCandidates[0].priority);
-        let deactivationBuildings = deactivationCandidates.filter(x => x.priority === deactivationPriority).map(x => new BuildingItem(x.id));
 
-        let mostActive = deactivationBuildings.reduce((max, x) => x.activeCount > max.activeCount ? x : max, deactivationBuildings[0]);
+        let deactivationPriorityConsumerGroup = this.state.energyConsumers.filter(x => x.priority === deactivationPriority);
+        let deactivationPriorityBuildingGroup = deactivationPriorityConsumerGroup.map(x => new BuildingItem(x.id));
+
+        let mostActive = deactivationPriorityBuildingGroup.reduce((max, x) => x.activeCount > max.activeCount ? x : max, deactivationPriorityBuildingGroup[0]);
 
         if (deactivationPriority === targetPriority) { // If the lowest priority also needs power, check if redistribution is available
-            let numLeastActive = deactivationBuildings.reduce((min, x) => x.activeCount < min && x.inactiveCount > 0 ? x.activeCount : min, deactivationBuildings[0].activeCount);
+            let numLeastActive = deactivationPriorityBuildingGroup.reduce((min, x) => x.activeCount < min && x.inactiveCount > 0 ? x.activeCount : min, deactivationPriorityBuildingGroup[0].activeCount);
 
             if (mostActive.activeCount - numLeastActive <= 1) {
                 // Cannot redistribute
