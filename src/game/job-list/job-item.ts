@@ -14,6 +14,10 @@ export class JobItem {
         return nameElement.textContent[nameElement.textContent.length - 1] === '*';
     }
 
+    public get isActive(): boolean {
+        return this.element.attributes.getNamedItem('style')?.value !== 'display: none;';
+    }
+
     public get count(): number {
         let countString = this.element.querySelector<HTMLElement>('.count').textContent;
         

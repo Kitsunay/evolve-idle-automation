@@ -38,6 +38,10 @@ export class AutoWorkerInterface {
                         // Farmer is a special case of worker because it is required for food production
                         label = 'Auto-Food /s';
                         break;
+                    case 'civ-hunter':
+                        // Hunter is a special case of worker because it is required for production of food with spoilage
+                        label = 'Auto-Spoilage /s';
+                        break;
                     default:
                         label = 'Auto-Ratio';
                 }

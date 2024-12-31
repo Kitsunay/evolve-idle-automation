@@ -5,12 +5,13 @@ import { Game } from "../../game/game";
 import { JobCategoryItem } from "../../game/job-list/job-category-item";
 import { AutoWorkerJobCategory } from "./auto-worker-job-category";
 import { AutoWorkerJobRatio } from "./auto-worker-job-ratio";
+import { JobItem } from "../../game/job-list/job-item";
 
 export class AutoWorker extends Automation<AutoWorkerState> {
     protected LOCAL_STORAGE_KEY: string = "auto-worker";
 
     // List of jobs that require special handling
-    private uniqueJobs = ['civ-farmer'];
+    private foodJobs = ['civ-farmer', 'civ-hunter'];
 
     protected state: AutoWorkerState = {
         unlocked: false,
@@ -23,23 +24,50 @@ export class AutoWorker extends Automation<AutoWorkerState> {
             return;
         }
 
-        let farmerTarget = this.getFarmerTarget();
-
+        let foodProducerTarget = this.getFoodProducerTarget();
+        
         let availableWorkers = Game.Resources.getCount(Game.Resources.populationResourceId);
-        availableWorkers -= farmerTarget.value;
-
+        availableWorkers -= foodProducerTarget.value;
+        
         let otherJobTargets = this.getJobTargets(availableWorkers);
-
-        let targetWorkers: { jobId: string, value: number }[] = [farmerTarget, ...otherJobTargets];
-
+        
+        let targetWorkers: { jobId: string, value: number }[] = [foodProducerTarget, ...otherJobTargets];
+        
         this.assignJobs(targetWorkers);
     }
 
-    private getFarmerTarget(): { jobId: string, value: number } {
-        let config = this.state.jobCategories.flatMap(x => x.jobs).find(x => x.jobId === 'civ-farmer');
-        let jobElement = Game.JobList.getJob(config.jobId);
+    private getFoodProducerTarget(): { jobId: string, value: number } {
+        let config = this.state.jobCategories.flatMap(x => x.jobs).filter(x => x.jobId === 'civ-farmer' || x.jobId === 'civ-hunter');
 
-        let targetFoodRate = config.value; // In case of auto-farmer, this is the target food rate
+        // Find out which food producer is currently active
+        let jobElement: JobItem;
+        let jobConfig: AutoWorkerJobRatio;
+        for (const configItem of config) {
+            let configItemJob = Game.JobList.getJob(configItem.jobId);
+            if (configItemJob.isActive) {
+                jobElement = configItemJob;
+                jobConfig = configItem;
+                break;
+            }
+        }
+
+        if (jobConfig === undefined) {
+            console.log('No active food producer found');
+            return undefined;
+        }
+
+        switch (jobConfig.jobId) {
+            case 'civ-farmer': // Farmer
+                return this.getFarmerTarget(jobElement, jobConfig);
+            case 'civ-hunter': // Hunter
+                return this.getHunterTarget(jobElement, jobConfig);
+            default:
+                throw new Error(`Unknown food producer [${jobConfig.jobId}]`);
+        }
+    }
+
+    private getFarmerTarget(jobElement: JobItem, config: AutoWorkerJobRatio): { jobId: string, value: number } {
+        let targetFoodRate = config.value; // In case of auto-farmer, config.value is the target food rate
 
         let foodRate = Game.Resources.getProduction('resFood');
 
@@ -59,8 +87,32 @@ export class AutoWorker extends Automation<AutoWorkerState> {
         let farmersNeeded = Math.ceil((consumption + targetFoodRate) / foodPerFarmer);
 
         return { jobId: config.jobId, value: farmersNeeded };
+    }
 
-        // Don't forget to deal with default job - if it's unemployed, if it's farmer and if it's anything else
+    private getHunterTarget(jobElement: JobItem, config: AutoWorkerJobRatio): { jobId: string, value: number } {
+        let targetSpoilage = config.value; // In case of auto-hunter, config.value is the target spoilage
+
+        // The spoilage will always try to balance out production and consumption,
+        // so having production be above consumption by target spoilage amount is all we need to do here
+
+        let foodTotalProduction = Game.Resources.getTotalProduction('resFood');
+        let consumptionBreakdown = Game.Resources.getConsumptionBreakdown('resFood');
+
+        let consumption = 0; // This will be negative number
+        if (consumptionBreakdown.length > 1) { // If spoilage exists, skip it because first item under breakdown is spoilage, without it we get actual consumption
+            for (let i = 1; i < consumptionBreakdown.length; i++) {
+                consumption += consumptionBreakdown[i].amount;
+            }
+        } else { // No spoilage detected
+            consumption = consumptionBreakdown[0].amount;
+        }
+
+        // Calculate how many hunters are required to reach target spoilage
+        let foodPerHunter = foodTotalProduction / jobElement.count;
+        let targetFoodProduction = -consumption + targetSpoilage; // Consumption is negative number
+        let huntersNeeded = Math.ceil(targetFoodProduction / foodPerHunter);
+
+        return { jobId: config.jobId, value: huntersNeeded };
     }
 
     private getJobTargets(numWorkers: number): { jobId: string, value: number }[] {
@@ -77,7 +129,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
 
                     for (let k = 0; k < jobs.length; k++) {
                         for (let l = 0; l < this.state.jobCategories[j].jobs.length; l++) {
-                            if (jobs[k].id === this.state.jobCategories[j].jobs[l].jobId && !this.uniqueJobs.includes(jobs[k].id)) { // Found matching config for this job
+                            if (jobs[k].id === this.state.jobCategories[j].jobs[l].jobId && !this.foodJobs.includes(jobs[k].id)) { // Found matching config for this job
                                 // TODO: This might get stored in the config to reduce the megaobject complexity
                                 jobConfigs.push(this.state.jobCategories[j].jobs[l]);
                             }
@@ -114,7 +166,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
             let availableWorkers = categoryWorkers[i]; // Number of workers available for auto-ratio
 
             let jobRatios = category.enabledJobs.map(x => x.value);
-            let jobCaps = category.gameCategory.jobs.filter(x => !this.uniqueJobs.includes(x.id)).map(x => x.countMax);
+            let jobCaps = category.gameCategory.jobs.filter(x => !this.foodJobs.includes(x.id)).map(x => x.countMax);
 
             let jobWorkers = this.calculateRatiosWithCaps(availableWorkers, jobRatios, jobCaps);
 
@@ -230,7 +282,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
 
         // Find indexes of values that overflow the cap
         let cappedIndexes: number[] = []; // Indexes of values that overflow the cap
-        
+
         for (let i = 0; i < intResult.length; i++) {
             if (valueCaps[i] !== undefined && intResult[i] > valueCaps[i]) {
                 cappedIndexes.push(i);

@@ -41,7 +41,7 @@ export class Resources {
         return maxCount;
     }
 
-    public static getConsumption(resourceId: string): number {
+    public static getConsumptionBreakdown(resourceId: string): {name: string, amount: number}[] {
         // Fix for market resources
         resourceId = this.fixResourceId(resourceId);
 
@@ -75,21 +75,29 @@ export class Resources {
         // The popup exists for such a short amount of time, it doesn't even render and the player won't see any flickering tooltips
 
         document.querySelector(`#${resourceId} .diff`).dispatchEvent(new Event('mouseover')); // Simulate mouseover to display tooltip
-        let consumptionElements = document.querySelectorAll('#popper .resBreakdown .parent > div:nth-child(2) .modal_bd > :nth-child(2)'); // Read pop-up tooltip
+        let consumptionElements = document.querySelectorAll('#popper .resBreakdown .parent > div:nth-child(2) .modal_bd'); // Read pop-up tooltip
         document.querySelector(`#${resourceId} .diff`).dispatchEvent(new Event('mouseout')); // Simulate mouseout to hide the tooltip
-
-        let consumption = 0;
-        for (let i = 0; i < consumptionElements.length; i++) {
-            const element = consumptionElements[i];
-
-            consumption += GameUtils.parseFloat(element.textContent);
-        }
 
         if (cachedElement) {
             cachedElement.dispatchEvent(new Event('mouseover')); // Restore the original tooltip
         }
 
-        return consumption;
+        let consumptionBreakdown = [];
+        for (let i = 0; i < consumptionElements.length; i++) {
+            const element = consumptionElements[i];
+
+            let nameElement = element.children.item(0);
+            let amountElement = element.children.item(1);
+
+            consumptionBreakdown.push({name: nameElement.textContent, amount: GameUtils.parseFloat(amountElement.textContent)});
+        }
+
+        return consumptionBreakdown;
+    }
+
+    public static getConsumption(resourceId: string): number {
+        let consumptionBreakdown = this.getConsumptionBreakdown(resourceId);
+        return consumptionBreakdown.reduce((previousValue, currentValue) => previousValue + currentValue.amount, 0);
     }
 
     public static getProduction(resourceId: string): number {
