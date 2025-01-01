@@ -42,6 +42,37 @@ export class Resources {
     }
 
     public static getConsumptionBreakdown(resourceId: string): {name: string, amount: number}[] {
+        return this.getBreakdown(resourceId, 'consumption');
+    }
+
+    public static getConsumption(resourceId: string): number {
+        let consumptionBreakdown = this.getConsumptionBreakdown(resourceId);
+        return consumptionBreakdown.reduce((previousValue, currentValue) => previousValue + currentValue.amount, 0);
+    }
+
+    static getProductionBreakdown(resourceId: string) {
+        return this.getBreakdown(resourceId, 'production');
+    }
+
+    public static getProduction(resourceId: string): number {
+        // Fix for market resources
+        resourceId = this.fixResourceId(resourceId);
+
+        return GameUtils.parseFloat(document.querySelector(`#${resourceId} .diff`).textContent);
+    }
+
+    public static getTotalProduction(resourceId: string): number {
+        // Fix for market resources
+        resourceId = this.fixResourceId(resourceId);
+
+        return this.getProduction(resourceId) - this.getConsumption(resourceId);
+    }
+
+    private static fixResourceId(resourceId: string): string {
+        return resourceId.replace('market-', 'res');
+    }
+
+    private static getBreakdown(resourceId: string, selector: 'production' | 'consumption') {
         // Fix for market resources
         resourceId = this.fixResourceId(resourceId);
 
@@ -72,10 +103,17 @@ export class Resources {
             cachedElement.dispatchEvent(new Event('mouseout'));
         }
 
-        // The popup exists for such a short amount of time, it doesn't even render and the player won't see any flickering tooltips
+        // Prepare to select the correct element based on the selector
+        let childIndex: number;
+        if (selector === 'production') {
+            childIndex = 1;
+        } else if (selector === 'consumption') {
+            childIndex = 2;
+        }
 
+        // The popup exists for such a short amount of time, it doesn't even render and the player won't see any flickering tooltips
         document.querySelector(`#${resourceId} .diff`).dispatchEvent(new Event('mouseover')); // Simulate mouseover to display tooltip
-        let consumptionElements = document.querySelectorAll('#popper .resBreakdown .parent > div:nth-child(2) .modal_bd'); // Read pop-up tooltip
+        let consumptionElements = document.querySelectorAll(`#popper .resBreakdown .parent > div:nth-child(${childIndex}) .modal_bd`); // Read pop-up tooltip
         document.querySelector(`#${resourceId} .diff`).dispatchEvent(new Event('mouseout')); // Simulate mouseout to hide the tooltip
 
         if (cachedElement) {
@@ -93,28 +131,5 @@ export class Resources {
         }
 
         return consumptionBreakdown;
-    }
-
-    public static getConsumption(resourceId: string): number {
-        let consumptionBreakdown = this.getConsumptionBreakdown(resourceId);
-        return consumptionBreakdown.reduce((previousValue, currentValue) => previousValue + currentValue.amount, 0);
-    }
-
-    public static getProduction(resourceId: string): number {
-        // Fix for market resources
-        resourceId = this.fixResourceId(resourceId);
-
-        return GameUtils.parseFloat(document.querySelector(`#${resourceId} .diff`).textContent);
-    }
-
-    public static getTotalProduction(resourceId: string): number {
-        // Fix for market resources
-        resourceId = this.fixResourceId(resourceId);
-
-        return this.getProduction(resourceId) - this.getConsumption(resourceId);
-    }
-
-    private static fixResourceId(resourceId: string): string {
-        return resourceId.replace('market-', 'res');
     }
 }
