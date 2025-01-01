@@ -1,23 +1,23 @@
 # evolve-idle-automation
 ## Description
-An attempt to write unlockable automations for Evolve Idle, a very slow game that requires way too much user interaction.
+An attempt to write unlockable automations for Evolve Idle, a very slow game that requires the player to be very active and rewards them with very minor boosts.
 
-This is not supposed to become an auto-play script. Players will have to unlock, enable and configure their automations in order to make them work. They are, however, pretty dumb, so playing actively is still going to result in faster progress. This serves as a higher-level gameplay compared to the vanilla experience, that eliminates unnecessary mindless clicking. The expected game-flow with this add-on is thus: unlock a new mechanic in the game -> use the mechanic manually to understand it -> unlock automation for the mechanic, using your experience to configure it properly.
+This is not supposed to become an auto-play script. Players will have to unlock, enable and configure their automations in order to make them work. They are, however, pretty dumb, so playing actively and sometimes disabling them to take over is still going to result in faster progress. This extension enables a more idle-focused,  higher-level gameplay compared to the vanilla experience, that eliminates unnecessary mindless clicking. The expected game-flow with this add-on is thus: unlock a new mechanic in the game -> use the mechanic manually to understand it -> unlock automation for the mechanic, using your experience to configure it properly.
 
 Disclaimer: this is a personal project that will evolve very slowly as I progress through the game. 
 
-Latest milestone: Unlocked plasmids (13.12.2024)
+Latest milestone: Finished 4-star run (31.12.2024)
 
 ## Motivation
-Since I like playing incremental-style games with tons of automations that unlock as I make progress, I would like to see such a thing in this game, too. And I'm not seeing any signs that automations do exist within the game. Because of this, I am now attempting to step up my automation game and write them myself.
+Since I like playing incremental-style games with tons of automations that unlock as I make progress, I would like to see such a thing in this game, too. And I'm not seeing any signs that automations do exist within the game. Because of this, I am now attempting to step up my automation game and write them myself, basically altering my game loop completely to unlock feature -> write automation -> fix bugs -> rewrite the automation, but more smart. It's harder, but also more mentally engaging that the vanilla experience.
 
 ## How to Install
-This extension is not available in official Firefox extension store, as it barely does anything.
+This extension is not available in official Firefox extension store, as it is still very early in development and it is very buggy. You can try it out by following the instructions below on how to build it and run it from local environment.
 
 ## How to Run in Local Environment
 This is a TypeScript Firefox extension. As such, it must be built before installation.
 Project's package.json contains packages and commands required to build and also run the extension (although in a new window). In order to build it, you need the latest LTS node.js installed (currently v22.12).
-The extension can be built from the command line with command "npm run build" and run it with command "npm run start". Both commands are scripts defined in package.json.
+To build and run the extension, you need to open a commandline in extension folder (where package.json is located) (in Windows, a commandline in folder can be opened by deleting folder path and entering cmd instead), then you need to download dependency libraries by running command "npm install", then the extension can be built from the command line with command "npm run build" and ran with command "npm run start". All commands are scripts defined in package.json.
 
 ## Game Configuration Pre-requisites
 The game prefers to keep hardware load to a minimum and completely destroys elements on tabs that are not visible. However, this extension simulates user interaction and mouse clicks, and as such, it requires buttons to exist, even if they are not visible. This is achievable by accessing the game's settings and making sure option "Preload Tab Content" is on.
@@ -60,7 +60,7 @@ TODO: Unlock condition??? have a total trading value over 3K for 100 consecutive
   - Auto-Research path picker (Anthropology vs. Fanaticism)
   - Auto-Industry - ???
   - Bug: Auto-Building and Auto-Research sometimes add an item to query
-  - Bug: Market bugs out twice during a reset, not rendering total trade routes properly
+  - Bug: Market bugs out twice during a reset, not rendering total trade routes properly; update: it happens when new storage option unlocks (crates, containers)
 - Resource refactoring - a single Resource class that can access storage/market data
 - Rendering refactoring - make UI render when mutation observer observes a change, instead of on every tick
 - Auto-Building unlocks after building queue is researched, each building unlocks when amount of that building reaches 10-15 (TBD)
