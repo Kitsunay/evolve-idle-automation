@@ -100,7 +100,7 @@ export class AutoEnergyInterface {
 
         let building = Game.PowerGrid.getBuilding(energyConsumer.id);
 
-        let elementString = `<div id="${elementId}"${building.isElectrified ? '' : ' class="inactive"'} draggable="true"><div class="label">${building.fullName}</div><div class="inactive-count">${building.inactiveCount}</div><div class="active-count">${building.activeCount}</div></div>`;
+        let elementString = `<div id="${elementId}"${building.isVisible && building.isElectrified ? '' : ' class="inactive"'} draggable="true"><div class="label">${building.fullName}</div><div class="inactive-count">${building.inactiveCount}</div><div class="active-count">${building.activeCount}</div></div>`;
         element = Interface.createChildElementFromString(elementString, containerElement);
         this.initDraggableElement(element);
     }

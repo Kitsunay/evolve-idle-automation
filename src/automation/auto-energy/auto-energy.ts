@@ -198,6 +198,7 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
         // Implementation: Try to add energy to highest priority consumer, if successful, return
         let sortedConsumers = this.state.energyConsumers.sort((left, right) => left.priority - right.priority); // Sort ascending
         sortedConsumers = sortedConsumers.filter(x => x.priority !== undefined); // Remove undefined priorities (new, never before seen buildings)
+        sortedConsumers = sortedConsumers.filter(x => Game.Buildings.getBuilding(x.id).isVisible); // Remove non-visible buildings
         sortedConsumers = sortedConsumers.filter(x => Game.Buildings.getBuilding(x.id).isElectrified); // Remove unelectrified buildings
         let targetPriority: number = undefined;
 
@@ -223,8 +224,8 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
         for (const energyConsumer of priorityGroup) {
             let building = Game.Buildings.getBuilding(energyConsumer.id);
 
-            // Building must be electrified
-            if (!building.isElectrified) {
+            // Building must be visible and electrified
+            if (!building.isVisible || !building.isElectrified) {
                 continue;
             }
 
@@ -271,6 +272,8 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
         let deactivationPriority = deactivationCandidates.reduce((max, x) => x.priority > max ? x.priority : max, deactivationCandidates[0].priority);
 
         let deactivationPriorityConsumerGroup = this.state.energyConsumers.filter(x => x.priority === deactivationPriority);
+        deactivationPriorityConsumerGroup = deactivationPriorityConsumerGroup.filter(x => Game.Buildings.getBuilding(x.id).isVisible); // Remove non-visible buildings
+        deactivationPriorityConsumerGroup = deactivationPriorityConsumerGroup.filter(x => Game.Buildings.getBuilding(x.id).isElectrified); // Remove unelectrified buildings
         let deactivationPriorityBuildingGroup = deactivationPriorityConsumerGroup.map(x => new BuildingItem(x.id));
 
         let mostActive = deactivationPriorityBuildingGroup.reduce((max, x) => x.activeCount > max.activeCount ? x : max, deactivationPriorityBuildingGroup[0]);
@@ -283,6 +286,7 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
                 return false;
             }
         }
+
 
         // Disable a building part from the most active building
         Game.Buildings.deactivate(mostActive);
