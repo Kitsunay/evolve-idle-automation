@@ -41,7 +41,7 @@ export class Resources {
         return maxCount;
     }
 
-    public static getConsumptionBreakdown(resourceId: string): {name: string, amount: number}[] {
+    public static getConsumptionBreakdown(resourceId: string): { name: string, amount: number }[] {
         return this.getBreakdown(resourceId, 'consumption');
     }
 
@@ -58,7 +58,7 @@ export class Resources {
         // Fix for market resources
         resourceId = this.fixResourceId(resourceId);
 
-        return GameUtils.parseFloat(document.querySelector(`#${resourceId} .diff`).textContent);
+        return GameUtils.parseFloat(document.querySelector(`#${resourceId} .diff`)?.textContent);
     }
 
     public static getTotalProduction(resourceId: string): number {
@@ -69,7 +69,15 @@ export class Resources {
     }
 
     private static fixResourceId(resourceId: string): string {
-        return resourceId.replace('market-', 'res');
+        resourceId = resourceId.replace('market-', 'res');
+
+        if (!resourceId.startsWith('res')) {
+            resourceId = 'res' + resourceId;
+
+            resourceId = `${resourceId.substring(0, 3)}${resourceId[3].toUpperCase()}${resourceId.substring(4)}`;
+        }
+
+        return resourceId;
     }
 
     private static getBreakdown(resourceId: string, selector: 'production' | 'consumption') {
@@ -127,7 +135,7 @@ export class Resources {
             let nameElement = element.children.item(0);
             let amountElement = element.children.item(1);
 
-            consumptionBreakdown.push({name: nameElement.textContent, amount: GameUtils.parseFloat(amountElement.textContent)});
+            consumptionBreakdown.push({ name: nameElement.textContent, amount: GameUtils.parseFloat(amountElement.textContent) });
         }
 
         return consumptionBreakdown;

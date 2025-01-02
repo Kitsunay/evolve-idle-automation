@@ -7,3 +7,24 @@
 #resStorage #createHead .is-multiline {
     flex-direction: column;
 }
+
+// Fix weird styling of "Industry" number inputs. It breaks custom additions to the inputs.
+.fuels {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 0.25rem;
+
+    .current {
+        bottom: 0;
+    }
+}
+
+// Fix factory column alignment that affects my nested elements
+.industry .factory :first-child {
+    width: unset;
+}
+
+.industry .factory > :first-child {
+    width: 8em;
+}

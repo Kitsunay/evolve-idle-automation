@@ -1,7 +1,7 @@
 export class GameMathRatios {
     public static calculateRatiosWithCaps(value: number, ratios: number[], valueCaps: number[]): number[] {
         // Calculate result the standard way
-        let intResult = this.calculateRatios(ratios, value);
+        let intResult = this.calculateIntRatios(ratios, value);
 
         // Find indexes of values that overflow the cap
         let cappedIndexes: number[] = []; // Indexes of values that overflow the cap
@@ -36,17 +36,15 @@ export class GameMathRatios {
         return subResult;
     }
 
-    public static calculateRatios(ratios: number[], value: number) {
-        // Normalize the ratios first
-        ratios = this.normalizeRatios(ratios);
-
+    public static calculateIntRatios(ratios: number[], value: number, minValues?: number[]): number[] {
         // Calculate result the standard way
-        let floatResult = ratios.map((x) => x * value);
+        let floatResult = this.calculateRatios(ratios, value, minValues);
 
         // Find the closest whole number and calculate the remainder
         let intResult = floatResult.map((x) => Math.floor(x));
         let remainder = 0;
         for (let i = 0; i < intResult.length; i++) {
+            intResult[i] = Math.min(intResult[i]);
             remainder += floatResult[i] - intResult[i];
         }
 
@@ -112,14 +110,53 @@ export class GameMathRatios {
         return intResult;
     }
 
-    private static normalizeRatios(ratios: number[]) {
-        let totalRatios = ratios.reduce((a, b) => a + b, 0);
+    static calculateRatios(ratios: number[], value: number, minValues?: number[]): number[] {
+        // Normalize the ratios first
+        ratios = this.normalizeRatios(ratios);
+
+        // Calculate result the standard way
+        let floatResult = ratios.map((x) => x * value);
+
+        if (!minValues) {
+            return floatResult;
+        }
+
+        // If minValues are set, check if all values meet the min value threshold
+        let cappedIndexes: number[] = [];
+
+        if (minValues) {
+            for (let i = 0; i < floatResult.length; i++) {
+                if (floatResult[i] < minValues[i]) {
+                    value -= minValues[i];
+
+                    cappedIndexes.push(i);
+                }
+            }
+
+            if (cappedIndexes.length > 0) {
+                // Recalculate non-anchored ratios with new target total after applying min values. 
+                let newRatios = ratios.filter((x, i) => !cappedIndexes.includes(i));
+                let newMinValues = minValues.filter((x, i) => !cappedIndexes.includes(i));
+                floatResult = this.calculateRatios(newRatios, value, newMinValues);
+
+                // Re-merge the result with capped values
+                for (let i = 0; i < cappedIndexes.length; i++) {
+                    floatResult.splice(cappedIndexes[i], 0, minValues[cappedIndexes[i]]);
+                }
+            }
+        }
+
+        return floatResult;
+    }
+
+    static normalizeRatios(ratios: number[], targetTotal: number = 1) {
+        let totalRatios = ratios.reduce((a, b) => a + b, 0); // Get current ratio total
         return ratios.map(x => {
             if (totalRatios === 0) {
                 return 0;
             }
 
-            return x / totalRatios;
+            return (x / totalRatios) * targetTotal; // Calculate normalized ratio and adjust to target total
         });
     }
 }

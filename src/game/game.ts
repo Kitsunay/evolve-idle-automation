@@ -1,4 +1,5 @@
 import { Buildings } from "./buildings/buildings";
+import { Industry } from "./industry/industry";
 import { JobList } from "./job-list/job-list";
 import { Market } from "./market/market";
 import { Military } from "./military/military";
@@ -23,4 +24,5 @@ export class Game {
     public static Market = Market;
     public static PowerGrid = PowerGrid;
     public static Military = Military;
+    public static Industry = Industry;
 }

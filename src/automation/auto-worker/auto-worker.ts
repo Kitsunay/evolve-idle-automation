@@ -59,7 +59,7 @@ export class AutoWorker extends Automation<AutoWorkerState> {
         }
 
         if (jobConfig === undefined) {
-            console.log('No active food producer found');
+            console.debug('No active food producer found');
             return undefined;
         }
 

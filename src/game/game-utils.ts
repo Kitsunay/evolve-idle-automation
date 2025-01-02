@@ -5,7 +5,58 @@ export class GameUtils {
         ['B', 10 ** 9]
     ]);
 
+    /**
+     * Utility method that allows reading tooltips without rendering them to the player.
+     * @param element element with a tooltip that will experience mouseover/mouseout events to show the tooltip
+     * @param tooltipProcessor anonymous function that processes the tooltip, with optional return value
+     * @returns whatever the anonymous function parameter returns
+     */
+    static processTooltip<T>(element: HTMLElement, tooltipProcessor: (tooltipElement: HTMLElement) => T) {
+        // This method uses global pop-up to get resource consumption, if a pop-up is displayed, cache it for restore at method end
+        let openTooltip = document.querySelector('#popper');
+        let cachedElement: Element = undefined;
+        if (openTooltip) {
+            let cachedId = openTooltip.getAttribute('data-id');
+            cachedElement = document.querySelector(`[id*="${cachedId}"]`);
+
+            if (!cachedElement) {
+                console.log('Failed to find cached tooltip element', openTooltip, cachedId);
+            }
+
+            let jobLabel = cachedElement.querySelector('.job_label');
+            if (jobLabel) { // Jobs have borked tooltip event listeners
+                cachedElement = jobLabel;
+            }
+
+            if (cachedElement.classList.contains('race')) { // Race tooltip is borked, too
+                cachedElement = cachedElement.querySelector<HTMLElement>('.name');
+            }
+
+            if (cachedElement.classList.contains('city')) { // District names are also borked
+                cachedElement = cachedElement.querySelector<HTMLElement>('h3');
+            }
+
+            cachedElement.dispatchEvent(new Event('mouseout'));
+        }
+
+        // The popup exists for such a short amount of time, it doesn't even render and the player won't see any flickering tooltips
+        element.dispatchEvent(new Event('mouseover')); // Simulate mouseover to display tooltip
+        let tooltip = document.querySelector<HTMLElement>(`#popper`); // Read pop-up tooltip
+        let result = tooltipProcessor(tooltip);
+        element.dispatchEvent(new Event('mouseout')); // Simulate mouseout to hide the tooltip
+
+        if (cachedElement) {
+            cachedElement.dispatchEvent(new Event('mouseover')); // Restore the original tooltip
+        }
+
+        return result;
+    }
+
     public static parseFloat(string: string): number {
+        if (!string) {
+            return 0;
+        }
+        
         string = this.preFormatString(string);
 
         // Account for percentages
