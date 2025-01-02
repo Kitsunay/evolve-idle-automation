@@ -340,7 +340,11 @@ export class AutoMarket extends Automation<AutoMarketState> {
         let sellTarget: MarketResourceItem = undefined;
 
         for (const resource of fullResources) {
-            if (resource.tradeAmount > Game.Resources.getProduction(resource.resourceId)/* || resource.sellTradeCount === 100*/) { // 100 trades per resource is the cap, for reasons
+            if (resource.tradeAmount > Game.Resources.getProduction(resource.resourceId)) { // Don't sell if production would go negative
+                continue;
+            }
+
+            if (resource.sellTradeCount >= Game.Market.maxTradeRoutesPerResource) { // There is a trade route limit per resource, for reasons
                 continue;
             }
 

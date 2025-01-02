@@ -1,3 +1,4 @@
+import { Game } from "../game";
 import { MarketResourceItem } from "./market-resource-item";
 import { ResourceTabRefreshObserver } from "./observers/resource-tab-refresh-observer";
 
@@ -56,6 +57,18 @@ export class Market {
         // Total trades is last element
         let totalTradeRouteCount = splitString[splitString.length - 1];
         return parseFloat(totalTradeRouteCount);
+    }
+
+    public static get maxTradeRoutesPerResource(): number {
+        // The trade limit is not detectable, so we have to employ a more brute force approach - fuck around and find out what affects the limit
+
+        // If research "Large Volume Trading" is unlocked, the limit is 100
+        if (Game.Research.completedResearches.find(research => research.id === 'tech-large_trades')) {
+            return 100;
+        }
+
+        // Default trade limit is 25
+        return 25;
     }
 
 

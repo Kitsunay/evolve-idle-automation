@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Evolve Idle Automation",
-    "version": "0.19.0",
+    "version": "0.20.0",
     "description": "Adds unlockable automations to Evolve Idle",
     "icons": {
         "48": "icons/border-48.png",
@@ -21,6 +21,7 @@
         }
     ]
 }
+
 
 
 
