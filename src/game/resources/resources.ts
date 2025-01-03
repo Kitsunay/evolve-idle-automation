@@ -65,6 +65,10 @@ export class Resources {
         // Fix for market resources
         resourceId = this.fixResourceId(resourceId);
 
+        if (resourceId === 'resLux') {
+            resourceId = 'resMoney';
+        }
+
         return this.getProduction(resourceId) - this.getConsumption(resourceId);
     }
 

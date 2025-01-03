@@ -10,10 +10,10 @@ export class AutoIndustry extends Automation<AutoIndustryState> {
     protected state: AutoIndustryState = { unlocked: false, enabled: false, smelterConfig: undefined, factoryConfig: undefined };
 
     tick(): void {
-        this.runAutoSmelter();
+        this.runAutoIndustry();
     }
 
-    private runAutoSmelter() {
+    private runAutoIndustry() {
         if (this.state.smelterConfig === undefined) {
             return;
         }
@@ -199,11 +199,12 @@ export class AutoIndustry extends Automation<AutoIndustryState> {
         let factoryCap: number = Game.Industry.Factory.countMax;
 
         // Assign factory items to appropriate ratios
-        let extendedRatios = ratios.map(x => {
+        let extendedRatios = factoryOutputs.map(x => {
+            let ratio = ratios.find(y => y.product === x.resourceId);
             return {
-                product: x.product,
-                ratio: x.ratio ?? 0, // TODO: Apply ratio multiplier to account for different production rate of items
-                industryItem: factoryOutputs.find(y => y.resourceId === x.product)
+                product: x.resourceId,
+                ratio: ratio?.ratio ?? 0,
+                industryItem: x
             };
         });
 
@@ -225,13 +226,13 @@ export class AutoIndustry extends Automation<AutoIndustryState> {
                     return;
                 }
             }
-            
+
             let totalProduction = Game.Resources.getTotalProduction(ratioItem.industryItem.resourceId);
             let productionPerFactory = totalProduction / numActive;
 
             ratioItem.ratio = ratioItem.ratio / productionPerFactory; // Adjust ratio to per-factory production, this way, configured ratio results in adjustments to achieve target ratio in output production rate, not in number of toggled factories
         }
-        
+
         // Filter out ratios that are not available
         extendedRatios = extendedRatios.filter(x => x.industryItem !== undefined);
 
