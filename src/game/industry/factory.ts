@@ -19,6 +19,10 @@ export class Factory {
     }
 
     public static get countMax(): number {
+        if (!this.exists) {
+            return 0;
+        }
+
         let textElement = this.element.querySelector<HTMLElement>(':scope > div:nth-child(2) > span:nth-child(2)');
 
         let [min, max] = textElement.textContent.split('/');
