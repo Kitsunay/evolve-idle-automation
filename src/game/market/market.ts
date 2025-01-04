@@ -1,15 +1,24 @@
+import { Clicker } from "../clicker";
 import { Game } from "../game";
+import { GameUtils } from "../game-utils";
 import { MarketResourceItem } from "./market-resource-item";
 import { ResourceTabRefreshObserver } from "./observers/resource-tab-refresh-observer";
 
 export class Market {
     public static readonly onResourceTabRefresh = new ResourceTabRefreshObserver();
 
+    /**
+     * Checks if market tab is unlocked
+     */
     public static get isUnlocked(): boolean {
         // Check if market tab is rendered
         return document.querySelector('#mTabResource .tabs ul > :nth-child(1):not([style="display: none;"])') ? true : false;
     }
 
+    /**
+     * A list of all currently tradeable resources
+     * @returns 
+     */
     public static getResources(): MarketResourceItem[] {
         // Get all resource ids
         let resourceElements = document.querySelectorAll<HTMLElement>('#market [id^="market-"]:not(:first-child):not([style="display: none;"])');
@@ -19,46 +28,53 @@ export class Market {
         return resourceIds.map((id) => new MarketResourceItem(id));
     }
 
+    /**
+     * Checks if trading through trade routes is unlocked
+     */
     public static get isTradeRouteUnlocked(): boolean {
         return document.querySelector('#market #tradeTotal:not([style="display: none;"])') ? true : false;
     }
 
+    /**
+     * Amount of trade routes that are unused
+     */
     public static get freeTradeRouteCount(): number {
-        //let usedTradeRouteCount = document.querySelector('#market #tradeTotal .tradeTotal span:nth-child(2)');
-
-        // Get element with trade routes summary
-        let tradeRouteCountSummaryElement = document.querySelector('#market #tradeTotal .tradeTotal');
-        let splitString = tradeRouteCountSummaryElement.textContent.split(' ');
-
-        // Used trades is third element from end, total trades is last element
-        let usedTradeRouteCount = splitString[splitString.length - 3];
-        let totalTradeRouteCount = splitString[splitString.length - 1];
-
-        // Calculate free trade routes
-        return parseFloat(totalTradeRouteCount) - parseFloat(usedTradeRouteCount);
+        return this.totalTradeRouteCount - this.usedTradeRouteCount;
     }
 
+    /**
+     * Amount of trade routes that are used
+     */
     public static get usedTradeRouteCount(): number {
-        // Get element with trade routes summary
-        let tradeRouteCountSummaryElement = document.querySelector('#market #tradeTotal .tradeTotal');
-        let splitString = tradeRouteCountSummaryElement.textContent.split(' ');
+        // Collect all trade route elements and calculate the sum value (while more resource intensive, this is more reliable than reading the game (v1.4.1a)'s provided sum as the game has a bug that breaks market UI when a resource storage (crate or container) is unlocked)
+        let resources = this.getResources();
+        let sum = 0;
+        for (let resource of resources) {
+            sum = sum + Math.abs(resource.tradeCount);
+        }
 
-        // Used trades is third element from end
-        let usedTradeRouteCount = splitString[splitString.length - 3];
-        return parseFloat(usedTradeRouteCount);
+        return sum;
     }
 
-
+    /**
+     * Total amount of trade routes available
+     */
     public static get totalTradeRouteCount(): number {
-        // Get element with trade routes summary
-        let tradeRouteCountSummaryElement = document.querySelector('#market #tradeTotal .tradeTotal');
-        let splitString = tradeRouteCountSummaryElement.textContent.split(' ');
+        // Read total value from game's tooltip (while more resource intensive, this is more reliable than reading the game's provided sum as the game (v1.4.1a) has a bug that breaks market UI when a resource storage (crate or container) is unlocked)
+        let tradeRouteCountSummaryElement = document.querySelector<HTMLElement>('#market #tradeTotal .tradeTotal');
 
-        // Total trades is last element
-        let totalTradeRouteCount = splitString[splitString.length - 1];
-        return parseFloat(totalTradeRouteCount);
+        let total: number;
+        GameUtils.processTooltip(tradeRouteCountSummaryElement, (tooltipElement) => {
+            let totalTradeRouteCountElement = tooltipElement.querySelector<HTMLElement>('.resBreakdown .sum :nth-child(2)');
+            total = parseInt(totalTradeRouteCountElement.textContent);
+        });
+
+        return total;
     }
 
+    /**
+     * Maximum amount of trade routes that can be assigned to a resource
+     */
     public static get maxTradeRoutesPerResource(): number {
         // The trade limit is not detectable, so we have to employ a more brute force approach - fuck around and find out what affects the limit
 
@@ -72,27 +88,43 @@ export class Market {
     }
 
 
+    /**
+     * Assigns a new trade route to buy a resource
+     * @param targetResource 
+     */
     public static addBuyTrade(targetResource: MarketResourceItem) {
         this.addTrade(targetResource);
     }
 
+    /**
+     * Assigns a new trade route to sell a resource
+     * @param targetResource 
+     */
     public static addSellTrade(targetResource: MarketResourceItem) {
         this.subTrade(targetResource);
     }
 
+    /**
+     * Removes a trade route that was used to buy a resource
+     * @param targetResource 
+     */
     public static subBuyTrade(targetResource: MarketResourceItem) {
         this.subTrade(targetResource);
     }
 
+    /**
+     * Removes a trade route that was used to sell a resource
+     * @param targetResource 
+     */
     public static subSellTrade(targetResource: MarketResourceItem) {
         this.addTrade(targetResource);
     }
 
     private static addTrade(targetResource: MarketResourceItem) {
-        targetResource.addButton.dispatchEvent(new Event('click'));
+        Clicker.click(targetResource.addButton);
     }
 
     private static subTrade(targetResource: MarketResourceItem) {
-        targetResource.subButton.dispatchEvent(new Event('click'));
+        Clicker.click(targetResource.subButton);
     }
 }

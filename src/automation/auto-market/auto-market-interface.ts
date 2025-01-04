@@ -60,20 +60,24 @@ export class AutoMarketInterface {
      */
     private static refreshButton(buttonType: 'buy' | 'sell' | 'pause', buttonConfig: { visible: boolean, resourceId: string, enabled: boolean, paused: boolean, onToggle: () => void }) {
         const buttonId = `auto_market_${buttonType}_${buttonConfig.resourceId}`;
-        
+
         // Make sure the button doesn't exist
         if (!buttonConfig.visible) {
             let toggleButton = ToggleButton.get(buttonId);
-            
+
             if (toggleButton) {
                 toggleButton.destroy();
             }
 
             return;
         }
-        
+
         // Make sure the button is properly configured and rendered
         let containerElement = this.refreshButtonContainer(buttonConfig.resourceId);
+
+        if (!containerElement) {
+            return;
+        }
 
         let toggleButton = ToggleButton.getOrCreate(
             buttonId,
@@ -97,12 +101,19 @@ export class AutoMarketInterface {
 
     private static refreshButtonContainer(resourceId: string): Element {
         let marketElement = document.querySelector<HTMLElement>(`#market`);
-        let resourceElement = marketElement.querySelector<HTMLElement>(`#${resourceId}`);
-        let containerElement = resourceElement.querySelector<Element>(`#auto_market_container_${resourceId}`);
+        let resourceMarketElement = marketElement.querySelector<HTMLElement>(`#${resourceId}`);
+        let containerElement = marketElement.querySelector<Element>(`#auto_market_container_${resourceId}`);
 
-        if (!containerElement) {
-            let elementString = `<div id="auto_market_container_${resourceId}" class="auto-market-container"></div>`;
-            containerElement = Interface.createChildElementFromString(elementString, resourceElement);
+        let visible = resourceMarketElement && resourceMarketElement.style.display !== 'none';
+
+        if (!containerElement && visible) {
+            let moveRight = resourceMarketElement.querySelector<HTMLElement>(`.buy`); // If market contains manual buy button, move the container contents right to match the offset of trade routes
+
+            let elementString = `<div id="auto_market_container_${resourceId}" class="auto-market-container market-item${moveRight ? ' offset-right' : ''}"></div>`;
+            containerElement = Interface.createSiblingElementFromString(elementString, resourceMarketElement, "afterend");
+        } else if (containerElement && !visible) {
+            containerElement.remove();
+            containerElement = undefined;
         }
 
         return containerElement;

@@ -20,21 +20,21 @@ export class MarketResourceItem {
     /**
      * Returns trade count, positive numbers are buy trades, negative numbers are sell trades
     */
-    private get tradeCount(): number {
+    public get tradeCount(): number {
         let tradeCountElement = this.element.querySelector('.trade .current');
         let tradeCountString = tradeCountElement.textContent;
         return parseInt(tradeCountString);
     }
 
-    public get buyPrice(): number {
-        return this.getTradePrice(this.addButton);
+    public get buyPricePerTrade(): number {
+        return this.pricePerTrade(this.addButton);
     }
 
-    public get sellPrice(): number {
-        return this.getTradePrice(this.subButton);
+    public get sellPricePerTrade(): number {
+        return this.pricePerTrade(this.subButton);
     }
 
-    private getTradePrice(tradeButton: Element): number {
+    private pricePerTrade(tradeButton: Element): number {
         // Go to parent element
         let buttonRootElement = tradeButton.parentElement.parentElement;
 
@@ -48,7 +48,7 @@ export class MarketResourceItem {
         return price;
     }
 
-    public get tradeAmount(): number {
+    public get amountPerTrade(): number {
         // Get a button
         let tradeButton = this.addButton;
 

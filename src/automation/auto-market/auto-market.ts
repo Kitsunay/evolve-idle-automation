@@ -156,7 +156,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
         autoBuyableResources = autoBuyableResources.filter((resource) => resource.buyTradeCount <= minTrades);
 
         // Filter out resources that are too expensive for now
-        autoBuyableResources = autoBuyableResources.filter((resource) => resource.buyPrice < income && Game.Resources.getCount(resource.resourceId) / Game.Resources.getMaxCount(resource.resourceId) < 0.99);
+        autoBuyableResources = autoBuyableResources.filter((resource) => resource.buyPricePerTrade < income && Game.Resources.getCount(resource.resourceId) / Game.Resources.getMaxCount(resource.resourceId) < 0.99);
 
         // Single out a resource that fits in current budget and is not capped
         let targetResource: MarketResourceItem = autoBuyableResources.length > 0 ? autoBuyableResources[0] : undefined;
@@ -181,7 +181,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
         let lowValueResource = this.getLeastValuableSellResource(soldResources);
 
         // Final check, if total cost of removing the sell trade and buying a new one is less than the income
-        if (targetResource.buyPrice + lowValueResource.sellPrice < income) {
+        if (targetResource.buyPricePerTrade + lowValueResource.sellPricePerTrade < income) {
             Game.Market.subSellTrade(lowValueResource);
             Game.Market.addBuyTrade(targetResource);
             return targetResource;
@@ -218,7 +218,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
         }
 
         // If buying the new resource would not put us into negative income, buy it
-        if (addTarget && addTarget.buyPrice < income + subTarget.buyPrice) {
+        if (addTarget && addTarget.buyPricePerTrade < income + subTarget.buyPricePerTrade) {
             Game.Market.addBuyTrade(addTarget);
             return subTarget;
         }
@@ -340,7 +340,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
         let sellTarget: MarketResourceItem = undefined;
 
         for (const resource of fullResources) {
-            if (resource.tradeAmount > Game.Resources.getProduction(resource.resourceId)) { // Don't sell if production would go negative
+            if (resource.amountPerTrade > Game.Resources.getProduction(resource.resourceId)) { // Don't sell if production would go negative
                 continue;
             }
 
@@ -348,7 +348,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
                 continue;
             }
 
-            if (sellTarget === undefined || resource.sellPrice > sellTarget.sellPrice) {
+            if (sellTarget === undefined || resource.sellPricePerTrade > sellTarget.sellPricePerTrade) {
                 sellTarget = resource;
             }
         }
@@ -374,7 +374,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
         let lowValueResource = this.getLeastValuableSellResource(soldResources);
 
         // Make sure it makes sense to remove the least valuable sell trade
-        if (lowValueResource.sellPrice > sellTarget.sellPrice || lowValueResource.resourceId === sellTarget.resourceId) {
+        if (lowValueResource.sellPricePerTrade > sellTarget.sellPricePerTrade || lowValueResource.resourceId === sellTarget.resourceId) {
             return undefined;
         }
 
@@ -393,7 +393,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
                 return next;
             }
 
-            return min.sellPrice < next.sellPrice ? min : next;
+            return min.sellPricePerTrade < next.sellPricePerTrade ? min : next;
         }, undefined);
     }
 }
