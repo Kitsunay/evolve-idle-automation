@@ -1,0 +1,15 @@
+@use "../mixins/inactive";
+
+.number-input-wrapper {
+    display: flex;
+
+    &>.content {
+        margin: 0;
+
+        border-top: #665c54 solid .0625rem;
+        border-bottom: #665c54 solid .0625rem;
+
+        min-width: 3rem;
+        text-align: center;
+    }
+}

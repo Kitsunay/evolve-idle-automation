@@ -1,7 +1,7 @@
 export abstract class Automation<STATE> {
     protected abstract readonly LOCAL_STORAGE_KEY: string;
     protected abstract state: STATE;
-    
+
     public init(): void {
         // Load configuration and state from local storage (from string to object)
         this.loadState();
@@ -12,6 +12,21 @@ export abstract class Automation<STATE> {
 
     abstract tick(): void;
     abstract updateUI(): void;
+
+    /**
+     * Helper function that constructs a simple decorator that executes methods
+     * that are always used after an interface event. Helps reduce boilerplate code.
+     * @param listenerCallback actual logic required to process an interface event
+     * @returns the same logic, but decorated with additional default functionality
+     */
+    protected decorateInterfaceListener(listenerCallback: (...args: any) => void): (...args: any) => void {
+        return (...args: any) => {
+            listenerCallback(...args);
+
+            this.saveState();
+            this.updateUI();
+        };
+    }
 
     /**
      * Generic method to save automation state to local storage, including non-primitive types.
@@ -36,11 +51,11 @@ export abstract class Automation<STATE> {
                 for (const key in value) {
                     if (Object.hasOwnProperty.call(value, key)) {
                         let newKey = key;
-                        
+
                         if (value[key] instanceof Set) {
                             newKey = `${key}<Set>`; // Annotate Set objects for identification during revival
                         }
-                        
+
                         replacement[newKey] = value[key];
                     }
                 }
@@ -82,11 +97,11 @@ export abstract class Automation<STATE> {
                 for (const key in value) {
                     if (Object.hasOwnProperty.call(value, key)) {
                         let newKey = key;
-                        
+
                         if (key.search('<Set>') !== -1) {
                             newKey = key.slice(0, key.search('<Set>')); // Remove annotation of Set objects after revival
                         }
-                        
+
                         replacement[newKey] = value[key];
                     }
                 }

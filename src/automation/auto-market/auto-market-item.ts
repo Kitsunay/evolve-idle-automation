@@ -3,4 +3,5 @@ export interface AutoMarketItem {
     paused: boolean;
     sellEnabled: boolean;
     buyEnabled: boolean;
+    buyRate: number;
 }
