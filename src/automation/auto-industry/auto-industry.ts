@@ -64,6 +64,11 @@ export class AutoIndustry extends Automation<AutoIndustryState> {
         }
 
         let smelterItems = Game.Industry.Smelter.outputItems;
+
+        if (!smelterItems || smelterItems.length === 0) { // Do not try to adjust the output if there is no output to adjust
+            return false;
+        }
+
         let extendedRatios = ratios.map(x => { // extend ratios with matching industry items
             return {
                 product: x.product,
