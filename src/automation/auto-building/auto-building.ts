@@ -111,7 +111,7 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
                         firstPurchase = true;
                     }
 
-                    console.log(`Automation purchased building [${buildingItem.buildingId}]`);
+                    console.debug(`Automation purchased building [${buildingItem.buildingId}]`);
                     break; // Limit to one purchase per tick to avoid the issue described above
                 }
             }
