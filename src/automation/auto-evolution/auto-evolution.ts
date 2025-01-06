@@ -21,7 +21,7 @@ export class AutoEvolution extends Automation<AutoEvolutionState> {
         targetMembrane: 0,
         targetNucleus: 0,
         targetMitochondria: 0,
-        targetSomething: 0
+        targetEukaryoticCell: 0
     };
 
     private static readonly MANDATORY_EVOLUTIONS: string[] = ['multicellular'];
