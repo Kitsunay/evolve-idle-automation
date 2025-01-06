@@ -139,9 +139,21 @@ export class BuildingItem {
     }
 
     /**
+     * Returns true if the building can become purchasable with current storage capacity
+     */
+    get isCostStorageable(): boolean {
+        if (!this.isVisible) { // If the building is not unlocked yet, it cant be purchased
+            return false;
+        }
+
+        // cnam - can not afford due to max capacity
+        return this.mainElement.classList.contains('cnam');
+    }
+
+    /**
      * Returns number of purchased buildings
      */
-    get count(): number {
+    get level(): number {
         let countString = this.mainElement.querySelector<HTMLElement>('.count').textContent;
 
         return parseInt(countString);

@@ -47,7 +47,8 @@
     &.icon-color-b8bb26,
     &.icon-color-green,
     &.icon-color-success {
-        filter: brightness(0) saturate(100%) invert(99%) sepia(79%) saturate(7396%) hue-rotate(0deg) brightness(83%) contrast(70%);;
+        filter: brightness(0) saturate(100%) invert(99%) sepia(79%) saturate(7396%) hue-rotate(0deg) brightness(83%) contrast(70%);
+        ;
     }
 
     &.icon-cogs {
@@ -64,4 +65,10 @@
         // https://pictogrammers.com/library/mdi/icon/alert/
         content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctitle%3Ealert%3C/title%3E%3Cpath d='M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z' /%3E%3C/svg%3E");
     }
+}
+
+.icon-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }

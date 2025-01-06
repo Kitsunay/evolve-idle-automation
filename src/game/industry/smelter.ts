@@ -20,7 +20,7 @@ export class Smelter {
     }
 
     public static get count(): number {
-        return Game.Buildings.getBuilding('city-smelter').count;
+        return Game.Buildings.getBuilding('city-smelter').level;
     }
 
     public static get fuelItems(): SmelterItem[] {

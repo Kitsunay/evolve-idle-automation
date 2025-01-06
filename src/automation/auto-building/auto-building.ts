@@ -107,7 +107,7 @@ export class AutoBuilding extends Automation<AutoBuildingState> {
                 let building = Game.Buildings.getBuilding(buildingItem.buildingId);
 
                 if (Game.Buildings.tryBuy(building)) { // At most one building per type per tick (TODO: currently adds unbuyable buildings to queue)
-                    if (Game.Buildings.getBuilding(buildingItem.buildingId).count === 1) {
+                    if (Game.Buildings.getBuilding(buildingItem.buildingId).level === 1) {
                         firstPurchase = true;
                     }
 
