@@ -1,14 +1,26 @@
 .auto-building {
-    border-style: solid;
-    border-width: 1px;
-    border-color: transparent;
-
-    transition: all 200ms ease;
+    &:hover {
+        color: #689d6a;
+    }
+    
+    &.toggled {
+        color: #689d6a;
+        border-color: #689d6a;
+    }
 
     &.paused {
         color: #83a598;
         background-color: transparent;
         border-color: #3c3836;
+
+        &:hover {
+            background-color: #504945;
+        }
+
+        &.toggled {
+            border-color: #83a598;
+            color: #83a598;
+        }
     }
 }
 
@@ -22,10 +34,10 @@
     transition: all 200ms ease;
 
     &:hover {
-        border-color: #fb4934;
+        color: #fb4934;
     }
 
-    &.on {
+    &.toggled {
         border-color: #fb4934;
         color: #fb4934;
     }

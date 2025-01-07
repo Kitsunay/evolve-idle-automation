@@ -48,7 +48,13 @@
     &.icon-color-green,
     &.icon-color-success {
         filter: brightness(0) saturate(100%) invert(99%) sepia(79%) saturate(7396%) hue-rotate(0deg) brightness(83%) contrast(70%);
-        ;
+    }
+
+    // Pink
+    &.icon-color-d3869b,
+    &.icon-color-pink,
+    &.icon-color-special {
+        filter: invert(78%) sepia(22%) saturate(1406%) hue-rotate(296deg) brightness(89%) contrast(84%);
     }
 
     &.icon-cogs {

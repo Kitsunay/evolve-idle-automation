@@ -1,5 +1,16 @@
 @mixin inactive {
+    color: #504945;
+    border-color: #504945;
     background-color: transparent;
-    border-color: #83a598;
-    color: #83a598;
+    cursor: default;
+
+    &:hover:not(.inactive),
+    &.toggled {
+        color: #d3869b;
+    }
+
+    &.toggled {
+        color: #d3869b;
+        border-color: #d3869b;
+    }
 }

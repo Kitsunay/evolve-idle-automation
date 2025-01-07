@@ -1,3 +1,5 @@
+@use "../mixins/inactive" as *;
+
 .toggle-button {
     margin: .375rem .375rem 0 0;
     border-radius: 4px;
@@ -9,22 +11,34 @@
     text-align: center;
     justify-items: center;
 
-    background-color: #3c3836;
+    color: #83a598;
+    background-color: transparent;
+    border-color: #3c3836;
+    border-style: solid;
+    border-width: 1px;
 
-    /* Disabled text color by default */
-    color: #fb4934;
+    transition: all 200ms ease;
 
     cursor: pointer;
-}
 
-.toggle-button:hover {
-    background-color: #504945;
-}
+    &:hover {
+        background-color: #504945;
+    }
 
-.toggle-button.on {
-    color: #8ec07c;
-}
+    &.toggled {
+        border-color: #83a598;
+    }
 
-.toggle-button span {
-    flex: 1;
+    &.inactive,
+    &.inactive:hover {
+        @include inactive;
+
+        &.toggled {
+            border-color: #83a598;
+        }
+    }
+
+    span {
+        flex: 1;
+    }
 }

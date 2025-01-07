@@ -1,0 +1,19 @@
+// TODO: Paint selected choice research pinkish-indigo
+.auto-research-choice .toggle-button {
+    &:hover:not(.inactive) {
+        color: #d3869b;
+    }
+
+    &.toggled {
+        color: #d3869b;
+        border-color: #d3869b;
+    }
+
+    &.inactive,
+    &.inactive:hover {
+        color: #504945;
+        border-color: #504945;
+        background-color: transparent;
+        cursor: default;
+    }
+}
