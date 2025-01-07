@@ -1,3 +1,5 @@
+import { AfterLoadState } from "./interfaces/after-load-state";
+
 export abstract class Automation<STATE> {
     protected abstract readonly LOCAL_STORAGE_KEY: string;
     protected abstract state: STATE;
@@ -72,6 +74,8 @@ export abstract class Automation<STATE> {
         if (stateObject) { // Do not overwrite default state if nothing is stored in local storage yet
             this.state = stateObject;
         }
+
+        this.onAfterLoadState();
     }
 
     /**
@@ -111,5 +115,15 @@ export abstract class Automation<STATE> {
 
             return value;
         });
+    }
+
+    private onAfterLoadState(): void { // Available via interface
+        if (this.implementsAfterLoadState(this)) {
+            this.afterLoadState();
+        }
+    };
+
+    private implementsAfterLoadState(instance: Automation<STATE> | AfterLoadState): instance is AfterLoadState {
+        return (<AfterLoadState>instance).afterLoadState !== undefined;
     }
 }

@@ -28,9 +28,8 @@ export class AutoEvolutionInterface {
         let pauseElementId = `auto_building_toggle_pause`;
 
         // Create the element if it doesn't exist
-        let toggleButton = ToggleButton.getOrCreate(pauseElementId, evolutionRootElement, { styleClass: "pause-button", textContent: { on: "Paused", off: "Pause" }, position: 0 });
-        toggleButton.onToggle = onToggle;
-        toggleButton.isToggled = paused;
+        let toggleButton = new ToggleButton(pauseElementId, evolutionRootElement, 0);
+        toggleButton.createOrUpdate({ styleClass: "pause-button", textContent: { on: "Paused", off: "Pause" }, position: 0, isToggled: paused, onToggle: onToggle });
 
         // Also make sure 'Automation' label is rendered
         if (!document.querySelector<HTMLElement>(`#auto-evolution-label`)) {

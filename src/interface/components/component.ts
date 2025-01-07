@@ -13,14 +13,16 @@ export abstract class Component<CONFIG_OBJECT> {
      */
     protected abstract readonly rootElementString: string;
     protected rootElement: Element;
+    private position: number;
     protected isNew: boolean = false;
 
     protected abstract defaultConfig: CONFIG_OBJECT;
     private config: CONFIG_OBJECT;
 
-    constructor(componentId: string, parentElement: Element) {
+    constructor(componentId: string, parentElement: Element, position?: number) {
         this.componentId = this.getComponentIdPrefix() + componentId;
         this.parentElement = parentElement;
+        this.position = position;
 
         this.rootElement = parentElement.querySelector<HTMLElement>(`#${this.componentId}`);
     }
@@ -36,7 +38,7 @@ export abstract class Component<CONFIG_OBJECT> {
 
         this.isNew = true;
 
-        this.rootElement = Interface.getOrCreate({ elementId: this.componentId, parentElement: this.parentElement, elementString: this.rootElementString });
+        this.rootElement = Interface.createChildElementFromString(this.rootElementString, this.parentElement, this.position);
         this.rootElement.id = this.componentId;
 
         this.config = config ?? this.defaultConfig;

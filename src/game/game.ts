@@ -4,6 +4,7 @@ import { Industry } from "./industry/industry";
 import { JobList } from "./job-list/job-list";
 import { Market } from "./market/market";
 import { Military } from "./military/military";
+import { Perks } from "./perks/perks";
 import { PowerGrid } from "./power-grid/power-grid";
 import { Research } from "./research/research";
 import { Resources } from "./resources/resources";
@@ -27,4 +28,5 @@ export class Game {
     public static Military = Military;
     public static Industry = Industry;
     public static Evolution = Evolution;
+    public static Perks = Perks;
 }

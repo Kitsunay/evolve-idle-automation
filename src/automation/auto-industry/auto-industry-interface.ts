@@ -54,22 +54,17 @@ export class AutoIndustryInterface {
 
             // Put the toggle before the left element
             let buttonId = `auto-industry-smelter-fuel-${fuelItem.resourceId}`;
-            let buttonElement = ToggleButton.getOrCreate(
-                buttonId,
-                parentElement,
-                {
-                    styleClass: "auto-industry-toggle-addon",
-                    iconStyleClass: {
-                        on: 'icon-cogs icon-size-16 icon-color-orange',
-                        off: 'icon-cogs icon-size-16 icon-color-white'
-                    },
-                    textContent: { on: '', off: '' },
-                    position: leftElementIndex
-                }
-            );
-
-            buttonElement.isToggled = smelterConfig?.preferredFuel === fuelItem.resourceId;
-            buttonElement.onToggle = () => { callbacks.onTogglePrefferedFuel(fuelItem.resourceId); };
+            let buttonElement = new ToggleButton(buttonId, parentElement, leftElementIndex);
+            buttonElement.createOrUpdate({
+                styleClass: "auto-industry-toggle-addon",
+                iconStyleClass: {
+                    on: 'icon-cogs icon-size-16 icon-color-orange',
+                    off: 'icon-cogs icon-size-16 icon-color-white'
+                },
+                textContent: { on: '', off: '' },
+                isToggled: smelterConfig?.preferredFuel === fuelItem.resourceId,
+                onToggle: () => { callbacks.onTogglePrefferedFuel(fuelItem.resourceId); }
+            });
         }
 
         let outputRootElement = Game.Industry.Smelter.outputRootElement;

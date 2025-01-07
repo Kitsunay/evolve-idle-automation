@@ -8,6 +8,10 @@ export class ResearchItem {
     public get id(): string {
         return this.element.getAttribute('id');
     }
+
+    public get name(): string {
+        return this.element.querySelector<HTMLElement>('.aTitle').textContent;
+    }
     
     get buyButtonElement(): HTMLElement {
         return this.element.querySelector<HTMLElement>('.button');

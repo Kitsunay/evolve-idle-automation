@@ -80,10 +80,10 @@ export class AutoMarketInterface {
 
         // Make sure the button doesn't exist
         if (!buttonConfig.visible) {
-            let toggleButton = ToggleButton.get(buttonId);
+            let toggleButton = document.querySelector<HTMLElement>(`#${buttonId}`);
 
             if (toggleButton) {
-                toggleButton.destroy();
+                toggleButton.remove();
             }
 
             return;
@@ -96,24 +96,16 @@ export class AutoMarketInterface {
             return;
         }
 
-        let toggleButton = ToggleButton.getOrCreate(
-            buttonId,
-            containerElement,
-            {
-                styleClass: `auto-market ${buttonType}`,
-                textContent: {
-                    on: buttonType.toUpperCase(),
-                    off: buttonType.toUpperCase()
-                }
-            }
-        );
-
-        toggleButton.onToggle = buttonConfig.onToggle;
-        toggleButton.isToggled = buttonConfig.enabled;
-
-        if (buttonConfig.paused !== undefined && toggleButton.buttonElement.classList.contains('paused') !== buttonConfig.paused) {
-            toggleButton.buttonElement.classList.toggle('paused');
-        }
+        let toggleButton = new ToggleButton(buttonId, containerElement,);
+        toggleButton.createOrUpdate({
+            styleClass: `auto-market ${buttonType}${buttonConfig.paused ? ' paused' : ''}`,
+            textContent: {
+                on: buttonType.toUpperCase(),
+                off: buttonType.toUpperCase()
+            },
+            isToggled: buttonConfig.enabled,
+            onToggle: buttonConfig.onToggle
+        });
     }
 
     private static refreshResourceComponentsContainer(resourceId: string): Element {

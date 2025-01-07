@@ -18,13 +18,8 @@ export class AutoBuildingInterface {
             return;
         }
         
-        let toggleButton = ToggleButton.getOrCreate(`auto_building_toggle_${buildingId}`, buildingElement, { styleClass: "auto-building", textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
-        toggleButton.onToggle = onToggle;
-        toggleButton.isToggled = enabled;
-
-        if (toggleButton.buttonElement.classList.contains('paused') !== paused) {
-            toggleButton.buttonElement.classList.toggle('paused');
-        }
+        let toggleButton = new ToggleButton(`auto_building_toggle_${buildingId}`, buildingElement, 0);
+        toggleButton.createOrUpdate({ styleClass: `auto-building${paused ? ' paused' : ''}`, textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0, onToggle: onToggle, isToggled: enabled });
     }
 
     static refreshPauseButton(paused: boolean, onToggle: () => void) {
@@ -37,9 +32,8 @@ export class AutoBuildingInterface {
         let pauseElementId = `auto_building_toggle_pause`;
         
         // Create the element if it doesn't exist
-        let toggleButton = ToggleButton.getOrCreate(pauseElementId, buildingRootElement, { styleClass: "auto-building pause-button", textContent: {on: "Paused", off: "Pause"}, position: 0});
-        toggleButton.onToggle = onToggle;
-        toggleButton.isToggled = paused;
+        let toggleButton = new ToggleButton(pauseElementId, buildingRootElement, 0);
+        toggleButton.createOrUpdate({ styleClass: "auto-building pause-button", textContent: {on: "Paused", off: "Pause"}, position: 0, isToggled: paused, onToggle: onToggle });
 
         // Also make sure 'Automation' label is rendered
         if (!document.querySelector<HTMLElement>(`#auto-building-label`)) {

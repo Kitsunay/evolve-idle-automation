@@ -14,9 +14,8 @@ export class AutoWorkerInterface {
         }
 
         // Add on/off button
-        let toggleButton = ToggleButton.getOrCreate(`auto_worker_toggle_enabled`, autoWorkerRootElement, {textContent: {on: "Auto: ON", off: "Auto: OFF"}, position: 0});
-        toggleButton.onToggle = onToggle;
-        toggleButton.isToggled = enabled;
+        let toggleButton = new ToggleButton(`auto_worker_toggle_enabled`, autoWorkerRootElement, 0);
+        toggleButton.createOrUpdate({textContent: {on: "Auto: ON", off: "Auto: OFF"}, isToggled: enabled, onToggle: onToggle});
 
         // Add 'Automation' label
         let autoWorkerLabelElement = autoWorkerRootElement.querySelector<Element>('#auto-worker-label');

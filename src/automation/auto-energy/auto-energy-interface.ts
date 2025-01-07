@@ -8,21 +8,17 @@ export class AutoEnergyInterface {
     static update(state: AutoEnergyState, onEnabledToggle: () => void, onDrop: (buildingIds: string[], newGroupBetween: { min: number, max: number }, newPriority: number) => void) {
         // Add a toggle button for using auto-energy's active energy distribution vs. the game's legacy energy distribution
         let buttonId = "auto-energy-button";
-        let button = ToggleButton.getOrCreate(
-            buttonId,
-            document.querySelector<Element>(`#powerGrid`),
-            {
-                textContent: {
-                    on: "Active Distribution",
-                    off: "Legacy Distribution"
-                },
-                position: 0,
-                styleClass: "auto-energy"
-            }
-        );
-
-        button.isToggled = state.enabled;
-        button.onToggle = onEnabledToggle;
+        let button = new ToggleButton(buttonId, document.querySelector<Element>(`#powerGrid`), 0);
+        button.createOrUpdate({
+            textContent: {
+                on: "Active Distribution",
+                off: "Legacy Distribution"
+            },
+            position: 0,
+            styleClass: "auto-energy",
+            isToggled: state.enabled,
+            onToggle: onEnabledToggle
+        });
 
         // Create an element for each resource that can be electrified
         for (const energyConsumer of state.energyConsumers) {

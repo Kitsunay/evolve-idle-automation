@@ -241,8 +241,8 @@ export class AutoMarket extends Automation<AutoMarketState> {
     private tryRemoveBuyHighProduction(buyTargetProductionResources: { config: AutoMarketItem; resource: MarketResourceItem; }[]): { config: AutoMarketItem; resource: MarketResourceItem; } {
         // Check which resources have high production after a trade would be removed
         let eligibleResources = buyTargetProductionResources.filter((configuredResource) => Game.Resources.getProduction(configuredResource.config.resourceId) - configuredResource.resource.amountPerTrade > configuredResource.config.buyRate);
-        // Check which resources have buy trades active (ignore if auto-buy is enabled, as it can cause oscillation)
-        eligibleResources = eligibleResources.filter((configuredResource) => configuredResource.resource.buyTradeCount > 0 && !configuredResource.config.buyEnabled);
+        // Check which resources have buy trades active
+        eligibleResources = eligibleResources.filter((configuredResource) => configuredResource.resource.buyTradeCount > 0);
 
         // Collect final selection from resources with highest amount of trades
         let maxTrades = eligibleResources.map((configuredResource) => configuredResource.resource.buyTradeCount).reduce((max, next) => { return Math.max(max, next); }, 0);
