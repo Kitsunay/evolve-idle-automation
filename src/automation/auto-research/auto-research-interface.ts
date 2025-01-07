@@ -17,6 +17,8 @@ export class AutoResearchInterface {
         // Do that also for researches that were selected from a selection
         let selectedChoiceResearches = state.researchChoices.filter(x => x.selectedResearchIndex !== undefined).map(x => x.researches[x.selectedResearchIndex].id);
         this.refreshAutomatedResearches(selectedChoiceResearches, IconColor.PINK);
+
+        this.clearNonAutomatedResearches([...Array.from(state.knownResearches), ...selectedChoiceResearches]);
     }
 
     /**
@@ -91,6 +93,23 @@ export class AutoResearchInterface {
                 if (!iconElement) {
                     let iconElementString = `<div class="auto-research-icon top-right"><div class="icon icon-cogs icon-size-16 ${iconColorClass ? "icon-color-" + iconColorClass : "icon-color-white"}"></div></div>`;
                     iconElement = Interface.createChildElementFromString(iconElementString, researchElement);
+                }
+            }
+        }
+    }
+
+    static clearNonAutomatedResearches(knownResearches: string[]) {
+        let researchElements = document.querySelectorAll<HTMLElement>('#tech [id^="tech-"]');
+
+        for (let index = 0; index < researchElements.length; index++) {
+            const researchElement = researchElements[index];
+
+            if (!knownResearches.includes(researchElement.id)) {
+                // Make sure the automation icon is not displayed
+                let iconElement = researchElement.querySelector('.auto-research-icon');
+
+                if (iconElement) {
+                    iconElement.remove();
                 }
             }
         }
