@@ -147,7 +147,7 @@ export class BuildingItem {
         }
 
         // cnam - can not afford due to max capacity
-        return this.mainElement.classList.contains('cnam');
+        return !this.mainElement.classList.contains('cnam');
     }
 
     /**
