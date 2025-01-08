@@ -1,3 +1,6 @@
+import { Game } from "../game";
+import { GameUtils } from "../game-utils";
+
 export class MarketResourceItem {
     public readonly resourceId: string;
     public readonly element: HTMLElement;
@@ -48,7 +51,23 @@ export class MarketResourceItem {
         return price;
     }
 
+    public get tradedAmount(): number {
+        // Read the amount of resources that are actually being traded from tooltip
+        let resourceBreakdown = Game.Resources.getConsumptionBreakdown(this.resourceId);
+        let tradedAmount = resourceBreakdown.find((x) => x.name === 'Trade')?.amount ?? 0;
+
+        return tradedAmount;
+    }
+
     public get amountPerTrade(): number {
+        if (this.tradeCount === 0) {
+            return this.getAmountPerTradeFromAddButtonTooltip();
+        }
+
+        return this.getAmountPerTradeFromTradedAmount();
+    }
+
+    private getAmountPerTradeFromAddButtonTooltip(): number {
         // Get a button
         let tradeButton = this.addButton;
 
@@ -61,6 +80,13 @@ export class MarketResourceItem {
         let amount = parseFloat(amountString.split(' ')[1]);
 
         return amount;
+    }
+
+    private getAmountPerTradeFromTradedAmount(): number {
+        let tradeCount = this.tradeCount;
+        let tradedAmount = this.tradedAmount;
+
+        return tradedAmount / tradeCount;
     }
 
     public get addButton(): HTMLElement {
