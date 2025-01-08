@@ -36,7 +36,7 @@ export class ToggleButton extends Component<ToggleButtonConfig> {
         } else if (iconElement && !config?.iconStyleClass) {
             iconElement.remove();
         } else if (!iconElement && config?.iconStyleClass) {
-            Interface.createChildElementFromString(`<span class="icon ${config?.iconStyleClass}"></span>`, rootElement, 0);
+            Interface.createChildElementFromString(`<span class="icon ${this.isToggled ? config?.iconStyleClass.on : config?.iconStyleClass.off}"></span>`, rootElement, 0);
         }
 
         // Content
