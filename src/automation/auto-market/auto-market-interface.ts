@@ -159,17 +159,15 @@ export class AutoMarketInterface {
         // TODO: This component could have also a toggle button with cogs icon that activates/deactivates production rate automation
         let component = new NumberInputComponent(elementId, containerElement);
 
-        if (!component.exists) {
-            component.create({
-                content: componentConfig.value,
-                styleClass: 'auto-market',
-                onAdd: () => {
-                    componentConfig.onChange((componentConfig.value ?? 0) + 1);
-                },
-                onSub: () => {
-                    componentConfig.onChange((componentConfig.value ?? 0) - 1);
-                }
-            });
-        }
+        component.createOrUpdate({
+            content: componentConfig.value,
+            styleClass: 'auto-market',
+            onAdd: () => {
+                componentConfig.onChange((componentConfig.value ?? 0) + 1);
+            },
+            onSub: () => {
+                componentConfig.onChange((componentConfig.value ?? 0) - 1);
+            }
+        });
     }
 }

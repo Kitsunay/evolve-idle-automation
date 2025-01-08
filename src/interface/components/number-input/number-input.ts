@@ -10,28 +10,22 @@ export class NumberInputComponent extends Component<NumberInputConfig> {
     }
 
     protected renderComponent(config: NumberInputConfig, rootElement: Element, isNew: boolean): void {
-        // Create inner HTML if it doesn't exist
-        if (!rootElement.innerHTML) {
-            let innerString = `<div class="sub">«</div><div class="content"></div><div class="add">»</div>`;
-            rootElement.innerHTML = innerString;
-        }
+        // Replace inner HTML
+        let innerString = `<div class="sub">«</div><div class="content"></div><div class="add">»</div>`;
+        rootElement.innerHTML = innerString;
 
-        // Update classes
+        // Add classes
         rootElement.className = `number-input-wrapper ${config.styleClass ?? ''}`;
 
-        // Update listeners
+        // Add listeners
         let subElement = rootElement.querySelector<HTMLElement>('.sub');
         let addElement = rootElement.querySelector<HTMLElement>('.add');
 
-        if (isNew && config.onSub) {
-            subElement.addEventListener('click', config.onSub);
-        }
+        subElement.addEventListener('click', config.onSub);
 
-        if (isNew && config.onAdd) {
-            addElement.addEventListener('click', config.onAdd);
-        }
+        addElement.addEventListener('click', config.onAdd);
 
-        // Update content
+        // Add content
         let contentElement = rootElement.querySelector<HTMLElement>('.content');
         contentElement.innerHTML = (config.content ?? 0).toString();
     }
