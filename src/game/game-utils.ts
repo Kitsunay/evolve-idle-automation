@@ -23,6 +23,7 @@ export class GameUtils {
                 cachedElement = document.querySelector(`#arpaGenetics .trait.t-${cachedId} :nth-child(2)`);
             } else {
                 cachedElement = document.querySelector(`[id*="${cachedId}"]`); // Standard tooltip behaviour
+                console.log(cachedId, cachedElement);
             }
 
             if (!cachedElement) {
@@ -38,7 +39,7 @@ export class GameUtils {
                 cachedElement = cachedElement.querySelector<HTMLElement>('.name');
             }
 
-            if (cachedElement.classList.contains('city')) { // District names are also borked
+            if (cachedElement.classList.contains('city') || cachedElement.classList.contains('space')) { // District names are also borked
                 cachedElement = cachedElement.querySelector<HTMLElement>('h3');
             }
 
