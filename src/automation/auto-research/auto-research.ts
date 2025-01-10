@@ -24,7 +24,14 @@ export class AutoResearch extends Automation<AutoResearchState> implements After
                 { id: 'tech-fanaticism', name: undefined, isDiscovered: false },
             ],
             selectedResearchIndex: undefined,
-        }
+        },
+        {
+            id: 'preeminence',
+            researches: [
+                { id: 'tech-study', name: undefined, isDiscovered: false },
+                { id: 'tech-deify', name: undefined, isDiscovered: false },
+            ],
+            selectedResearchIndex: undefined,
     ];
 
     private researchChoiceIgnoreConditions: Map<string, () => boolean> = new Map<string, () => boolean>([
