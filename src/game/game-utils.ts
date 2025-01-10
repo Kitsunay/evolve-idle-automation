@@ -23,7 +23,6 @@ export class GameUtils {
                 cachedElement = document.querySelector(`#arpaGenetics .trait.t-${cachedId} :nth-child(2)`);
             } else {
                 cachedElement = document.querySelector(`[id*="${cachedId}"]`); // Standard tooltip behaviour
-                console.log(cachedId, cachedElement);
             }
 
             if (!cachedElement) {
