@@ -92,6 +92,7 @@ export class AutoEvolution extends Automation<AutoEvolutionState> {
 
         return;
 
+        /*
         // TODO: Finish picking automatic evolution path
         // Collect target evolution path
         /*
