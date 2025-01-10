@@ -11,7 +11,7 @@
         }
     },
     "scripts": {
-        "install-git-hooks": "cp ./git-hooks/install/* ./.git/hooks",
+        "install-git-hooks": "xcopy /h /k \"git-hooks/install/*\" \".git/hooks\"",
         "sass-watch": "sass --watch ./styles/:./dist/",
         "webpack-watch": "webpack --mode development --watch",
         "build": "webpack --mode production && sass ./styles/:./dist/",
