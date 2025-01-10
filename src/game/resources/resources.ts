@@ -88,33 +88,6 @@ export class Resources {
         // Fix for market resources
         resourceId = this.fixResourceId(resourceId);
 
-        // This method uses global pop-up to get resource consumption, if a pop-up is displayed, cache it for restore at method end
-        let openTooltip = document.querySelector('#popper');
-        let cachedElement: Element = undefined;
-        if (openTooltip) {
-            let cachedId = openTooltip.getAttribute('data-id');
-            cachedElement = document.querySelector(`[id*="${cachedId}"]`);
-
-            if (!cachedElement) {
-                console.log('Failed to find cached tooltip element', openTooltip, cachedId);
-            }
-
-            let jobLabel = cachedElement.querySelector('.job_label');
-            if (jobLabel) { // Jobs have borked tooltip event listeners
-                cachedElement = jobLabel;
-            }
-
-            if (cachedElement.classList.contains('race')) { // Race tooltip is borked, too
-                cachedElement = cachedElement.querySelector<HTMLElement>('.name');
-            }
-
-            if (cachedElement.classList.contains('city')) { // District names are also borked
-                cachedElement = cachedElement.querySelector<HTMLElement>('h3');
-            }
-
-            cachedElement.dispatchEvent(new Event('mouseout'));
-        }
-
         // Prepare to select the correct element based on the selector
         let childIndex: number;
         if (selector === 'production') {
@@ -123,14 +96,9 @@ export class Resources {
             childIndex = 2;
         }
 
-        // The popup exists for such a short amount of time, it doesn't even render and the player won't see any flickering tooltips
-        document.querySelector(`#${resourceId} .diff`).dispatchEvent(new Event('mouseover')); // Simulate mouseover to display tooltip
-        let consumptionElements = document.querySelectorAll(`#popper .resBreakdown .parent > div:nth-child(${childIndex}) .modal_bd`); // Read pop-up tooltip
-        document.querySelector(`#${resourceId} .diff`).dispatchEvent(new Event('mouseout')); // Simulate mouseout to hide the tooltip
-
-        if (cachedElement) {
-            cachedElement.dispatchEvent(new Event('mouseover')); // Restore the original tooltip
-        }
+        let consumptionElements = GameUtils.processTooltip(document.querySelector(`#${resourceId} .diff`), (tooltipElement) => {
+            return tooltipElement.querySelectorAll(`.resBreakdown .parent > div:nth-child(${childIndex}) .modal_bd`);
+        });
 
         let consumptionBreakdown = [];
         for (let i = 0; i < consumptionElements.length; i++) {

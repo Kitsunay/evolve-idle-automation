@@ -17,7 +17,13 @@ export class GameUtils {
         let cachedElement: Element = undefined;
         if (openTooltip) {
             let cachedId = openTooltip.getAttribute('data-id');
-            cachedElement = document.querySelector(`[id*="${cachedId}"]`);
+            
+            if (cachedId.startsWith('popGenetrait')) { // Gene trait tooltip is no work
+                cachedId = cachedId.replace('popGenetrait', '');
+                cachedElement = document.querySelector(`#arpaGenetics .trait.t-${cachedId} :nth-child(2)`);
+            } else {
+                cachedElement = document.querySelector(`[id*="${cachedId}"]`); // Standard tooltip behaviour
+            }
 
             if (!cachedElement) {
                 console.log('Failed to find cached tooltip element', openTooltip, cachedId);
