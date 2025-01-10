@@ -217,6 +217,10 @@ export class AutoIndustry extends Automation<AutoIndustryState> {
         let numUsableFactories = factoryCap;
 
         for (const ratioItem of extendedRatios) {
+            if (ratioItem.ratio === 0) { // Skip unwanted products
+                continue;
+            }
+
             let numActive = ratioItem.industryItem.count;
 
             if (ratioItem.ratio > 0 && numActive === 0) {
