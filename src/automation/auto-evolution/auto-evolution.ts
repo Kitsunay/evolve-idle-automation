@@ -92,6 +92,7 @@ export class AutoEvolution extends Automation<AutoEvolutionState> {
 
         return;
 
+        /*
         // TODO: Finish picking automatic evolution path
         // Collect target evolution path
         let targetPath: EvolutionNode[] = [];
@@ -130,6 +131,7 @@ export class AutoEvolution extends Automation<AutoEvolutionState> {
         // Something went horribly wrong
         console.error("Could not find target evolution", 'targetPath:', targetPath, 'availableEvolutions:', availableEvolutions, 'mandatoryEvolutions:', AutoEvolution.MANDATORY_EVOLUTIONS);
         throw new Error("Could not find target evolution");
+        */
     }
 
     updateUI(): void {
