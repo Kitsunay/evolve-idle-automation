@@ -65,10 +65,6 @@ export class Resources {
         // Fix for market resources
         resourceId = this.fixResourceId(resourceId);
 
-        if (resourceId === 'resLux') {
-            resourceId = 'resMoney';
-        }
-
         return this.getProduction(resourceId) - this.getConsumption(resourceId);
     }
 
@@ -79,6 +75,14 @@ export class Resources {
             resourceId = 'res' + resourceId;
 
             resourceId = `${resourceId.substring(0, 3)}${resourceId[3].toUpperCase()}${resourceId.substring(4)}`;
+        }
+
+        if (resourceId === 'resLux') { // Luxury items are practically money
+            resourceId = 'resMoney';
+        }
+
+        if (resourceId === 'resNano') { // Market uses difference
+            resourceId = 'resNano_Tube';
         }
 
         return resourceId;
