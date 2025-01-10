@@ -94,6 +94,7 @@ export class AutoEvolution extends Automation<AutoEvolutionState> {
 
         // TODO: Finish picking automatic evolution path
         // Collect target evolution path
+        /*
         let targetPath: EvolutionNode[] = [];
         let currNode: EvolutionNode = this.state.evolutionRoot.children[this.state.evolutionRoot.selectedChildIndex];
         while (currNode) {
@@ -130,6 +131,7 @@ export class AutoEvolution extends Automation<AutoEvolutionState> {
         // Something went horribly wrong
         console.error("Could not find target evolution", 'targetPath:', targetPath, 'availableEvolutions:', availableEvolutions, 'mandatoryEvolutions:', AutoEvolution.MANDATORY_EVOLUTIONS);
         throw new Error("Could not find target evolution");
+        */
     }
 
     updateUI(): void {

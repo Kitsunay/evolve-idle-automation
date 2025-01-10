@@ -15,11 +15,13 @@
         "sass-watch": "sass --watch ./styles/:./dist/",
         "webpack-watch": "webpack --mode development --watch",
         "build": "webpack --mode production && sass ./styles/:./dist/",
-        "start": "web-ext run --watch-ignored *.* **/firefox-profiles/**/* src/**/* settings/**/* node_modules/**/* icons/**/* --start-url https://pmotschmann.github.io/Evolve/ --firefox-profile=.\\firefox-profiles\\evolve-idle --profile-create-if-missing --keep-profile-changes --verbose",
+        "start": "web-ext run --watch-ignored *.* **/firefox-profile-evolve-idle/**/* src/**/* settings/**/* node_modules/**/* icons/**/* --start-url https://pmotschmann.github.io/Evolve/ --firefox-profile=.\\firefox-profile-evolve-idle --profile-create-if-missing --keep-profile-changes --verbose",
         "help": "web-ext run --help",
         "dev": "start npm run sass-watch & start npm run webpack-watch & start npm run start"
     },
     "devDependencies": {
+        "@types/eslint": "^9.6.1",
+        "@types/node": "^22.10.5",
         "ts-loader": "^9.5.1",
         "typescript": "^5.7.2",
         "web-ext": "~8.3.0",
@@ -30,52 +32,3 @@
         "sass": "^1.83.0"
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
