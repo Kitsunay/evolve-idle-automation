@@ -39,7 +39,7 @@ $versionNumberParts = $versionNumber.Split(".")
 # Decide which version number to increment
 # If commit message contains "[MAJOR]", increment minor version number
 [string] $commitMessage = git log -1 --pretty=%B
-if ($commitMessage -match "[MAJOR]") {
+if ($commitMessage -match "\[MAJOR\]") {
     $versionNumberParts[1] = [int]$versionNumberParts[1] + 1
     $versionNumberParts[2] = 0
 } else {
