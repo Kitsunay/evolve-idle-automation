@@ -241,6 +241,7 @@ export class AutoMarket extends Automation<AutoMarketState> {
     private tryRemoveBuyHighProduction(buyTargetProductionResources: { config: AutoMarketItem; resource: MarketResourceItem; }[]): { config: AutoMarketItem; resource: MarketResourceItem; } {
         // Check which resources have high production after a trade would be removed
         let eligibleResources = buyTargetProductionResources.filter((configuredResource) => Game.Resources.getProduction(configuredResource.config.resourceId) - configuredResource.resource.amountPerTrade > configuredResource.config.buyRate);
+
         // Check which resources have buy trades active
         eligibleResources = eligibleResources.filter((configuredResource) => configuredResource.resource.buyTradeCount > 0);
 
@@ -313,14 +314,16 @@ export class AutoMarket extends Automation<AutoMarketState> {
         return undefined;
     }
 
-
     private tryRemoveBuyResourceNotAutoBuyable(boughtResources: { resource: MarketResourceItem, config: AutoMarketItem }[], autoBuyableResources: { resource: MarketResourceItem, config: AutoMarketItem }[]): { resource: MarketResourceItem, config: AutoMarketItem } {
         if (boughtResources.length === 0) {
             return undefined;
         }
 
         for (const configurableResource of boughtResources) {
-            if (configurableResource.resource.buyTradeCount > 0 && !autoBuyableResources.some((autoBuyableResource) => autoBuyableResource.resource.resourceId === configurableResource.resource.resourceId)) {
+            if (configurableResource.resource.buyTradeCount > 0 &&
+                !autoBuyableResources.some((autoBuyableResource) => autoBuyableResource.resource.resourceId === configurableResource.resource.resourceId) &&
+                Game.Resources.getProduction(configurableResource.config.resourceId) - configurableResource.resource.amountPerTrade > configurableResource.config.buyRate) {
+
                 Game.Market.subBuyTrade(configurableResource.resource);
                 return configurableResource;
             }
