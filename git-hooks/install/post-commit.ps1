@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+#!/usr/bin/env powershell
 # Run all post-commit scripts from script folder
 
 $fileItems = Get-ChildItem ./git-hooks/post-commit
@@ -13,7 +13,7 @@ for ($i = 0; $i -lt $fileItems.Count; $i++) {
 
     # Run the script
     $fileItem.FullName
-    pwsh $fileItem.FullName
+    powershell $fileItem.FullName
 }
 
 # If any script produced commits, squash them to one commit with original message

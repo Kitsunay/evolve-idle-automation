@@ -18,7 +18,7 @@ for ($i = 0; $i -lt $gitDiffLines.Count; $i++) {
 
     # Get line with latest value
     if ($gitDiffLines[$i].StartsWith("+")) {
-        # If a line matches regex that begins with "version", manual change has been made
+        # If a line matches regex that begins with "version", manual change to project's version has been made
         $regex = '^[+-]\s+"version":\s+"(\d+\.\d+\.\d+)"'
         if ($gitDiffLines[$i] -match $regex) {
             Write-Host "Manual change detected. Leaving version number [$($matches[1])] unchanged."
