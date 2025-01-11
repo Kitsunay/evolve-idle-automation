@@ -263,11 +263,10 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
 
         // Implementation: If adding energy fails, check if there are lower priority consumers, if so, remove energy from one of them
         let deactivationCandidates = this.state.energyConsumers.filter(x => x.priority >= targetPriority && new BuildingItem(x.id).activeCount > 0);
-        
         if (deactivationCandidates.length === 0) { // Nothing to do to improve the situation
             return false;
         }
-        
+
         // Find the lowest priority and collect all consumer candidates from that priority group
         let deactivationPriority = deactivationCandidates.reduce((max, x) => x.priority > max ? x.priority : max, deactivationCandidates[0].priority);
 
@@ -278,11 +277,16 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
 
         let mostActive = deactivationPriorityBuildingGroup.reduce((max, x) => x.activeCount > max.activeCount ? x : max, deactivationPriorityBuildingGroup[0]);
 
+        if (Game.Resources.Power.count < 0) { // In case there is deficit of power, just disable the lowest priority building
+            Game.Buildings.deactivate(mostActive);
+            return true;
+        }
+
         if (deactivationPriority === targetPriority) { // If the lowest priority also needs power, check if redistribution is available
             let numLeastActive = deactivationPriorityBuildingGroup.reduce((min, x) => x.activeCount < min && x.inactiveCount > 0 ? x.activeCount : min, deactivationPriorityBuildingGroup[0].activeCount);
 
             if (mostActive.activeCount - numLeastActive <= 1) {
-                // Cannot redistribute
+                // Energy is distributed evenly
                 return false;
             }
         }
