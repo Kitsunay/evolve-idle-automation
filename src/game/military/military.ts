@@ -1,5 +1,9 @@
 export class Military {
     static get maxSoldiers(): number {
+        if (!this.bunksElement) {
+            return 0;
+        }
+
         let soldiersText = this.bunksElement.children.item(0).textContent;
 
         let parseRegex = /\S (\d+) \/ (\d+)/g;
@@ -10,6 +14,10 @@ export class Military {
     }
 
     static get soldiers(): number {
+        if (!this.bunksElement) {
+            return 0;
+        }
+
         let soldiersText = this.bunksElement.children.item(0).textContent;
 
         let parseRegex = /\S (\d+) \/ (\d+)/g;
@@ -20,6 +28,10 @@ export class Military {
     }
 
     static get woundedSoldiers(): number {
+        if (!this.bunksElement) {
+            return 0;
+        }
+
         let woundedSoldiersElement = this.bunksElement.children.item(2).children.item(1);
 
         return parseInt(woundedSoldiersElement.textContent);
@@ -33,5 +45,4 @@ export class Military {
         let attackButton = document.querySelector<HTMLElement>(`#${targetId} .attack`);
         attackButton.dispatchEvent(new Event('click'));
     }
-
 }
