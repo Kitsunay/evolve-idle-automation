@@ -1,8 +1,18 @@
+import { Clicker } from "../clicker";
 import { GameUtils } from "../game-utils";
 import { Power } from "./power";
 
 export class Resources {
     public static readonly Power = Power;
+
+    public static get gatherableResources(): string[] {
+        let resourceGatherButtons = document.querySelectorAll<Element>("#city .action a.button:not([class*=res-])");
+
+        // Resource id is present in parent
+        let resources = Array.from(resourceGatherButtons).map((element) => element.parentElement.id.replace('city-', 'res'));
+
+        return resources;
+    }
 
     public static get populationResourceId(): string {
         return document.querySelector('#resMoney + *').id;
@@ -115,5 +125,17 @@ export class Resources {
         }
 
         return consumptionBreakdown;
+    }
+
+    public static tryGather(resourceId: string): boolean {
+        let resourceButtonId = resourceId.replace('res', 'city-');
+        let buttonElement = document.querySelector<Element>(`#${resourceButtonId} a.button`);
+
+        if (!buttonElement) {
+            return false;
+        }
+
+        Clicker.click(buttonElement);
+        return true;
     }
 }

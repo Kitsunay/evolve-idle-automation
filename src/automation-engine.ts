@@ -5,6 +5,7 @@ import { AutoIndustry } from "./automation/auto-industry/auto-industry";
 import { AutoMarket } from "./automation/auto-market/auto-market";
 import { AutoMilitary } from "./automation/auto-military/auto-military";
 import { AutoResearch } from "./automation/auto-research/auto-research";
+import { AutoStart } from "./automation/auto-start/auto-start";
 import { AutoStorage } from "./automation/auto-storage/auto-storage";
 import { AutoWorker } from "./automation/auto-worker/auto-worker";
 import { Automation } from "./automation/automation";
@@ -29,6 +30,7 @@ export class AutomationEngine {
         new AutoEnergy(),
         new AutoIndustry(),
         new AutoEvolution(),
+        new AutoStart(),
     ];
 
     public static run(): void {

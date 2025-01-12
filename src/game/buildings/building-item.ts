@@ -154,6 +154,10 @@ export class BuildingItem {
      * Returns number of purchased buildings
      */
     get level(): number {
+        if (!this.isVisible) {
+            return 0;
+        }
+        
         let countString = this.mainElement.querySelector<HTMLElement>('.count').textContent;
 
         return parseInt(countString);

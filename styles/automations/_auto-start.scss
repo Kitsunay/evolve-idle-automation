@@ -1,0 +1,10 @@
+.auto-start.toggle-button {
+    &:hover {
+        color: #689d6a;
+    }
+    
+    &.toggled {
+        color: #689d6a;
+        border-color: #689d6a;
+    }
+}

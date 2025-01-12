@@ -68,6 +68,6 @@ export abstract class Component<CONFIG_OBJECT> {
     protected abstract renderComponent(config: CONFIG_OBJECT, rootElement: Element, isNew: boolean): void;
 
     public destroy(): void {
-        this.rootElement.remove();
+        this.rootElement?.remove();
     }
 }
