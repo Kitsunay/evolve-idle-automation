@@ -261,8 +261,8 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
             return true;
         }
 
-        // Implementation: If adding energy fails, check if there are lower priority consumers, if so, remove energy from one of them
-        let deactivationCandidates = this.state.energyConsumers.filter(x => x.priority >= targetPriority && new BuildingItem(x.id).activeCount > 0);
+        // Implementation: If adding energy fails, check if it is possible to remove energy from one of lower priority buildings
+        let deactivationCandidates = this.state.energyConsumers.filter(x => new BuildingItem(x.id).activeCount > 0);
         if (deactivationCandidates.length === 0) { // Nothing to do to improve the situation
             return false;
         }

@@ -55,12 +55,12 @@ Allows the player to select resources that can be managed by the automation. If 
 TODO: Unlock condition??? have a total trading value over 3K for 100 consecutive days?
 
 ## TODO:
-- Top priority are items that are preventing a fully automated reset:
-  - Auto-Energy - Simple priority list???
-  - Auto-Research path picker (Anthropology vs. Fanaticism)
-  - Auto-Industry - ???
-  - Bug: Auto-Building and Auto-Research sometimes add an item to query
-  - Bug: Market bugs out twice during a reset, not rendering total trade routes properly; update: it happens when new storage option unlocks (crates, containers)
+- Auto-Start - a simple autoclicker that collects materialt until 1 university is purchased
+- Auto-Building extension - add auto-building caps
+- Auto-Military extension - add option to automatically purchase spies, do espionage and select government
+- Auto-Market refactoring - split decision making logic into advisor classes
+- Auto-Energy refactoring - split decition making logic into tryActivateBuilding(), tryDeactivateBuilding()
+- Auto-Energy extension - extent Auto-Energy to work on other building limitations (e.g. planets with lmited supply)
 - Resource refactoring - a single Resource class that can access storage/market data
 - Rendering refactoring - make UI render when mutation observer observes a change, instead of on every tick
 - Auto-Building unlocks after building queue is researched, each building unlocks when amount of that building reaches 10-15 (TBD)
