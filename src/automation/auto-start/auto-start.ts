@@ -14,11 +14,22 @@ export class AutoStart extends Automation<AutoStartState> {
     private tickCounter: number = 0;
 
     tick(): void {
+        let oldVisible = this.state.visible;
+
         if (Game.Buildings.getBuilding('city-university').level > 0) { // Stop the automation after university is purchased, at this point it is not needed anymore
             this.state.visible = false;
+
+            if (oldVisible !== this.state.visible) { // On change, update the UI
+                this.updateUI();
+            }
+
             return;
         } else {
             this.state.visible = true;
+
+            if (oldVisible !== this.state.visible) { // On change, update the UI
+                this.updateUI();
+            }
         }
 
         if (!this.state.enabled) {
