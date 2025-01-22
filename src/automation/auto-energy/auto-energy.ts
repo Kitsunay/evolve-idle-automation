@@ -270,6 +270,12 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
         // Find the lowest priority and collect all consumer candidates from that priority group
         let deactivationPriority = deactivationCandidates.reduce((max, x) => x.priority > max ? x.priority : max, deactivationCandidates[0].priority);
 
+        if (deactivationPriority < targetPriority) {
+            // Don't deactivate higher priority building to power lower priority
+            // (happens when priority is fully activated with 0 power left, causing oscillation)
+            return false;
+        }
+
         let deactivationPriorityConsumerGroup = this.state.energyConsumers.filter(x => x.priority === deactivationPriority);
         deactivationPriorityConsumerGroup = deactivationPriorityConsumerGroup.filter(x => Game.Buildings.getBuilding(x.id).isVisible); // Remove non-visible buildings
         deactivationPriorityConsumerGroup = deactivationPriorityConsumerGroup.filter(x => Game.Buildings.getBuilding(x.id).isElectrified); // Remove unelectrified buildings
@@ -278,17 +284,20 @@ export class AutoEnergy extends Automation<AutoEnergyState> {
         let mostActive = deactivationPriorityBuildingGroup.reduce((max, x) => x.activeCount > max.activeCount ? x : max, deactivationPriorityBuildingGroup[0]);
 
         if (Game.Resources.Power.count < 0) { // In case there is deficit of power, just disable the lowest priority building
+            console.log(`Power: ${Game.Resources.Power.count}`);
             Game.Buildings.deactivate(mostActive);
             return true;
         }
 
         if (deactivationPriority === targetPriority) { // If the lowest priority also needs power, check if redistribution is available
-            let numLeastActive = deactivationPriorityBuildingGroup.reduce((min, x) => x.activeCount < min && x.inactiveCount > 0 ? x.activeCount : min, deactivationPriorityBuildingGroup[0].activeCount);
+            let leastActive = deactivationPriorityBuildingGroup.reduce((min, x) => (x.activeCount < min.activeCount && x.inactiveCount > 0) ? x : min, deactivationPriorityBuildingGroup[0]);
 
-            if (mostActive.activeCount - numLeastActive <= 1) {
+            if (mostActive.activeCount - leastActive.activeCount <= 1) {
                 // Energy is distributed evenly
                 return false;
             }
+
+            console.log(mostActive, leastActive);
         }
 
 
