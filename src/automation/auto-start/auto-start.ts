@@ -39,11 +39,15 @@ export class AutoStart extends Automation<AutoStartState> {
         // Try to cycle through all gatherable resources, collecting once per tick
         let gatherables = Game.Resources.gatherableResources;
 
-        if (this.tickCounter < gatherables.length) {
-            Game.Resources.tryGather(gatherables[this.tickCounter]);
+        if (gatherables.length == 0) { // Division by zero protection
+            return;
         }
 
         this.tickCounter = (this.tickCounter + 1) % gatherables.length;
+
+        if (this.tickCounter < gatherables.length) {
+            Game.Resources.tryGather(gatherables[this.tickCounter]);
+        }
     }
 
     updateUI(): void {
