@@ -61,7 +61,7 @@ export class AutoEvolution extends Automation<AutoEvolutionState> {
             return; // Only one action per tick
         }
 
-        if (organelles.level < this.state.targetOrganelles && organelles.isCostStorageable && nucleus.level < this.state.targetNucleus && nucleus.isCostStorageable) { // Until production buildings don't run outside of current storage, don't purchase storage
+        if ((organelles.level < this.state.targetOrganelles || nucleus.level < this.state.targetNucleus) && nucleus.isCostStorageable && organelles.isCostStorageable) { // Until production buildings don't run outside of current storage, don't purchase storage
             return;
         }
 
