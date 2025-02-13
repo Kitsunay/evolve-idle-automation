@@ -81,7 +81,6 @@ export class AutoIndustry extends Automation<AutoIndustryState> {
             return true;
         }
 
-
         if (this.tryAssertMinOutputCount(extendedRatios)) {
             return true;
         }
@@ -92,9 +91,9 @@ export class AutoIndustry extends Automation<AutoIndustryState> {
         let ironTotalProduction = Game.Resources.getTotalProduction('resIron');
         let ironSmelterConsumption = -(Game.Resources.getConsumptionBreakdown('resIron').find(x => x.name === 'Smelter').amount);
         let ironProduction = ironTotalProduction - ironSmelterConsumption;
-        let ironSmelterBoost = Game.Resources.getProductionBreakdown('resIron').find(x => x.name === 'Smelter').amount;
-        let numIronSmelter = extendedRatios.find(x => x.product === 'iron').industryItem.count;
-        let ironBoostPerSmelter = ironSmelterBoost / numIronSmelter;
+        let ironSmelterBoost = Game.Resources.getProductionBreakdown('resIron').find(x => x.name === 'Smelter')?.amount ?? 0;
+        let numIronSmelter = extendedRatios.find(x => x.product === 'iron')?.industryItem?.count ?? 0;
+        let ironBoostPerSmelter = isNaN(ironSmelterBoost / numIronSmelter) ? 0.1 : ironSmelterBoost / numIronSmelter; // If no smelters exist, default to 10%
         let ironRawProduction = ironTotalProduction / (1 + ironSmelterBoost);
 
         // Collect steel data
@@ -109,22 +108,32 @@ export class AutoIndustry extends Automation<AutoIndustryState> {
         let ironRatio = currentRatios[0];
         let steelRatio = currentRatios[1];
 
-        let ironTargetRatio = extendedRatios.find(x => x.product === 'iron').ratio;
-        let steelTargetRatio = extendedRatios.find(x => x.product === 'steel').ratio;
+        let ironTargetRatio = extendedRatios.find(x => x.product === 'iron')?.ratio ?? 0;
+        let steelTargetRatio = extendedRatios.find(x => x.product === 'steel')?.ratio ?? 0;
 
         let simulateNumIronSmelter = numIronSmelter;
         let simulateNumSteelSmelter = numSteelSmelter;
 
-        if (simulateNumIronSmelter === 0 || simulateNumSteelSmelter === 0) { // Never go below one smelter
+        if ((simulateNumIronSmelter === 0 && ironTargetRatio > 0) || (simulateNumSteelSmelter === 0 && steelTargetRatio > 0)) { // Never go below one smelter (except is ratio is 0)
             return false;
         }
 
+        let simulatedIncrease: 'iron' | 'steel';
+
         if (ironRatio <= ironTargetRatio) { // Simulate iron increase
             simulateNumIronSmelter++;
-            simulateNumSteelSmelter--;
+            simulatedIncrease = 'iron';
+
+            if (Game.Industry.Smelter.countInactive > 0) { // If there are free Smelters, we don't need to decrease
+                simulateNumSteelSmelter--;
+            }
         } else { // Simulate steel increase
-            simulateNumIronSmelter--;
             simulateNumSteelSmelter++;
+            simulatedIncrease = 'steel';
+
+            if (Game.Industry.Smelter.countInactive > 0) { // If there are free Smelters, we don't need to decrease
+                simulateNumIronSmelter--;
+            }
         }
 
         let simulateIronProduction = ironRawProduction * (1 + ironBoostPerSmelter * simulateNumIronSmelter) - 2 * simulateNumSteelSmelter;
@@ -133,20 +142,22 @@ export class AutoIndustry extends Automation<AutoIndustryState> {
         let simulateRatios = GameMathRatios.normalizeRatios([simulateIronProduction, simulateSteelProduction], ratios.reduce((a, b) => a + b.ratio, 0));
 
         // If simulation is closer to target, apply the change
-        let currDiff = Math.abs(ironRatio - ironTargetRatio) / ironTargetRatio + Math.abs(steelRatio - steelTargetRatio) / steelTargetRatio;
-        let simDiff = Math.abs(simulateRatios[0] - ironTargetRatio) / ironTargetRatio + Math.abs(simulateRatios[1] - steelTargetRatio) / steelTargetRatio;
+        let currDiff = Math.abs(ironRatio - ironTargetRatio) + Math.abs(steelRatio - steelTargetRatio);
+        let simDiff = Math.abs(simulateRatios[0] - ironTargetRatio) + Math.abs(simulateRatios[1] - steelTargetRatio);
+
+        console.log(`Iron: ${simulateRatios[0]} vs ${ironTargetRatio}, Steel: ${simulateRatios[1]} vs ${steelTargetRatio}`);
 
         if (simDiff < currDiff) {
-            if (ironRatio <= ironTargetRatio) { // Simulated iron increase
+            if (simulatedIncrease === 'iron' && (!(steelTargetRatio > 0) || numSteelSmelter > 1)) { // Simulated iron increase
                 Game.Industry.Smelter.addIndustryItem(extendedRatios.find(x => x.product === 'iron').industryItem);
                 return true;
-            } else { // Simulated steel increase
+            } else if (!(ironTargetRatio > 0) || numIronSmelter > 1) { // Simulated steel increase
                 Game.Industry.Smelter.addIndustryItem(extendedRatios.find(x => x.product === 'steel').industryItem);
                 return true;
             }
         }
 
-        return false; // Somulation did not predict moving closer to the target
+        return false; // Simulation did not predict moving closer to the target
 
         /*
         direct calculation without simulation:
